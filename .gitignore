@@ -1,0 +1,6 @@
+*.def
+*.ndef
+*.sol
+*.cbp
+*.layout
+*.depend
