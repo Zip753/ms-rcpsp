@@ -14,20 +14,20 @@
 char *file_name;
 int POP_SIZE = 100;
 int N_STEPS = 100;
-double P_CROSS = 0.7;
-double P_MUT = 0.03;
+double P_CROSS = 0.3;
+double P_MUT = 0.1;
 
 int main(int argc, char *argv[]) {
     if (argc >= 2) {
         file_name = argv[1];
     } else {
         file_name = new char[20];
-        strcpy(file_name, "10_3_5_3");
+        strcpy(file_name, "100_5_20_9_D3");
     }
     if (argc >= 3) { POP_SIZE = atoi(argv[2]); }
     if (argc >= 4) { N_STEPS = atoi(argv[3]); }
-    if (argc >= 5) { P_CROSS = atoi(argv[4]); }
-    if (argc >= 6) { P_MUT = atoi(argv[5]); }
+    if (argc >= 5) { P_CROSS = atof(argv[4]); }
+    if (argc >= 6) { P_MUT = atof(argv[5]); }
 //    char file_name[] = "15_6_10_6";
 //    char file_name[] = "100_5_20_9_D3";
 //    char file_name[] = "100_20_65_9";
@@ -64,15 +64,12 @@ int main(int argc, char *argv[]) {
 
     Schedule *sch = algo->solve(stat_file);
 
-    printf("\nSOLUTION: ");
+    printf("SOLUTION: ");
     sch->show(true);
 
     sch->show(output_file);
 
     fclose(output_file);
-
-
-    printf("ARGC: %d\n", argc);
 
     return 0;
 }

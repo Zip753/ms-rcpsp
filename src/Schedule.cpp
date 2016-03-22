@@ -88,7 +88,9 @@ void Schedule::fix_all() {
             if (!used[j]) {
                 if (min_start_idx == -1)
                     min_start_idx = j;
-                else if (tasks[j]->start < tasks[min_start_idx]->start)
+                else if (tasks[j]->start < tasks[min_start_idx]->start
+                    /*|| (tasks[j]->start == tasks[min_start_idx]->start
+                        && tasks[j]->duration > tasks[min_start_idx]->duration)*/)
                     min_start_idx = j;
             }
         used[min_start_idx] = true;
