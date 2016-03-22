@@ -13,7 +13,7 @@ public:
     ~Schedule();
 
     int fitness();
-    void show();
+    void show(bool sh = false);
     void show(FILE *stream);
     int size();
 
@@ -22,24 +22,16 @@ public:
 private:
     int n;
     Task** tasks; // copies of tasks with new dependencies
-    Task *st, *fin;
+    Task *fin;
     int _fitness = -1;
 
     void init(); // constructor hook
 
     void update_start(int i);
-    void update_finish(int i);
     void reschedule();
-    std::pair<int, int> check_conflict();
-    std::set<int> checked_res;
-
-    struct Comparator {
-        Comparator(Task **_tasks) : tasks(_tasks) {}
-        bool operator()(const int& i, const int& j) {
-            return tasks[i]->start < tasks[j]->start;
-        }
-        Task **tasks;
-    };
+    void fix_all();
+    bool fix_conflict(int idx);
+    void sort_by_start();
 };
 
 #endif // SCHEDULE_H

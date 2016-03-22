@@ -15,7 +15,7 @@ bool Random::rand(double prob) {
 
 void Random::seed() {
     if (!_seed) {
-        printf("SEEEEEEEEEEEEEEEEEEEED!!!!!!!!!!!!!!!11111111\n");
+//        printf("SEEEEEEEEEEEEEEEEEEEED!!!!!!!!!!!!!!!11111111\n");
         _seed = true;
         srand(time(0));
     }

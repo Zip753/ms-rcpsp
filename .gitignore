@@ -1,6 +1,9 @@
+obj/
+bin/
 *.def
 *.ndef
 *.sol
 *.cbp
 *.layout
 *.depend
+*.stat

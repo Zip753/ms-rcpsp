@@ -12,6 +12,8 @@ public:
     int size();
     Schedule* best();
     Schedule **genotype; // array of *Solution
+
+    void showStat(FILE *stream);
 private:
     int n;
 };

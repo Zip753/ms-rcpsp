@@ -12,7 +12,7 @@ public:
     std::list<int> dep, next;
     int *res;
     int res_size();
-    int start, finish; // earliest start and latest finish
+    int start = 0;
     bool collides_with(Task* t);
 private:
     int nres;
