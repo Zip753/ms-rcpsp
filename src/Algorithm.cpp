@@ -10,7 +10,7 @@ Schedule* Algorithm::solve(FILE* stat) {
         // evaluation
         best = population->best();
         // patrial results
-        if (step % 1 == 0) {
+        if (step % 5 == 0) {
             // result to console
             printf("step == %d\n", step);
             printf("best: ");
@@ -22,29 +22,26 @@ Schedule* Algorithm::solve(FILE* stat) {
             }
         }
         // move to next generation
-        Schedule** next_pop = new Schedule*[population->size()];
         int n = population->size();
-        for (int i = 0; i < n; i += 2) {
+        Schedule** next_pop = new Schedule*[n];
+        for (int i = 0; i < n;) {
             // selection
             Schedule *a = selector->select(population);
-            Schedule *b = selector->select(population);
-            while (b == a) {
-                b = selector->select(population);
-            }
+            Schedule *b;
+            do { b = selector->select(population); } while (b == a);
             // crossover
-            std::pair<Schedule*, Schedule*> samples = std::make_pair(a, b);
-            samples = crossover->cross(samples);
-            a = samples.first;
-            b = samples.second;
-            // mutation
-            Schedule *a1 = mutator->mutate(a);
-            Schedule *b1 = mutator->mutate(b);
-            // add to next generation
-            next_pop[i] = a1;
-            next_pop[i + 1] = b1;
-            // clear memory
-            delete a;
-            delete b;
+            if (i == n - 1 || crossover->should_cross()) {
+                Schedule *a_cross = crossover->cross(std::make_pair(a, b));
+                // mutation
+                Schedule *a_mut = mutator->mutate(a_cross);
+                // add to next generation
+                next_pop[i++] = a_mut;
+                // clear memory
+                delete a_cross;
+            } else {
+                next_pop[i++] = mutator->mutate(a);
+                next_pop[i++] = mutator->mutate(b);
+            }
         }
         delete population;
         population = new Population(n, next_pop);

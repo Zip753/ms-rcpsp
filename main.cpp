@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include "include/ProjectReader.h"
 #include "include/Project.h"
-#include "include/Task.h"
 #include "include/Schedule.h"
 #include "include/Population.h"
 #include "include/Selector.h"
@@ -13,9 +12,10 @@
 
 char *file_name;
 int POP_SIZE = 100;
-int N_STEPS = 100;
+int N_STEPS = 200;
 double P_CROSS = 0.3;
-double P_MUT = 0.1;
+double P_MUT = 0.01;
+int TOURN_SIZE = 5;
 
 int main(int argc, char *argv[]) {
     if (argc >= 2) {
@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     if (argc >= 4) { N_STEPS = atoi(argv[3]); }
     if (argc >= 5) { P_CROSS = atof(argv[4]); }
     if (argc >= 6) { P_MUT = atof(argv[5]); }
+    if (argc >= 7) { TOURN_SIZE = atoi(argv[6]); }
 //    char file_name[] = "15_6_10_6";
 //    char file_name[] = "100_5_20_9_D3";
 //    char file_name[] = "100_20_65_9";
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) {
 //    s->show();
 
     Population *pop = new Population(POP_SIZE);
-    Selector *sel = new Selector(5);
+    Selector *sel = new Selector(TOURN_SIZE);
     Crossover *cross = new Crossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
     strcat(strcpy(stat_file_name, file_name), ".stat");
     FILE* stat_file = fopen(stat_file_name, "w");
 
-    Schedule *sch = algo->solve(stat_file);
+    Schedule *sch = algo->solve(nullptr);
 
     printf("SOLUTION: ");
     sch->show(true);

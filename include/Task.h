@@ -5,17 +5,15 @@
 
 class Task {
 public:
-    Task(int _id, int _dur, int _ndep, int *_dep, int _nres, int *_res);
-    Task(Task* t);
+    Task(int _id, int _dur, int _ndep, int *_dep, int _nres, int *_res)
+            : id(_id), duration(_dur), ndep(_ndep), dep(_dep), res(_res), nres(_nres)  {};
     ~Task();
     int id, duration;
-    std::list<int> dep, next;
-    int *res;
+    int *res, *dep;
     int res_size();
-    int start = 0;
-    bool collides_with(Task* t);
+    int dep_size();
 private:
-    int nres;
+    int nres, ndep;
 };
 
 #endif // TASK_H

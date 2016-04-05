@@ -1,86 +1,86 @@
 #include "../include/Schedule.h"
 #include "../include/Project.h"
 #include "../include/Random.h"
-#include <cstdio>
 #include <map>
-#include <list>
 #include <vector>
-#include <utility>
 #include <algorithm>
+#include <cstring>
 
-void Schedule::init() {
+void Schedule::init(bool create_ires) {
     Project* proj = Project::get();
     n = proj->size();
-    ires = new int[n];
-    for (int i = 0; i < n; i++)
-        ires[i] = Random::randint() % proj->tasks[i]->res_size();
+    this->tasks = proj->tasks;
 
-    tasks = new Task*[n + 1];
-    for (int i = 0; i < n; i++)
-        tasks[i] = new Task(proj->tasks[i]);
-
-    fin = tasks[n] = new Task(-1, 0, 0, 0, 0, 0);
-
-    // add reverse connections
-    for (int i = 0; i < n; i++) {
-        for (auto it = tasks[i]->dep.begin(); it != tasks[i]->dep.end(); it++) {
-            int to = *it;
-            tasks[to]->next.push_back(i);
+    if (create_ires) {
+        ires = new int[n];
+        for (int i = 0; i < n; i++) {
+            ires[i] = Random::randint() % proj->tasks[i]->res_size();
         }
     }
 
-    // connect everything to last task
-    for (int i = 0; i < n; i++)
-        if (tasks[i]->next.empty()) {
-            tasks[i]->next.push_back(n + 1);
-            fin->dep.push_back(i);
-        }
+    start = new int[n];
+    std::fill_n(start, n, 0);
+
+    visited = new bool[n];
+
+    int rcount = Project::get()->get_res_count();
+    business = new int[rcount];
 }
 
 Schedule::Schedule() {
-    init();
+    init(true);
 }
 
 Schedule::Schedule(Schedule *s) {
-    init();
-    for (int i = 0; i < n; i++)
+    init(false);
+    ires = new int[n];
+    for (int i = 0; i < n; i++) {
         ires[i] = s->ires[i];
+    }
+}
+
+Schedule::Schedule(int *_ires) : ires(_ires) {
+    init(false);
 }
 
 Schedule::~Schedule() {
-    for (int i = 0; i < n; i++)
-        delete tasks[i];
-    delete[] tasks;
     delete[] ires;
+    delete[] start;
+    delete[] visited;
 }
 
 void Schedule::update_start(int i) {
-    for (auto it = tasks[i]->dep.begin(); it != tasks[i]->dep.end(); it++) {
-        int prev = *it;
-        update_start(prev);
-    }
-    if (!tasks[i]->dep.empty()) {
-        for (auto it = tasks[i]->dep.begin(); it != tasks[i]->dep.end(); it++) {
-            int prev = *it;
-            int finish = tasks[prev]->start + tasks[prev]->duration;
-            if (tasks[i]->start < finish)
-                tasks[i]->start = finish;
+    if (!visited[i]) {
+        visited[i] = true;
+        for (int j = 0; j < tasks[i]->dep_size(); j++) {
+            int prev = tasks[i]->dep[j];
+            update_start(prev);
+        }
+        if (tasks[i]->dep_size() > 0) {
+            for (int j = 0; j < tasks[i]->dep_size(); ++j) {
+                int prev = tasks[i]->dep[j];
+                int finish = finish_time(prev);
+                if (start[i] < finish)
+                    start[i] = finish;
+            }
         }
     }
 }
 
 void Schedule::reschedule() {
     // first, set earliest start (from fin)
-    update_start(n);
+    std::fill_n(visited, n, 0);
+    for (int i = 0; i < n; ++i) {
+        update_start(i);
+    }
 }
 
 void Schedule::fix_all() {
     reschedule();
+
     bool *used = new bool[n];
-    for (int i = 0; i < n; i++)
-        used[i] = false;
-//    for (int j = 0; j < n; j++)
-//        printf("%d => %d\n", tasks[j]->id, tasks[j]->start);
+    std::fill_n(used, n, false);
+
     for (int i = 0; i < n; i++) {
         // select task with earliest start
         int min_start_idx = -1;
@@ -88,19 +88,17 @@ void Schedule::fix_all() {
             if (!used[j]) {
                 if (min_start_idx == -1)
                     min_start_idx = j;
-                else if (tasks[j]->start < tasks[min_start_idx]->start
-                    /*|| (tasks[j]->start == tasks[min_start_idx]->start
-                        && tasks[j]->duration > tasks[min_start_idx]->duration)*/)
+                else if (start[j] < start[min_start_idx])
                     min_start_idx = j;
             }
         used[min_start_idx] = true;
         // select all tasks with same resource and shift them
-        int res = tasks[min_start_idx]->res[ires[min_start_idx]];
+        int res = resource(min_start_idx);
         bool is_conflict = false;
-        int finish = tasks[min_start_idx]->start + tasks[min_start_idx]->duration;
+        int finish = finish_time(min_start_idx);
         for (int j = 0; j < n; j++)
-            if (!used[j] && tasks[j]->res[ires[j]] == res && tasks[j]->start < finish) {
-                tasks[j]->start = finish;
+            if (!used[j] && resource(j) == res && start[j] < finish) {
+                start[j] = finish;
                 is_conflict = true;
             }
         // reschedule if anything changed
@@ -109,10 +107,27 @@ void Schedule::fix_all() {
     }
 }
 
+int Schedule::resource(int i) {
+    return tasks[i]->res[ires[i]];
+}
+
+int Schedule::finish_time(int i) {
+    return start[i] + tasks[i]->duration;
+}
+
 int Schedule::fitness() {
     if (_fitness == -1) {
         fix_all();
-        _fitness = fin->start;
+
+        for (int i = 0; i < n; i++)
+            if (_fitness < finish_time(i))
+                _fitness = finish_time(i);
+
+        std::fill_n(business, Project::get()->get_res_count(), 0);
+        for (int i = 0; i < n; i++) {
+            int res = resource(i);
+            business[res]++;
+        }
     }
     return _fitness;
 }
@@ -129,7 +144,7 @@ void Schedule::show(bool sh) {
     if (!sh) {
         for (int i = 0; i < n; i++)
             printf("Task ID: %d, Resource ID: %d, start time: %d\n",
-                tasks[i]->id, tasks[i]->res[ires[i]], tasks[i]->start);
+                tasks[i]->id, resource(i), start[i]);
     }
     printf("fitness (finish): %d\n", fitness());
 }
@@ -137,14 +152,15 @@ void Schedule::show(bool sh) {
 void Schedule::show(FILE *stream) {
     fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
     std::map<int, std::list<std::pair<int, int> > > timeline;
+    Project *proj = Project::get();
     for (int i = 0; i < n; i++) {
-        int start = tasks[i]->start + 1;
-        int res = tasks[i]->res[ires[i]];
+        int st = start[i] + 1;
+        int res = proj->get_res_id(resource(i));
         int task_id = tasks[i]->id;
 
-        if (timeline.count(start) == 0)
-            timeline[start] = std::list<std::pair<int, int> >();
-        timeline[start].push_back(std::make_pair(res, task_id));
+        if (timeline.count(st) == 0)
+            timeline[st] = std::list<std::pair<int, int> >();
+        timeline[st].push_back(std::make_pair(res, task_id));
     }
     for (auto it = timeline.begin(); it != timeline.end(); it++) {
         fprintf(stream, "%d ", it->first);
@@ -154,3 +170,5 @@ void Schedule::show(FILE *stream) {
         fprintf(stream, "\n");
     }
 }
+
+

@@ -6,9 +6,11 @@
 
 Schedule* Selector::select(Population *p) {
     // select n random genotypes
-
     int p_size = p->size();
-    for (int i = 0; i < n; i++) {
+    int tourn_size = n;
+    if (p_size < tourn_size)
+        tourn_size = p_size;
+    for (int i = 0; i < tourn_size; i++) {
         int idx = Random::randint() % (p_size - i) + i;
         std::swap(p->genotype[i], p->genotype[idx]);
     }
@@ -16,7 +18,7 @@ Schedule* Selector::select(Population *p) {
     // find solution with max fitness
     int min_idx = 0;
     int min_fitness = p->genotype[0]->fitness();
-    for (int i = 1; i < n; i++) {
+    for (int i = 1; i < tourn_size; i++) {
         int i_fitness = p->genotype[i]->fitness();
 //        printf("FIT: %d\n", i_fitness);
         if (i_fitness < min_fitness) {

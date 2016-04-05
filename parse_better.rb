@@ -15,8 +15,9 @@ resources = []
 nres.to_i.times do
   res = Hash.new
   res[:skills] = Hash.new
-  /^(?<r_id>\d+)\b/ =~ lines[idx]
+  /^(?<r_id>\d+)\s+(?<sal>[\d\.]+)\b/ =~ lines[idx]
   res[:id] = r_id
+  res[:salary] = sal
   while i = /Q(?<skill_id>\d+)\:\s*(?<level>\d+)/ =~ lines[idx] do
     res[:skills][skill_id] = level
     lines[idx][i] = '!'
@@ -69,8 +70,8 @@ tasks.each do |task|
   s_id = task[:skill_id]
   req = task[:req]
   task[:resources] = []
-  resources.each do |res|
-    task[:resources] << res[:id] if res[:skills][s_id] && res[:skills][s_id] >= req
+  resources.each_with_index do |res, i|
+    task[:resources] << i if res[:skills][s_id] && res[:skills][s_id] >= req
   end
   # task[:resources] = resources.select {|r| r[s_id] >= req}.map {|r| r[:res_id]}
 end
@@ -79,12 +80,13 @@ puts tasks
 
 
 File.open(filename.gsub(/\.def$/, '.ndef'), 'w') do |out|
-  out << "#{ntask}\n" #  #{nres}
-  # resources.each do |res|
-  #   out << "#{res[:id]} #{res[:skills].size}"
-  #   res[:skills].each {|k, v| out << " #{k} #{v}"}
-  #   out << "\n"
-  # end
+  out << "#{ntask} #{nres}\n" # 
+  resources.each do |res|
+    # out << "#{res[:id]} #{res[:skills].size}"
+    # res[:skills].each {|k, v| out << " #{k} #{v}"}
+    # out << "\n"
+    out << "#{res[:id]} #{res[:salary]}\n"
+  end
   tasks.each do |task|
     out << "#{task[:id]} #{task[:dur]} #{task[:dep].size}" #  #{task[:skill_id]} #{task[:req]}
     task[:dep].each {|t_id| out << " #{t_id}"}

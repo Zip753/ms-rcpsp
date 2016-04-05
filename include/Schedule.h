@@ -9,6 +9,7 @@
 class Schedule {
 public:
     Schedule();
+    Schedule(int *_ires);
     Schedule(Schedule *s);
     ~Schedule();
 
@@ -18,20 +19,22 @@ public:
     int size();
 
     int *ires; // assignment of resources to tasks
+    int *start;
+    int *business;
     int max_res_count(int i);
+    int resource(int i);
 private:
     int n;
     Task** tasks; // copies of tasks with new dependencies
-    Task *fin;
     int _fitness = -1;
 
-    void init(); // constructor hook
+    bool *visited;
 
+    void init(bool create_ires); // constructor hook
     void update_start(int i);
     void reschedule();
     void fix_all();
-    bool fix_conflict(int idx);
-    void sort_by_start();
+    int finish_time(int i);
 };
 
 #endif // SCHEDULE_H
