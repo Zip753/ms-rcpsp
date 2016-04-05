@@ -23,6 +23,7 @@ public:
     int *business;
     int max_res_count(int i);
     int resource(int i);
+    bool eq(Schedule *s);
 private:
     int n;
     Task** tasks; // copies of tasks with new dependencies

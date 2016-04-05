@@ -171,4 +171,10 @@ void Schedule::show(FILE *stream) {
     }
 }
 
-
+bool Schedule::eq(Schedule *s) {
+    if (n != s->size()) return false;
+    for (int i = 0; i < n; i++)
+        if (ires[i] != s->ires[i])
+            return false;
+    return true;
+}

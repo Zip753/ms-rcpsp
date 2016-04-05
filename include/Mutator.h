@@ -12,6 +12,7 @@ public:
     Schedule* force_mutate(Schedule *sample);
 private:
     double p_mut;
+    void mutate_gene(Schedule *sample, int idx);
 };
 
 #endif // MUTATOR_H

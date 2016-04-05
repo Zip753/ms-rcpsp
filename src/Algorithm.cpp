@@ -1,6 +1,4 @@
 #include "../include/Algorithm.h"
-#include <utility>
-#include <cstdio>
 
 Schedule* Algorithm::solve(FILE* stat) {
     if (steps == -1) {
@@ -35,12 +33,12 @@ Schedule* Algorithm::solve(FILE* stat) {
                 // mutation
                 Schedule *a_mut = mutator->mutate(a_cross);
                 // add to next generation
-                next_pop[i++] = a_mut;
+                addToPopulation(next_pop, i, a_mut);
                 // clear memory
                 delete a_cross;
             } else {
-                next_pop[i++] = mutator->mutate(a);
-                next_pop[i++] = mutator->mutate(b);
+                addToPopulation(next_pop, i, mutator->mutate(a));
+                addToPopulation(next_pop, i, mutator->mutate(b));
             }
         }
         delete population;
@@ -48,6 +46,28 @@ Schedule* Algorithm::solve(FILE* stat) {
     }
     best = population->best();
     return best;
+}
+
+void Algorithm::addToPopulation(Schedule **pop, int &idx, Schedule *sample) {
+    if (remove_clones) {
+        for (int k = 0; k < 3; k++) {
+            bool contains = false;
+            for (int i = 0; i < idx; i++)
+                if (pop[i]->eq(sample)) {
+                    contains = true;
+                    break;
+                }
+            if (contains) {
+                mutator->force_mutate(sample);
+            } else {
+                pop[idx++] = sample;
+                return;
+            }
+        }
+        pop[idx++] = new Schedule();
+    } else {
+        pop[idx++] = sample;
+    }
 }
 
 Schedule* Algorithm::solve() {

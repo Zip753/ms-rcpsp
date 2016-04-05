@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     Crossover *cross = new Crossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
-    Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS);
+    Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
 
     char output_file_name[50];
     strcat(strcpy(output_file_name, file_name), ".sol");
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     strcat(strcpy(stat_file_name, file_name), ".stat");
     FILE* stat_file = fopen(stat_file_name, "w");
 
-    Schedule *sch = algo->solve(nullptr);
+    Schedule *sch = algo->solve(stat_file);
 
     printf("SOLUTION: ");
     sch->show(true);
