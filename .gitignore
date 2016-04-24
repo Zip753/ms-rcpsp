@@ -8,3 +8,4 @@ bin/
 *.depend
 *.stat
 .idea/
+*.html
