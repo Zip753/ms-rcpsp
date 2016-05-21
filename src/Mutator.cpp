@@ -6,9 +6,14 @@ Schedule* Mutator::mutate(Schedule* sample) {
 
     for (int i = 0; i < s->size(); i++) {
         // don't forget to check whether we can mutate it at all
-        int max_ires = s->max_res_count(i);
         if (Random::rand(p_mut)) {
             mutate_gene(s, i);
+        }
+
+        if (Random::rand(p_mut)) {
+            int idx = Random::randint() % (s->size() - 1);
+            if (idx >= i) idx++;
+            std::swap(sample->prio[i], sample->prio[idx]);
         }
     }
     return s;

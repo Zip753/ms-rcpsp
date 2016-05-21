@@ -9,9 +9,10 @@ public:
             : id(_id), duration(_dur), ndep(_ndep), dep(_dep), res(_res), nres(_nres)  {};
     ~Task();
     int id, duration;
-    int *res, *dep;
+    int *res, *dep, *next;
     int res_size();
     int dep_size();
+    int next_size;
 private:
     int nres, ndep;
 };

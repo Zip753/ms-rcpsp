@@ -19,6 +19,7 @@ public:
     int size();
 
     int *ires; // assignment of resources to tasks
+    int *prio; // priorities of tasks
     int *start;
     int *business;
     int max_res_count(int i);
@@ -31,7 +32,7 @@ private:
 
     bool *visited;
 
-    void init(bool create_ires); // constructor hook
+    void init(bool initialize); // constructor hook
     void update_start(int i);
     void reschedule();
     void fix_all();

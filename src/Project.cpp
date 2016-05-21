@@ -1,9 +1,28 @@
+#include <vector>
 #include "../include/Project.h"
 
 Project* Project::_project = 0;
 
 void Project::create(int _n, Task** _tasks, int _res_count, int* _res_id, double* _res_sal) {
     _project = new Project(_n, _tasks, _res_count, _res_id, _res_sal);
+
+    std::vector<int> *next = new std::vector<int>[_n];
+
+    for (int i = 0; i < _n; ++i) {
+        for (int j = 0; j < _tasks[i]->dep_size(); ++j) {
+            int idep = _tasks[i]->dep[j];
+            next[idep].push_back(i);
+        }
+    }
+    
+    for (int i = 0; i < _n; ++i) {
+        int size = (int)next[i].size();
+        _tasks[i]->next_size = size;
+        _tasks[i]->next = new int[size];
+        for (int j = 0; j < size; ++j) {
+            _tasks[i]->next[j] = next[i][j];
+        }
+    }
 }
 
 Project::~Project() {

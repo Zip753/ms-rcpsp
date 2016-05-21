@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 
     Population *pop = new Population(POP_SIZE);
     Selector *sel = new Selector(TOURN_SIZE);
-    Crossover *cross = new LAXCrossover(P_CROSS);
-//    Crossover *cross = new UniformCrossover(P_CROSS);
+//    Crossover *cross = new LAXCrossover(P_CROSS);
+    Crossover *cross = new UniformCrossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
     Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
@@ -65,15 +65,22 @@ int main(int argc, char *argv[]) {
 
     char stat_file_name[123];
     strcat(strcpy(stat_file_name, file_name), ".stat");
-    FILE* stat_file = fopen(stat_file_name, "w");
+//    FILE* stat_file = fopen(stat_file_name, "w");
 
-    Schedule *sch = algo->solve(stat_file);
+//    Schedule *sch = algo->solve(stat_file);
+    Schedule *sch = algo->solve(nullptr);
 
     printf("SOLUTION: ");
     sch->show(true);
 
+    char best_file_name[123];
+    strcat(strcpy(best_file_name, file_name), ".best");
+    FILE* best_file = fopen(best_file_name, "w");
+    fprintf(best_file, "%d", sch->fitness());
+
     sch->show(output_file);
 
+    fclose(best_file);
     fclose(output_file);
 
     return 0;

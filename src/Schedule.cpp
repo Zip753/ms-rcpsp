@@ -5,17 +5,21 @@
 #include <vector>
 #include <algorithm>
 #include <cstring>
+#include <queue>
 
-void Schedule::init(bool create_ires) {
+void Schedule::init(bool initialize) {
     Project* proj = Project::get();
     n = proj->size();
     this->tasks = proj->tasks;
 
-    if (create_ires) {
+    if (initialize) {
         ires = new int[n];
+        prio = new int[n];
         for (int i = 0; i < n; i++) {
             ires[i] = Random::randint() % proj->tasks[i]->res_size();
+            prio[i] = i;
         }
+        std::random_shuffle(prio, prio + n);
     }
 
     start = new int[n];
@@ -34,8 +38,10 @@ Schedule::Schedule() {
 Schedule::Schedule(Schedule *s) {
     init(false);
     ires = new int[n];
+    prio = new int[n];
     for (int i = 0; i < n; i++) {
         ires[i] = s->ires[i];
+        prio[i] = s->prio[i];
     }
 }
 
@@ -45,66 +51,67 @@ Schedule::Schedule(int *_ires) : ires(_ires) {
 
 Schedule::~Schedule() {
     delete[] ires;
+    delete[] prio;
     delete[] start;
     delete[] visited;
 }
 
-void Schedule::update_start(int i) {
-    if (!visited[i]) {
-        visited[i] = true;
-        for (int j = 0; j < tasks[i]->dep_size(); j++) {
-            int prev = tasks[i]->dep[j];
-            update_start(prev);
-        }
-        if (tasks[i]->dep_size() > 0) {
-            for (int j = 0; j < tasks[i]->dep_size(); ++j) {
-                int prev = tasks[i]->dep[j];
-                int finish = finish_time(prev);
-                if (start[i] < finish)
-                    start[i] = finish;
-            }
-        }
-    }
-}
-
-void Schedule::reschedule() {
-    // first, set earliest start (from fin)
-    std::fill_n(visited, n, 0);
-    for (int i = 0; i < n; ++i) {
-        update_start(i);
-    }
-}
-
 void Schedule::fix_all() {
-    reschedule();
+    struct PriorityComp {
+        bool operator()(const std::pair<int, int> a, const std::pair<int, int> b) const {
+            return a.second < b.second;
+        }
+    };
 
-    bool *used = new bool[n];
-    std::fill_n(used, n, false);
-
-    for (int i = 0; i < n; i++) {
-        // select task with earliest start
-        int min_start_idx = -1;
-        for (int j = 0; j < n; j++)
-            if (!used[j]) {
-                if (min_start_idx == -1)
-                    min_start_idx = j;
-                else if (start[j] < start[min_start_idx])
-                    min_start_idx = j;
-            }
-        used[min_start_idx] = true;
-        // select all tasks with same resource and shift them
-        int res = resource(min_start_idx);
-        bool is_conflict = false;
-        int finish = finish_time(min_start_idx);
-        for (int j = 0; j < n; j++)
-            if (!used[j] && resource(j) == res && start[j] < finish) {
-                start[j] = finish;
-                is_conflict = true;
-            }
-        // reschedule if anything changed
-        if (is_conflict)
-            reschedule();
+    // heap of pairs (task_id, priority)
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, PriorityComp> queue;
+    for (int i = 0; i < n; ++i) {
+        if (tasks[i]->dep_size() == 0) {
+            queue.push(std::make_pair(i, prio[i]));
+        }
     }
+    int res_count = Project::get()->get_res_count();
+
+    // availability time for resources
+    int* time = new int[res_count];
+    std::fill_n(time, res_count, 0);
+
+    // number of complete dependencies for tasks
+    int* dep_count = new int[n];
+    std::fill_n(dep_count, n, 0);
+
+    while (!queue.empty()) {
+        // take next task
+        int itask = queue.top().first;
+        queue.pop();
+
+        // find max finish time of all dependencies
+        int res_idx = resource(itask);
+        int min_start = 0;
+        for (int i = 0; i < tasks[itask]->dep_size(); ++i) {
+            int idep = tasks[itask]->dep[i];
+            int fin = finish_time(idep);
+            if (min_start < fin)
+                min_start = fin;
+        }
+
+        // update start time for the task
+        start[itask] = std::max(min_start, time[res_idx]);
+        // update availability time for resource
+        time[res_idx] = finish_time(itask);
+
+        // add all unblocked dependent tasks to the queue
+        for (int i = 0; i < tasks[itask]->next_size; ++i) {
+            int inext = tasks[itask]->next[i];
+            dep_count[inext]++;
+            if (dep_count[inext] == tasks[inext]->dep_size()) {
+                queue.push(std::make_pair(inext, prio[inext]));
+            }
+        }
+    }
+
+    delete[] time;
+    delete[] dep_count;
 }
 
 int Schedule::resource(int i) {
