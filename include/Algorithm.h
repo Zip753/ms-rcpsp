@@ -3,7 +3,7 @@
 
 #include "Population.h"
 #include "Schedule.h"
-#include "Crossover.h"
+#include "LAXCrossover.h"
 #include "Mutator.h"
 #include "Selector.h"
 #include <cstdio>
@@ -22,8 +22,11 @@ private:
     int steps;
     bool remove_clones;
     Schedule *best = 0;
+    Schedule* global_best = nullptr;
 
     void addToPopulation(Schedule **pop, int &i, Schedule *sample);
+
+    void update_best();
 };
 
 #endif // ALGORITHM_H

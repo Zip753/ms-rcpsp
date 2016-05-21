@@ -1,7 +1,10 @@
 require 'scanf'
 
 filename = ARGV[0]
-sol_lines = IO.readlines("#{filename}.sol")
+dir = File.dirname(filename)
+base = File.basename(filename)
+
+sol_lines = IO.readlines(filename)
 sol_lines.shift
 
 all = []
@@ -28,7 +31,9 @@ end
 
 puts all
 
-ndef_lines = IO.readlines("#{filename}.ndef")
+/^(?<def_name>\w+)\./ =~ base
+ndef_name = File.join(dir, "#{def_name}.ndef")
+ndef_lines = IO.readlines(ndef_name)
 
 /^(?<ntask>\d+)\s+(?<nres>\d+)$/ =~ ndef_lines[0]
 
@@ -41,9 +46,9 @@ end
 
 puts duration
 
-js_data = all.map do |d|
-  fin = d[:start] + duration[d[:task]] + 1
-  "[ '#{d[:res]}', '#{d[:task]}', new Date(2010, 0, #{d[:start]}), new Date(2010, 0, #{fin}) ]"
+js_data = all.sort {|a, b| a[:res] <=> b[:res]}.map do |d|
+  fin = d[:start] + duration[d[:task]]
+  "[ '#{d[:res]}', '#{d[:task]}', '#{d[:start]} - #{fin}', new Date(2010, 0, #{d[:start]}), new Date(2010, 0, #{fin + 1}) ]"
 end.join(",\n")
 
 html = <<-HTML
@@ -60,11 +65,17 @@ html = <<-HTML
 
         dataTable.addColumn({ type: 'string', id: 'Resource' });
         dataTable.addColumn({ type: 'string', id: 'Name' });
+        dataTable.addColumn({ type: 'string', role: 'tooltip' });
         dataTable.addColumn({ type: 'date', id: 'Start' });
         dataTable.addColumn({ type: 'date', id: 'End' });
         dataTable.addRows([#{js_data}]);
 
         chart.draw(dataTable);
+
+        var height = document.querySelector("#timeline div:first-child div:first-child div:first-child div svg").height.baseVal.value + 70;
+
+        chart.draw(dataTable, {height: height});
+
       }
     </script>
   </head>
@@ -74,4 +85,4 @@ html = <<-HTML
 </html>
 HTML
 
-IO.write("#{filename}.html", html)
+IO.write(File.join(dir, "#{base}.html"), html)

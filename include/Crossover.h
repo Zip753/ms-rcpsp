@@ -1,16 +1,22 @@
-#ifndef CROSSOVER_H
-#define CROSSOVER_H
+//
+// Created by ivan on 05.04.16.
+//
 
-#include <utility>
+#ifndef MS_RCPSP_CROSSOVER_H
+#define MS_RCPSP_CROSSOVER_H
+
+
 #include "Schedule.h"
 
 class Crossover {
-public:
-    Crossover(double _p_cross) : p_cross(_p_cross) {};
-    Schedule* cross(std::pair<Schedule*, Schedule*> p);
-    bool should_cross();
 private:
     double p_cross;
+public:
+    Crossover(double _p_cross) : p_cross(_p_cross) {}
+    virtual ~Crossover() {}
+    virtual Schedule* cross(std::pair<Schedule*, Schedule*> p) = 0;
+    bool should_cross();
 };
 
-#endif // CROSSOVER_H
+
+#endif //MS_RCPSP_CROSSOVER_H

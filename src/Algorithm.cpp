@@ -6,9 +6,9 @@ Schedule* Algorithm::solve(FILE* stat) {
     }
     for (int step = 0; step < steps; step++) {
         // evaluation
-        best = population->best();
+        update_best();
         // patrial results
-        if (step % 5 == 0) {
+        if (step % 1 == 0) {
             // result to console
             printf("step == %d\n", step);
             printf("best: ");
@@ -44,8 +44,17 @@ Schedule* Algorithm::solve(FILE* stat) {
         delete population;
         population = new Population(n, next_pop);
     }
-    best = population->best();
-    return best;
+    update_best();
+    return global_best;
+}
+
+void Algorithm::update_best() {
+    best = new Schedule(population->best());
+    if (global_best == nullptr) {
+        global_best = best;
+    } else if (global_best->fitness() > best->fitness()) {
+        global_best = best;
+    }
 }
 
 void Algorithm::addToPopulation(Schedule **pop, int &idx, Schedule *sample) {
