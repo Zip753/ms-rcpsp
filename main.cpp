@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
     strcat(strcpy(stat_file_name, file_name), ".stat");
 //    FILE* stat_file = fopen(stat_file_name, "w");
 
+//    Schedule *sch = algo->solve(stat_file);
     Schedule *sch = algo->solve(nullptr);
 
     printf("SOLUTION: ");
@@ -76,10 +77,10 @@ int main(int argc, char *argv[]) {
     strcat(strcpy(best_file_name, file_name), ".best");
     FILE* best_file = fopen(best_file_name, "w");
     fprintf(best_file, "%d", sch->fitness());
-    fclose(best_file);
 
     sch->show(output_file);
 
+    fclose(best_file);
     fclose(output_file);
 
     return 0;

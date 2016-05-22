@@ -126,7 +126,7 @@ int Schedule::fitness() {
         std::fill_n(business, Project::get()->get_res_count(), 0);
         for (int i = 0; i < n; i++) {
             int res = resource(i);
-            business[res]++;
+            business[res] += tasks[i]->duration;
         }
     }
     return _fitness;
