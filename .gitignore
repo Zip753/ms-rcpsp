@@ -1,4 +1,6 @@
 obj/
+data/
+best/
 bin/
 *.def
 *.ndef
@@ -9,3 +11,4 @@ bin/
 *.stat
 .idea/
 *.html
+*.sh
