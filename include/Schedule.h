@@ -9,7 +9,7 @@
 class Schedule {
 public:
     Schedule();
-    Schedule(int *_ires);
+    Schedule(int *_ires, int *_prio);
     Schedule(Schedule *s);
     ~Schedule();
 

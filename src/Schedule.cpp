@@ -45,7 +45,7 @@ Schedule::Schedule(Schedule *s) {
     }
 }
 
-Schedule::Schedule(int *_ires) : ires(_ires) {
+Schedule::Schedule(int *_ires, int *_prio) : ires(_ires), prio(_prio) {
     init(false);
 }
 

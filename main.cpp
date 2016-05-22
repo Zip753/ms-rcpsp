@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 
     Population *pop = new Population(POP_SIZE);
     Selector *sel = new Selector(TOURN_SIZE);
-//    Crossover *cross = new LAXCrossover(P_CROSS);
-    Crossover *cross = new UniformCrossover(P_CROSS);
+    Crossover *cross = new LAXCrossover(P_CROSS);
+//    Crossover *cross = new UniformCrossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
     Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
