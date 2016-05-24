@@ -63,12 +63,19 @@ int main(int argc, char *argv[]) {
     strcat(strcpy(output_file_name, file_name), ".sol");
     FILE* output_file = fopen(output_file_name, "w");
 
-    char stat_file_name[123];
-    strcat(strcpy(stat_file_name, file_name), ".stat");
-//    FILE* stat_file = fopen(stat_file_name, "w");
+    Schedule *sch;
 
-//    Schedule *sch = algo->solve(stat_file);
-    Schedule *sch = algo->solve(nullptr);
+    bool SHOW_STAT = true;
+    if (SHOW_STAT) {
+        char stat_file_name[123];
+        strcat(strcpy(stat_file_name, file_name), ".stat");
+        FILE* stat_file = fopen(stat_file_name, "w");
+
+        sch = algo->solve(stat_file);;
+        fclose(stat_file);
+    } else {
+        sch = algo->solve(nullptr);
+    }
 
     printf("SOLUTION: ");
     sch->show(true);

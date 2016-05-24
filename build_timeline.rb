@@ -48,7 +48,11 @@ puts duration
 
 js_data = all.sort {|a, b| a[:res] <=> b[:res]}.map do |d|
   fin = d[:start] + duration[d[:task]]
-  "[ '#{d[:res]}', '#{d[:task]}', '#{d[:start]} - #{fin}', new Date(2010, 0, #{d[:start]}), new Date(2010, 0, #{fin + 1}) ]"
+  # if ['-s', '--short'].include? ARGV[1]
+  #   "[ '#{d[:res]}', '#{d[:task]}', '#{d[:start]} - #{fin}', new Date(2010, 0, #{d[:start]}), new Date(2010, 0, #{fin + 1}) ]"
+  # else
+  "[ '#{d[:res]}', '#{d[:task]}', '[#{d[:task]}] #{d[:start]} - #{fin}', new Date(2010, 0, #{d[:start]}), new Date(2010, 0, #{fin + 1}) ]"
+  # end
 end.join(",\n")
 
 html = <<-HTML

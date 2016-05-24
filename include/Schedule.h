@@ -35,7 +35,7 @@ private:
     void init(bool initialize); // constructor hook
     void update_start(int i);
     void reschedule();
-    void fix_all();
+    void fix_all(std::list<std::pair<int, int> > *assigned);
     int finish_time(int i);
 };
 
