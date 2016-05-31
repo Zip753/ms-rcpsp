@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) { P_CROSS = atof(argv[4]); }
     if (argc >= 6) { P_MUT = atof(argv[5]); }
     if (argc >= 7) { TOURN_SIZE = atoi(argv[6]); }
-    if (argc >= 8) { suffix = argv[7]; }
+    if (argc >= 8 && strlen(argv[7]) > 0) { suffix = argv[7]; }
     else TOURN_SIZE = POP_SIZE / 20;
 
     strcpy(file_name, "data/");
@@ -73,10 +73,15 @@ int main(int argc, char *argv[]) {
 
     Schedule *sch;
 
-    bool SHOW_STAT = false;
+    bool SHOW_STAT = true;
     if (SHOW_STAT) {
         char stat_file_name[123];
-        strcat(strcpy(stat_file_name, file_name), ".stat");
+        strcpy(stat_file_name, file_name);
+        if (suffix != nullptr) {
+            strcat(stat_file_name, ".");
+            strcat(stat_file_name, suffix);
+        }
+        strcat(stat_file_name, ".stat");
         FILE* stat_file = fopen(stat_file_name, "w");
 
         sch = algo->solve(stat_file);;
