@@ -18,6 +18,7 @@ int N_STEPS = 200;
 double P_CROSS = 0.3;
 double P_MUT = 0.01;
 int TOURN_SIZE;
+char *suffix = nullptr;
 
 int main(int argc, char *argv[]) {
     if (argc >= 2) {
@@ -31,6 +32,7 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) { P_CROSS = atof(argv[4]); }
     if (argc >= 6) { P_MUT = atof(argv[5]); }
     if (argc >= 7) { TOURN_SIZE = atoi(argv[6]); }
+    if (argc >= 8) { suffix = argv[7]; }
     else TOURN_SIZE = POP_SIZE / 20;
 
     strcpy(file_name, "data/");
@@ -61,7 +63,12 @@ int main(int argc, char *argv[]) {
     Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
 
     char output_file_name[123];
-    strcat(strcpy(output_file_name, file_name), ".sol");
+    strcpy(output_file_name, file_name);
+    if (suffix != nullptr) {
+        strcat(output_file_name, ".");
+        strcat(output_file_name, suffix);
+    }
+    strcat(output_file_name, ".sol");
     FILE* output_file = fopen(output_file_name, "w");
 
     Schedule *sch;
@@ -82,7 +89,12 @@ int main(int argc, char *argv[]) {
     sch->show(true);
 
     char best_file_name[123];
-    strcat(strcpy(best_file_name, file_name), ".best");
+    strcpy(best_file_name, file_name);
+    if (suffix != nullptr) {
+        strcat(best_file_name, ".");
+        strcat(best_file_name, suffix);
+    }
+    strcat(best_file_name, ".best");
     FILE* best_file = fopen(best_file_name, "w");
     fprintf(best_file, "%d", sch->fitness());
 
