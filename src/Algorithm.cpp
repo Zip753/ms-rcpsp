@@ -8,17 +8,17 @@ Schedule* Algorithm::solve(FILE* stat) {
         // evaluation
         update_best();
         // patrial results
-        if (step % 5 == 0) {
-            // result to console
-            printf("step == %d\n", step);
-            printf("best: ");
-            best->show(true);
-            // stats to file
-            if (stat != 0) {
-                population->showStat(stat);
-//                best->show(stream);
-            }
-        }
+//        if (step % 1 == 0) {
+//            // result to console
+//            printf("step == %d\n", step);
+//            printf("best: ");
+//            best->show(true);
+//            // stats to file
+//            if (stat != 0) {
+//                population->showStat(stat);
+////                best->show(stream);
+//            }
+//        }
         // move to next generation
         int n = population->size();
         Schedule** next_pop = new Schedule*[n];

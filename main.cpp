@@ -17,7 +17,7 @@ int POP_SIZE = 100;
 int N_STEPS = 200;
 double P_CROSS = 0.3;
 double P_MUT = 0.01;
-int TOURN_SIZE = 5;
+int TOURN_SIZE;
 
 int main(int argc, char *argv[]) {
     if (argc >= 2) {
@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) { P_CROSS = atof(argv[4]); }
     if (argc >= 6) { P_MUT = atof(argv[5]); }
     if (argc >= 7) { TOURN_SIZE = atoi(argv[6]); }
+    else TOURN_SIZE = POP_SIZE / 20;
 
     strcpy(file_name, "data/");
     strcat(file_name, fname);
@@ -53,8 +54,8 @@ int main(int argc, char *argv[]) {
 
     Population *pop = new Population(POP_SIZE);
     Selector *sel = new Selector(TOURN_SIZE);
-    Crossover *cross = new LAXCrossover(P_CROSS);
-//    Crossover *cross = new UniformCrossover(P_CROSS);
+//    Crossover *cross = new LAXCrossover(P_CROSS);
+    Crossover *cross = new UniformCrossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
     Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]) {
 
     Schedule *sch;
 
-    bool SHOW_STAT = true;
+    bool SHOW_STAT = false;
     if (SHOW_STAT) {
         char stat_file_name[123];
         strcat(strcpy(stat_file_name, file_name), ".stat");
