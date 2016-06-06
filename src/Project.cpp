@@ -23,12 +23,16 @@ void Project::create(int _n, Task** _tasks, int _res_count, int* _res_id, double
             _tasks[i]->next[j] = next[i][j];
         }
     }
+
+    delete[] next;
 }
 
 Project::~Project() {
     for (int i = 0; i < n; i++)
         delete tasks[i];
     delete[] tasks;
+    delete[] res_id;
+    delete[] res_salary;
 }
 
 Project* Project::get() {
@@ -51,6 +55,6 @@ double Project::get_salary(int res) {
     return res_salary[res];
 }
 
-
-
-
+void Project::remove() {
+    delete _project;
+}

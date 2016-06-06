@@ -9,7 +9,7 @@ public:
     // create new sample that is a probable mutation of given one
     Schedule* mutate(Schedule* sample);
     // mutate given sample without creating a new one
-    Schedule* force_mutate(Schedule *sample);
+    void force_mutate(Schedule *sample);
 private:
     double p_mut;
     void mutate_gene(Schedule *sample, int idx);

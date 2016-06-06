@@ -54,6 +54,7 @@ Schedule::~Schedule() {
     delete[] prio;
     delete[] start;
     delete[] visited;
+    if (business != nullptr) delete[] business;
 }
 
 void Schedule::fix_all(std::list<std::pair<int, int> > *assigned) {
@@ -116,11 +117,11 @@ void Schedule::fix_all(std::list<std::pair<int, int> > *assigned) {
     delete[] dep_count;
 }
 
-int Schedule::resource(int i) {
+inline int Schedule::resource(int i) {
     return tasks[i]->res[ires[i]];
 }
 
-int Schedule::finish_time(int i) {
+inline int Schedule::finish_time(int i) {
     return start[i] + tasks[i]->duration;
 }
 
@@ -168,9 +169,11 @@ int Schedule::fitness() {
 
         delete[] assigned;
 
-        for (int i = 0; i < n; i++)
-            if (_fitness < finish_time(i))
-                _fitness = finish_time(i);
+        for (int i = 0; i < n; i++) {
+            int finish = finish_time(i);
+            if (_fitness < finish)
+                _fitness = finish;
+        }
 
         std::fill_n(business, Project::get()->get_res_count(), 0);
         for (int i = 0; i < n; i++) {

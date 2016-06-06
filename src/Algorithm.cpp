@@ -8,17 +8,17 @@ Schedule* Algorithm::solve(FILE* stat) {
         // evaluation
         update_best();
         // patrial results
-//        if (step % 1 == 0) {
-//            // result to console
-//            printf("step == %d\n", step);
-//            printf("best: ");
-//            best->show(true);
-//            // stats to file
-//            if (stat != 0) {
-//                population->showStat(stat);
-////                best->show(stream);
-//            }
-//        }
+        if (step % 1 == 0) {
+            // result to console
+            printf("step == %d\n", step);
+            printf("best: ");
+            best->show(true);
+            // stats to file
+            if (stat != 0) {
+                population->showStat(stat);
+//                best->show(stream);
+            }
+        }
         // move to next generation
         int n = population->size();
         Schedule** next_pop = new Schedule*[n];
@@ -29,7 +29,7 @@ Schedule* Algorithm::solve(FILE* stat) {
             do { b = selector->select(population); } while (b == a);
             // crossover
             if (i == n - 1 || crossover->should_cross()) {
-                Schedule *a_cross = crossover->cross(std::make_pair(a, b));
+                Schedule *a_cross = crossover->cross(a, b);
                 // mutation
                 Schedule *a_mut = mutator->mutate(a_cross);
                 // add to next generation
@@ -45,15 +45,19 @@ Schedule* Algorithm::solve(FILE* stat) {
         population = new Population(n, next_pop);
     }
     update_best();
-    return global_best;
+
+//    return global_best;
+    return best;
 }
 
 void Algorithm::update_best() {
+    if (best != nullptr) delete best;
     best = new Schedule(population->best());
     if (global_best == nullptr) {
-        global_best = best;
+        global_best = new Schedule(best);
     } else if (global_best->fitness() > best->fitness()) {
-        global_best = best;
+        delete global_best;
+        global_best = new Schedule(best);
     }
 }
 
@@ -73,12 +77,18 @@ void Algorithm::addToPopulation(Schedule **pop, int &idx, Schedule *sample) {
                 return;
             }
         }
+        delete sample;
         pop[idx++] = new Schedule();
     } else {
         pop[idx++] = sample;
     }
 }
 
-Schedule* Algorithm::solve() {
-    return solve(0);
+Algorithm::~Algorithm() {
+    delete population;
+    delete selector;
+    delete mutator;
+    delete crossover;
+    delete best;
+    delete global_best;
 }

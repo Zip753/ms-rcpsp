@@ -6,6 +6,7 @@
 class Project {
 public:
     static void create(int _n, Task** _tasks, int _res_count, int* _res_id, double* _res_sal);
+    static void remove();
     static Project* get();
     ~Project();
 

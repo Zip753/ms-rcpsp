@@ -19,7 +19,7 @@ Schedule* Mutator::mutate(Schedule* sample) {
     return s;
 }
 
-Schedule* Mutator::force_mutate(Schedule* sample) {
+void Mutator::force_mutate(Schedule* sample) {
     int idx = Random::randint() % sample->size();
     mutate_gene(sample, idx);
 }
