@@ -57,7 +57,7 @@ Schedule::~Schedule() {
     if (business != nullptr) delete[] business;
 }
 
-void Schedule::fix_all(std::list<std::pair<int, int> > *assigned) {
+void Schedule::fix_all() {
     struct PriorityComp {
         bool operator()(const std::pair<int, int> a, const std::pair<int, int> b) const {
             return a.second < b.second;
@@ -100,8 +100,6 @@ void Schedule::fix_all(std::list<std::pair<int, int> > *assigned) {
         start[itask] = std::max(min_start, time[res_idx]);
         // update availability time for resource
         time[res_idx] = finish_time(itask);
-        // add task to assigned
-        assigned[res_idx].push_back(std::make_pair(finish_time(itask), itask));
 
         // add all unblocked dependent tasks to the queue
         for (int i = 0; i < tasks[itask]->next_size; ++i) {
@@ -127,47 +125,7 @@ inline int Schedule::finish_time(int i) {
 
 int Schedule::fitness() {
     if (_fitness == -1) {
-        std::list<std::pair<int, int> > *assigned = new std::list<std::pair<int, int> >[n];
-
-        fix_all(assigned);
-
-//        // execute heuristics several times
-//        for (int k = 0; k < 5; ++k) {
-
-            bool not_found = true;
-            for (int i = 0; not_found && i < n; ++i) {
-                // start of current task
-                int st = start[i];
-                for (int j = 0; not_found && j < tasks[i]->res_size(); ++j) {
-                    // for any other resource
-                    if (ires[i] != j) {
-                        // find first task that starts not earlier than current
-                        auto it = std::lower_bound(assigned[i].begin(), assigned[i].end(), std::make_pair(st, -1));
-                        // if no such task is found or our task fits before the found one
-                        if (it == assigned[i].end() || finish_time(i) <= it->first) {
-                            // if there are no earlier tasks, swap resource and terminate
-                            if (it == assigned[i].begin()) {
-                                ires[i] = j;
-                                not_found = false;
-                            } else {
-                                // otherwise check previous task
-                                it--;
-                                // if there is no conflict, then swap resources and terminate
-                                if (finish_time(it->second) <= st) {
-                                    ires[i] = j;
-                                    not_found = false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            fix_all(assigned);
-
-//        }
-
-        delete[] assigned;
+        fix_all();
 
         for (int i = 0; i < n; i++) {
             int finish = finish_time(i);

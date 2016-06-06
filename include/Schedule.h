@@ -33,7 +33,7 @@ private:
     bool *visited;
 
     void init(bool initialize); // constructor hook
-    void fix_all(std::list<std::pair<int, int> > *assigned);
+    void fix_all();
     int finish_time(int i);
 };
 

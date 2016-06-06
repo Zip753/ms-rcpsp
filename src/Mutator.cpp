@@ -11,9 +11,11 @@ Schedule* Mutator::mutate(Schedule* sample) {
         }
 
         if (Random::rand(p_mut)) {
-            int idx = Random::randint() % (s->size() - 1);
-            if (idx >= i) idx++;
-            std::swap(sample->prio[i], sample->prio[idx]);
+            if (Random::rand(0.5)) sample->prio[i]++;
+            else sample->prio[i]--;
+            //int idx = Random::randint() % (s->size() - 1);
+            //if (idx >= i) idx++;
+            //std::swap(sample->prio[i], sample->prio[idx]);
         }
     }
     return s;
