@@ -47,6 +47,7 @@ Schedule::~Schedule() {
     delete[] ires;
     delete[] start;
     delete[] visited;
+    if (business != nullptr) delete[] business;
 }
 
 void Schedule::update_start(int i) {
@@ -55,14 +56,9 @@ void Schedule::update_start(int i) {
         for (int j = 0; j < tasks[i]->dep_size(); j++) {
             int prev = tasks[i]->dep[j];
             update_start(prev);
-        }
-        if (tasks[i]->dep_size() > 0) {
-            for (int j = 0; j < tasks[i]->dep_size(); ++j) {
-                int prev = tasks[i]->dep[j];
-                int finish = finish_time(prev);
-                if (start[i] < finish)
-                    start[i] = finish;
-            }
+            int finish = finish_time(prev);
+            if (start[i] < finish)
+                start[i] = finish;
         }
     }
 }
@@ -105,13 +101,15 @@ void Schedule::fix_all() {
         if (is_conflict)
             reschedule();
     }
+
+    delete[] used;
 }
 
-int Schedule::resource(int i) {
+inline int Schedule::resource(int i) {
     return tasks[i]->res[ires[i]];
 }
 
-int Schedule::finish_time(int i) {
+inline int Schedule::finish_time(int i) {
     return start[i] + tasks[i]->duration;
 }
 
@@ -119,9 +117,11 @@ int Schedule::fitness() {
     if (_fitness == -1) {
         fix_all();
 
-        for (int i = 0; i < n; i++)
-            if (_fitness < finish_time(i))
-                _fitness = finish_time(i);
+        for (int i = 0; i < n; i++) {
+            int finish = finish_time(i);
+            if (_fitness < finish)
+                _fitness = finish;
+        }
 
         std::fill_n(business, Project::get()->get_res_count(), 0);
         for (int i = 0; i < n; i++) {

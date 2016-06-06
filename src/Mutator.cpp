@@ -6,7 +6,6 @@ Schedule* Mutator::mutate(Schedule* sample) {
 
     for (int i = 0; i < s->size(); i++) {
         // don't forget to check whether we can mutate it at all
-        int max_ires = s->max_res_count(i);
         if (Random::rand(p_mut)) {
             mutate_gene(s, i);
         }
@@ -14,7 +13,7 @@ Schedule* Mutator::mutate(Schedule* sample) {
     return s;
 }
 
-Schedule* Mutator::force_mutate(Schedule* sample) {
+void Mutator::force_mutate(Schedule* sample) {
     int idx = Random::randint() % sample->size();
     mutate_gene(sample, idx);
 }

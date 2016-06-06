@@ -2,12 +2,10 @@
 #include "../include/Project.h"
 #include <cstdlib>
 
-Schedule* LAXCrossover::cross(std::pair<Schedule*, Schedule*> p) {
-    Schedule *a = new Schedule(p.first),
-            *b = new Schedule(p.second);
+Schedule* LAXCrossover::cross(Schedule *a, Schedule *b) {
 
     Project* proj = Project::get();
-    int n = p.first->size();
+    int n = a->size();
     int *ires = new int[n];
     for (int i = 0; i < n; i++) {
         int a_res = a->resource(i);

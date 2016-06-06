@@ -18,15 +18,15 @@ public:
     void show(FILE *stream);
     int size();
 
-    int *ires; // assignment of resources to tasks
-    int *start;
-    int *business;
+    int *ires; // own
+    int *start; // own
+    int *business; // own
     int max_res_count(int i);
     int resource(int i);
     bool eq(Schedule *s);
 private:
     int n;
-    Task** tasks; // copies of tasks with new dependencies
+    Task** tasks; // reference
     int _fitness = -1;
 
     bool *visited;

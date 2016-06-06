@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     Crossover *cross = new UniformCrossover(P_CROSS);
     Mutator *mut = new Mutator(P_MUT);
 
-    Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, true);
+    Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, false);
 
     char output_file_name[123];
     strcpy(output_file_name, file_name);
@@ -110,6 +110,9 @@ int main(int argc, char *argv[]) {
 
     fclose(best_file);
     fclose(output_file);
+
+    delete algo;
+    Project::remove();
 
     return 0;
 }

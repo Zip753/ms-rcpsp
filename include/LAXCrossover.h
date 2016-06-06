@@ -8,7 +8,7 @@
 class LAXCrossover : public Crossover {
 public:
     LAXCrossover(double _p_cross) : Crossover(_p_cross) { }
-    Schedule* cross(std::pair<Schedule*, Schedule*> p);
+    Schedule* cross(Schedule *a, Schedule *b);
 };
 
 #endif // CROSSOVER_H

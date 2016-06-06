@@ -11,7 +11,7 @@
 class UniformCrossover : public Crossover {
 public:
     UniformCrossover(double _p_cross) : Crossover(_p_cross) { }
-    Schedule *cross(std::pair<Schedule *, Schedule *> p);
+    Schedule *cross(Schedule *a, Schedule *b);
 };
 
 

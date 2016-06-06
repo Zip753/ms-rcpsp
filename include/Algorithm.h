@@ -12,7 +12,8 @@ class Algorithm {
 public:
     Algorithm(Population *p, Selector *s, Crossover *c, Mutator *m, int _steps = -1, bool _rem_clones = true)
         : population(p), selector(s), crossover(c), mutator(m), steps(_steps), remove_clones(_rem_clones) {};
-    Schedule* solve();
+    ~Algorithm();
+
     Schedule* solve(FILE *stream);
 private:
     Population *population;
@@ -21,8 +22,7 @@ private:
     Mutator *mutator;
     int steps;
     bool remove_clones;
-    Schedule *best = 0;
-    Schedule* global_best = nullptr;
+    Schedule *best = nullptr, *global_best = nullptr;
 
     void addToPopulation(Schedule **pop, int &i, Schedule *sample);
 

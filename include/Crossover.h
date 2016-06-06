@@ -14,7 +14,7 @@ private:
 public:
     Crossover(double _p_cross) : p_cross(_p_cross) {}
     virtual ~Crossover() {}
-    virtual Schedule* cross(std::pair<Schedule*, Schedule*> p) = 0;
+    virtual Schedule* cross(Schedule* a, Schedule* b) = 0;
     bool should_cross();
 };
 

@@ -5,13 +5,13 @@
 #include "../include/UniformCrossover.h"
 #include "../include/Random.h"
 
-Schedule *UniformCrossover::cross(std::pair<Schedule *, Schedule *> p) {
-    Schedule *s = new Schedule(p.first);
+Schedule *UniformCrossover::cross(Schedule *a, Schedule *b) {
+    Schedule *s = new Schedule(a);
 
     int n = s->size();
     for (int i = 0; i < n; i++) {
         if (Random::randint() % 2 == 1) {
-            s->ires[i] = p.second->ires[i];
+            s->ires[i] = b->ires[i];
         }
     }
 
