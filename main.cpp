@@ -31,9 +31,11 @@ int main(int argc, char *argv[]) {
     if (argc >= 4) { N_STEPS = atoi(argv[3]); }
     if (argc >= 5) { P_CROSS = atof(argv[4]); }
     if (argc >= 6) { P_MUT = atof(argv[5]); }
-    if (argc >= 7) { TOURN_SIZE = atoi(argv[6]); }
-    if (argc >= 8 && strlen(argv[7]) > 0) { suffix = argv[7]; }
+    if (argc >= 7 && strlen(argv[6]) > 0) { TOURN_SIZE = atoi(argv[6]); }
     else TOURN_SIZE = POP_SIZE / 20;
+    if (argc >= 8 && strlen(argv[7]) > 0) { suffix = argv[7]; }
+
+    printf("TOURN_SIZE - %d\n", TOURN_SIZE);
 
     strcpy(file_name, "data/");
     strcat(file_name, fname);
