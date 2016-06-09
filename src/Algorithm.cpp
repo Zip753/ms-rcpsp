@@ -46,8 +46,8 @@ Schedule* Algorithm::solve(FILE* stat) {
     }
     update_best();
 
-//    return global_best;
-    return best;
+    return global_best;
+//    return best;git st
 }
 
 void Algorithm::update_best() {
