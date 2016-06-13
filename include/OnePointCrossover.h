@@ -8,6 +8,9 @@
 
 #include "Crossover.h"
 
+/**
+ * Class that is used to perform one crossover of the specimen.
+ */
 class OnePointCrossover : public Crossover {
 public:
     OnePointCrossover(double _p_cross) : Crossover(_p_cross) { }

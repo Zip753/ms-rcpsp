@@ -5,6 +5,9 @@
 #include "Schedule.h"
 #include "Crossover.h"
 
+/**
+ * Class that implements specialised Least Assignments Crossover.
+ */
 class LAXCrossover : public Crossover {
 public:
     LAXCrossover(double _p_cross) : Crossover(_p_cross) { }
