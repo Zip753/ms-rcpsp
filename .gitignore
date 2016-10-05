@@ -13,3 +13,8 @@ bin/
 *.html
 *.sh
 *.rb
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-genfiles
+bazel-ms-rcpsp
