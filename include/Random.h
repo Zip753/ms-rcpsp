@@ -1,14 +1,14 @@
-#ifndef RANDOM_H
-#define RANDOM_H
+#ifndef MS_RCPSP_RANDOM_H
+#define MS_RCPSP_RANDOM_H
 
 class Random {
-public:
-    static int randint();
-    static bool rand(double prob);
-private:
-    static void seed();
-    static bool _seed;
-    static const int R_MAX = 1e5;
+ public:
+  static int randint();
+  static bool rand(double prob);
+
+ private:
+  static void seed();
+  static bool _seed;
 };
 
-#endif // RANDOM_H
+#endif // MS_RCPSP_RANDOM_H

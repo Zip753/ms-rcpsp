@@ -1,94 +1,94 @@
 #include "../include/Algorithm.h"
 
-Schedule* Algorithm::solve(FILE* stat) {
-    if (steps == -1) {
-        return 0;
-    }
-    for (int step = 0; step < steps; step++) {
-        // evaluation
-        update_best();
-        // patrial results
-        if (step % 1 == 0) {
-            // result to console
-            printf("step == %d\n", step);
-            printf("best: ");
-            best->show(true);
-            // stats to file
-            if (stat != 0) {
-                population->showStat(stat);
-//                best->show(stream);
-            }
-        }
-        // move to next generation
-        int n = population->size();
-        Schedule** next_pop = new Schedule*[n];
-        for (int i = 0; i < n;) {
-            // selection
-            Schedule *a = selector->select(population);
-            Schedule *b;
-            do { b = selector->select(population); } while (b == a);
-            // crossover
-            if (i == n - 1 || crossover->should_cross()) {
-                Schedule *a_cross = crossover->cross(a, b);
-                // mutation
-                Schedule *a_mut = mutator->mutate(a_cross);
-                // add to next generation
-                addToPopulation(next_pop, i, a_mut);
-                // clear memory
-                delete a_cross;
-            } else {
-                addToPopulation(next_pop, i, mutator->mutate(a));
-                addToPopulation(next_pop, i, mutator->mutate(b));
-            }
-        }
-        delete population;
-        population = new Population(n, next_pop);
-    }
+Schedule *Algorithm::solve(FILE *stat) {
+  if (steps == -1) {
+    return 0;
+  }
+  for (int step = 0; step < steps; step++) {
+    // evaluation
     update_best();
+    // patrial results
+    if (step % 1 == 0) {
+      // result to console
+      printf("step == %d\n", step);
+      printf("best: ");
+      best->show(true);
+      // stats to file
+      if (stat != 0) {
+        population->showStat(stat);
+//                best->show(stream);
+      }
+    }
+    // move to next generation
+    int n = population->size();
+    Schedule **next_pop = new Schedule *[n];
+    for (int i = 0; i < n;) {
+      // selection
+      Schedule *a = selector->select(population);
+      Schedule *b;
+      do { b = selector->select(population); } while (b == a);
+      // crossover
+      if (i == n - 1 || crossover->should_cross()) {
+        Schedule *a_cross = crossover->cross(a, b);
+        // mutation
+        Schedule *a_mut = mutator->mutate(a_cross);
+        // add to next generation
+        addToPopulation(next_pop, i, a_mut);
+        // clear memory
+        delete a_cross;
+      } else {
+        addToPopulation(next_pop, i, mutator->mutate(a));
+        addToPopulation(next_pop, i, mutator->mutate(b));
+      }
+    }
+    delete population;
+    population = new Population(n, next_pop);
+  }
+  update_best();
 
-    return global_best;
+  return global_best;
 //    return best;git st
 }
 
 void Algorithm::update_best() {
-    if (best != nullptr) delete best;
-    best = new Schedule(population->best());
-    if (global_best == nullptr) {
-        global_best = new Schedule(best);
-    } else if (global_best->fitness() > best->fitness()) {
-        delete global_best;
-        global_best = new Schedule(best);
-    }
+  if (best != nullptr) delete best;
+  best = new Schedule(population->best());
+  if (global_best == nullptr) {
+    global_best = new Schedule(best);
+  } else if (global_best->fitness() > best->fitness()) {
+    delete global_best;
+    global_best = new Schedule(best);
+  }
 }
 
 void Algorithm::addToPopulation(Schedule **pop, int &idx, Schedule *sample) {
-    if (remove_clones) {
-        for (int k = 0; k < 3; k++) {
-            bool contains = false;
-            for (int i = 0; i < idx; i++)
-                if (pop[i]->eq(sample)) {
-                    contains = true;
-                    break;
-                }
-            if (contains) {
-                mutator->force_mutate(sample);
-            } else {
-                pop[idx++] = sample;
-                return;
-            }
+  if (remove_clones) {
+    for (int k = 0; k < 3; k++) {
+      bool contains = false;
+      for (int i = 0; i < idx; i++)
+        if (pop[i]->eq(sample)) {
+          contains = true;
+          break;
         }
-        delete sample;
-        pop[idx++] = new Schedule();
-    } else {
+      if (contains) {
+        mutator->force_mutate(sample);
+      } else {
         pop[idx++] = sample;
+        return;
+      }
     }
+    delete sample;
+    pop[idx++] = new Schedule();
+  } else {
+    pop[idx++] = sample;
+  }
 }
 
 Algorithm::~Algorithm() {
-    delete population;
-    delete selector;
-    delete mutator;
-    delete crossover;
-    delete best;
-    delete global_best;
+  delete population;
+  delete selector;
+  delete mutator;
+  delete crossover;
+  delete best;
+  delete global_best;
 }

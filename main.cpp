@@ -25,92 +25,92 @@ DEFINE_bool(lax, false, "Use LAX crossover operator.");
 DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 
 int main(int argc, char *argv[]) {
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
-    if (argc != 2) {
-        fprintf(stderr, "Invalid number of arguments.\n"
-                "Usage: %s input_file [flags...]\n", argv[0]);
-        return 1;
-    }
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  if (argc != 2) {
+    fprintf(stderr, "Invalid number of arguments.\n"
+        "Usage: %s input_file [flags...]\n", argv[0]);
+    return 1;
+  }
 
-    if (FLAGS_tournament_size == -1) {
-        FLAGS_tournament_size = FLAGS_pop_size / 20;
-    }
+  if (FLAGS_tournament_size == -1) {
+    FLAGS_tournament_size = FLAGS_pop_size / 20;
+  }
 
-    printf("Tournament size: %d\n", FLAGS_tournament_size);
+  printf("Tournament size: %d\n", FLAGS_tournament_size);
 
-    std::string input_full_name = std::string(argv[1]);
-    std::string input_base_name =
-            input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
-    std::string folder_path =
-            input_full_name.substr(0, input_full_name.find_last_of("/\\") + 1);
-    std::string base_name = folder_path +
-            input_base_name.substr(0, input_base_name.find_last_of('.'));
-    printf("File base name: %s\n", input_base_name.c_str());
-    printf("Folder path: %s\n", folder_path.c_str());
-    printf("Base name: %s\n", base_name.c_str());
+  std::string input_full_name = std::string(argv[1]);
+  std::string input_base_name =
+      input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
+  std::string folder_path =
+      input_full_name.substr(0, input_full_name.find_last_of("/\\") + 1);
+  std::string base_name = folder_path +
+      input_base_name.substr(0, input_base_name.find_last_of('.'));
+  printf("File base name: %s\n", input_base_name.c_str());
+  printf("Folder path: %s\n", folder_path.c_str());
+  printf("Base name: %s\n", base_name.c_str());
 
-    FILE* input_file = fopen(input_full_name.c_str(), "r");
-    ProjectReader::read(input_file);
-    fclose(input_file);
+  FILE *input_file = fopen(input_full_name.c_str(), "r");
+  ProjectReader::read(input_file);
+  fclose(input_file);
 
-    printf("Tasks: %d\n", Project::get()->size());
+  printf("Tasks: %d\n", Project::get()->size());
 
 //    Schedule* s = new Schedule();
 //    printf("FITNESS = %d\n", s->fitness());
 //    s->show();
 
-    Population *pop = new Population(FLAGS_pop_size);
-    Selector *sel = new Selector(FLAGS_tournament_size);
-    Crossover *cross;
-    if (FLAGS_lax) {
-        cross = new LAXCrossover(FLAGS_crossover);
-    } else {
-        cross = new UniformCrossover(FLAGS_crossover);
-    }
-    Mutator *mut = new Mutator(FLAGS_mutation);
-    Algorithm *algo = new Algorithm(pop, sel, cross, mut, FLAGS_iters, false);
+  Population *pop = new Population(FLAGS_pop_size);
+  Selector *sel = new Selector(FLAGS_tournament_size);
+  Crossover *cross;
+  if (FLAGS_lax) {
+    cross = new LAXCrossover(FLAGS_crossover);
+  } else {
+    cross = new UniformCrossover(FLAGS_crossover);
+  }
+  Mutator *mut = new Mutator(FLAGS_mutation);
+  Algorithm *algo = new Algorithm(pop, sel, cross, mut, FLAGS_iters, false);
 
-    std::string output_file_name = base_name;
+  std::string output_file_name = base_name;
+  if (!FLAGS_suffix.empty()) {
+    output_file_name += "." + FLAGS_suffix;
+  }
+  output_file_name += ".sol";
+  FILE *output_file = fopen(output_file_name.c_str(), "w");
+
+  Schedule *sch;
+  if (FLAGS_output_stat) {
+    std::string stat_file_name = base_name;
     if (!FLAGS_suffix.empty()) {
-        output_file_name += "." + FLAGS_suffix;
+      stat_file_name += "." + FLAGS_suffix;
     }
-    output_file_name += ".sol";
-    FILE* output_file = fopen(output_file_name.c_str(), "w");
+    stat_file_name += ".stat";
+    printf("Stat file name: %s\n", stat_file_name.c_str());
+    FILE *stat_file = fopen(stat_file_name.c_str(), "w");
 
-    Schedule *sch;
-    if (FLAGS_output_stat) {
-        std::string stat_file_name = base_name;
-        if (!FLAGS_suffix.empty()) {
-            stat_file_name += "." + FLAGS_suffix;
-        }
-        stat_file_name += ".stat";
-        printf("Stat file name: %s\n", stat_file_name.c_str());
-        FILE* stat_file = fopen(stat_file_name.c_str(), "w");
+    sch = algo->solve(stat_file);
+    fclose(stat_file);
+  } else {
+    sch = algo->solve(nullptr);
+  }
 
-        sch = algo->solve(stat_file);
-        fclose(stat_file);
-    } else {
-        sch = algo->solve(nullptr);
-    }
+  printf("SOLUTION: ");
+  sch->show(true);
 
-    printf("SOLUTION: ");
-    sch->show(true);
+  std::string best_file_name = base_name;
+  if (!FLAGS_suffix.empty()) {
+    best_file_name += "." + FLAGS_suffix;
+  }
+  best_file_name += ".best";
+  FILE *best_file = fopen(best_file_name.c_str(), "w");
+  fprintf(best_file, "%d", sch->fitness());
 
-    std::string best_file_name = base_name;
-    if (!FLAGS_suffix.empty()) {
-        best_file_name += "." + FLAGS_suffix;
-    }
-    best_file_name += ".best";
-    FILE* best_file = fopen(best_file_name.c_str(), "w");
-    fprintf(best_file, "%d", sch->fitness());
+  sch->show(output_file);
 
-    sch->show(output_file);
+  fclose(best_file);
+  fclose(output_file);
 
-    fclose(best_file);
-    fclose(output_file);
+  delete algo;
+  Project::remove();
 
-    delete algo;
-    Project::remove();
-
-    return 0;
+  return 0;
 }

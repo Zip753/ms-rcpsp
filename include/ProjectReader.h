@@ -1,10 +1,11 @@
-#ifndef PROJECTREADER_H
-#define PROJECTREADER_H
+#ifndef MS_RCPSP_PROJECTREADER_H
+#define MS_RCPSP_PROJECTREADER_H
+
 #include <cstdio>
 
 class ProjectReader {
-public:
-    static void read(FILE* stream);
+ public:
+  static void read(FILE *stream);
 };
 
-#endif // PROJECTREADER_H
+#endif // MS_RCPSP_PROJECTREADER_H
