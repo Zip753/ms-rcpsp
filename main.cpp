@@ -15,7 +15,6 @@
 #include "include/Algorithm.h"
 #include "include/UniformCrossover.h"
 
-DEFINE_string(filename, "", "Input project file.");
 DEFINE_int32(pop_size, 100, "Population size.");
 DEFINE_int32(iters, 200, "Number of generations.");
 DEFINE_double(crossover, 0.3, "Probability of crossover.");
@@ -27,9 +26,9 @@ DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 
 int main(int argc, char *argv[]) {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
-
-    if (FLAGS_filename.empty()) {
-        fprintf(stderr, "No input file provided.");
+    if (argc != 2) {
+        fprintf(stderr, "Invalid number of arguments.\n"
+                "Usage: %s input_file [flags...]\n", argv[0]);
         return 1;
     }
 
@@ -39,11 +38,18 @@ int main(int argc, char *argv[]) {
 
     printf("Tournament size: %d\n", FLAGS_tournament_size);
 
-    std::string base_name = "data/" + FLAGS_filename + "/" + FLAGS_filename;
-    printf("File name: %s\n", base_name.c_str());
+    std::string input_full_name = std::string(argv[1]);
+    std::string input_base_name =
+            input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
+    std::string folder_path =
+            input_full_name.substr(0, input_full_name.find_last_of("/\\") + 1);
+    std::string base_name = folder_path +
+            input_base_name.substr(0, input_base_name.find_last_of('.'));
+    printf("File base name: %s\n", input_base_name.c_str());
+    printf("Folder path: %s\n", folder_path.c_str());
+    printf("Base name: %s\n", base_name.c_str());
 
-    std::string input_file_name = base_name + ".ndef";
-    FILE* input_file = fopen(input_file_name.c_str(), "r");
+    FILE* input_file = fopen(input_full_name.c_str(), "r");
     ProjectReader::read(input_file);
     fclose(input_file);
 
