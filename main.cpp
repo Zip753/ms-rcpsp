@@ -1,6 +1,10 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <string>
+
+#include <gflags/gflags.h>
+
 #include "include/ProjectReader.h"
 #include "include/Project.h"
 #include "include/Schedule.h"
@@ -11,42 +15,35 @@
 #include "include/Algorithm.h"
 #include "include/UniformCrossover.h"
 
-char *fname;
-char file_name[123];
-int POP_SIZE = 100;
-int N_STEPS = 200;
-double P_CROSS = 0.3;
-double P_MUT = 0.01;
-int TOURN_SIZE;
-char *suffix = nullptr;
+DEFINE_string(filename, "", "Input project file.");
+DEFINE_int32(pop_size, 100, "Population size.");
+DEFINE_int32(iters, 200, "Number of generations.");
+DEFINE_double(crossover, 0.3, "Probability of crossover.");
+DEFINE_double(mutation, 0.01, "Probability of single gene mutation.");
+DEFINE_int32(tournament_size, -1, "Size of tournament for selection.");
+DEFINE_string(suffix, "", "Suffix for output file names.");
+DEFINE_bool(lax, false, "Use LAX crossover operator.");
+DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 
 int main(int argc, char *argv[]) {
-    if (argc >= 2) {
-        fname = argv[1];
-    } else {
-        fname = new char[123];
-        strcpy(fname, "100_5_20_9_D3");
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+    if (FLAGS_filename.empty()) {
+        fprintf(stderr, "No input file provided.");
+        return 1;
     }
-    if (argc >= 3) { POP_SIZE = atoi(argv[2]); }
-    if (argc >= 4) { N_STEPS = atoi(argv[3]); }
-    if (argc >= 5) { P_CROSS = atof(argv[4]); }
-    if (argc >= 6) { P_MUT = atof(argv[5]); }
-    if (argc >= 7 && strlen(argv[6]) > 0) { TOURN_SIZE = atoi(argv[6]); }
-    else TOURN_SIZE = POP_SIZE / 20;
-    if (argc >= 8 && strlen(argv[7]) > 0) { suffix = argv[7]; }
 
-    printf("TOURN_SIZE - %d\n", TOURN_SIZE);
+    if (FLAGS_tournament_size == -1) {
+        FLAGS_tournament_size = FLAGS_pop_size / 20;
+    }
 
-    strcpy(file_name, "data/");
-    strcat(file_name, fname);
-    strcat(file_name, "/");
-    strcat(file_name, fname);
-    printf("file name - %s\n", file_name);
+    printf("Tournament size: %d\n", FLAGS_tournament_size);
 
-    char input_file_name[123];
-    strcat(strcpy(input_file_name, file_name), ".ndef");
-    FILE* input_file = fopen(input_file_name, "r");
+    std::string base_name = "data/" + FLAGS_filename + "/" + FLAGS_filename;
+    printf("File name: %s\n", base_name.c_str());
 
+    std::string input_file_name = base_name + ".ndef";
+    FILE* input_file = fopen(input_file_name.c_str(), "r");
     ProjectReader::read(input_file);
     fclose(input_file);
 
@@ -56,37 +53,35 @@ int main(int argc, char *argv[]) {
 //    printf("FITNESS = %d\n", s->fitness());
 //    s->show();
 
-    Population *pop = new Population(POP_SIZE);
-    Selector *sel = new Selector(TOURN_SIZE);
-//    Crossover *cross = new LAXCrossover(P_CROSS);
-    Crossover *cross = new UniformCrossover(P_CROSS);
-    Mutator *mut = new Mutator(P_MUT);
-
-    Algorithm *algo = new Algorithm(pop, sel, cross, mut, N_STEPS, false);
-
-    char output_file_name[123];
-    strcpy(output_file_name, file_name);
-    if (suffix != nullptr) {
-        strcat(output_file_name, ".");
-        strcat(output_file_name, suffix);
+    Population *pop = new Population(FLAGS_pop_size);
+    Selector *sel = new Selector(FLAGS_tournament_size);
+    Crossover *cross;
+    if (FLAGS_lax) {
+        cross = new LAXCrossover(FLAGS_crossover);
+    } else {
+        cross = new UniformCrossover(FLAGS_crossover);
     }
-    strcat(output_file_name, ".sol");
-    FILE* output_file = fopen(output_file_name, "w");
+    Mutator *mut = new Mutator(FLAGS_mutation);
+    Algorithm *algo = new Algorithm(pop, sel, cross, mut, FLAGS_iters, false);
+
+    std::string output_file_name = base_name;
+    if (!FLAGS_suffix.empty()) {
+        output_file_name += "." + FLAGS_suffix;
+    }
+    output_file_name += ".sol";
+    FILE* output_file = fopen(output_file_name.c_str(), "w");
 
     Schedule *sch;
-
-    bool SHOW_STAT = true;
-    if (SHOW_STAT) {
-        char stat_file_name[123];
-        strcpy(stat_file_name, file_name);
-        if (suffix != nullptr) {
-            strcat(stat_file_name, ".");
-            strcat(stat_file_name, suffix);
+    if (FLAGS_output_stat) {
+        std::string stat_file_name = base_name;
+        if (!FLAGS_suffix.empty()) {
+            stat_file_name += "." + FLAGS_suffix;
         }
-        strcat(stat_file_name, ".stat");
-        FILE* stat_file = fopen(stat_file_name, "w");
+        stat_file_name += ".stat";
+        printf("Stat file name: %s\n", stat_file_name.c_str());
+        FILE* stat_file = fopen(stat_file_name.c_str(), "w");
 
-        sch = algo->solve(stat_file);;
+        sch = algo->solve(stat_file);
         fclose(stat_file);
     } else {
         sch = algo->solve(nullptr);
@@ -95,14 +90,12 @@ int main(int argc, char *argv[]) {
     printf("SOLUTION: ");
     sch->show(true);
 
-    char best_file_name[123];
-    strcpy(best_file_name, file_name);
-    if (suffix != nullptr) {
-        strcat(best_file_name, ".");
-        strcat(best_file_name, suffix);
+    std::string best_file_name = base_name;
+    if (!FLAGS_suffix.empty()) {
+        best_file_name += "." + FLAGS_suffix;
     }
-    strcat(best_file_name, ".best");
-    FILE* best_file = fopen(best_file_name, "w");
+    best_file_name += ".best";
+    FILE* best_file = fopen(best_file_name.c_str(), "w");
     fprintf(best_file, "%d", sch->fitness());
 
     sch->show(output_file);
