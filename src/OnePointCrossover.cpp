@@ -1,7 +1,10 @@
 #include "../include/OnePointCrossover.h"
-#include "../include/Random.h"
 
-Schedule *OnePointCrossover::cross(Schedule *a, Schedule *b) {
+#include "../include/Random.h"
+#include "../include/Schedule.h"
+
+template<>
+Schedule *OnePointCrossover<Schedule>::cross(Schedule *a, Schedule *b) {
   Schedule *s = new Schedule(a);
 
   int n = s->size();

@@ -59,16 +59,15 @@ int main(int argc, char *argv[]) {
 //    printf("FITNESS = %d\n", s->fitness());
 //    s->show();
 
-  Population *pop = new Population(FLAGS_pop_size);
-  Selector *sel = new Selector(FLAGS_tournament_size);
-  Crossover *cross;
+  Crossover<Schedule> *cross;
   if (FLAGS_lax) {
-    cross = new LAXCrossover(FLAGS_crossover);
+    cross = new LAXCrossover<Schedule>(FLAGS_crossover);
   } else {
-    cross = new UniformCrossover(FLAGS_crossover);
+    cross = new UniformCrossover<Schedule>(FLAGS_crossover);
   }
-  Mutator *mut = new Mutator(FLAGS_mutation);
-  Algorithm *algo = new Algorithm(pop, sel, cross, mut, FLAGS_iters, false);
+  Mutator<Schedule> *mut = new Mutator<Schedule>(FLAGS_mutation);
+  Algorithm *algo = new Algorithm(FLAGS_pop_size, FLAGS_tournament_size,
+                                  cross, mut, FLAGS_iters, false);
 
   std::string output_file_name = base_name;
   if (!FLAGS_suffix.empty()) {

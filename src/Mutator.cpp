@@ -1,29 +1,10 @@
 #include "../include/Mutator.h"
+
 #include "../include/Random.h"
+#include "../include/Schedule.h"
 
-Schedule *Mutator::mutate(Schedule *sample) {
-  Schedule *s = new Schedule(sample);
-
-  for (int i = 0; i < s->size(); i++) {
-    // don't forget to check whether we can mutate it at all
-    if (Random::rand(p_mut)) {
-      mutate_gene(s, i);
-    }
-
-    if (Random::rand(p_mut)) {
-      if (Random::rand(0.5)) ++sample->prio[i];
-      else --sample->prio[i];
-    }
-  }
-  return s;
-}
-
-void Mutator::force_mutate(Schedule *sample) {
-  int idx = Random::randint() % sample->size();
-  mutate_gene(sample, idx);
-}
-
-void Mutator::mutate_gene(Schedule *sample, int i) {
+template<>
+void Mutator<Schedule>::mutate_gene(Schedule *sample, int i) {
   int max_ires = sample->max_res_count(i);
   if (max_ires > 1) {
     int new_res = Random::randint() % (max_ires - 1);
@@ -33,3 +14,32 @@ void Mutator::mutate_gene(Schedule *sample, int i) {
       sample->ires[i] = new_res + 1;
   }
 }
+
+template<>
+Schedule* Mutator<Schedule>::mutate(Schedule *sample) {
+  Schedule *s = new Schedule(sample);
+
+  for (int i = 0; i < s->size(); i++) {
+    // don't forget to check whether we can mutate it at all
+    if (Random::rand(p_mut)) {
+      mutate_gene(s, i);
+    }
+
+    if (Random::rand(p_mut)) {
+      if (Random::rand(0.5)) {
+        ++sample->prio[i];
+      } else {
+        --sample->prio[i];
+      }
+    }
+  }
+  return s;
+}
+
+template<>
+void Mutator<Schedule>::force_mutate(Schedule *sample) {
+  int idx = Random::randint() % sample->size();
+  mutate_gene(sample, idx);
+}
+
+template class Mutator<Schedule>;

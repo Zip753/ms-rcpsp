@@ -1,11 +1,13 @@
 #include "../include/Schedule.h"
-#include "../include/Project.h"
-#include "../include/Random.h"
 
 #include <algorithm>
 #include <list>
 #include <map>
 #include <queue>
+#include <vector>
+
+#include "../include/Project.h"
+#include "../include/Random.h"
 
 void Schedule::init(bool initialize) {
   Project *proj = Project::get();

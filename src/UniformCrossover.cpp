@@ -1,7 +1,10 @@
-#include "../include/Random.h"
 #include "../include/UniformCrossover.h"
 
-Schedule *UniformCrossover::cross(Schedule *a, Schedule *b) {
+#include "../include/Random.h"
+#include "../include/Schedule.h"
+
+template<>
+Schedule* UniformCrossover<Schedule>::cross(Schedule *a, Schedule *b) {
   Schedule *s = new Schedule(a);
 
   int n = s->size();

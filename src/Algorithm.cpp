@@ -92,3 +92,9 @@ Algorithm::~Algorithm() {
   delete best;
   delete global_best;
 }
+Algorithm::Algorithm(int pop_size, int tournament_size, Crossover<Schedule> *c,
+                     Mutator<Schedule> *m, int _steps, bool _rem_clones) :
+    crossover(c), mutator(m), steps (_steps), remove_clones(_rem_clones) {
+  population = new Population(pop_size);
+  selector = new Selector(tournament_size);
+}

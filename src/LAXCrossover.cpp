@@ -1,8 +1,11 @@
 #include "../include/LAXCrossover.h"
+
 #include "../include/Project.h"
 #include "../include/Random.h"
+#include "../include/Schedule.h"
 
-Schedule *LAXCrossover::cross(Schedule *a, Schedule *b) {
+template<>
+Schedule* LAXCrossover<Schedule>::cross(Schedule *a, Schedule *b) {
   Project *proj = Project::get();
   int n = a->size();
   int *ires = new int[n];
@@ -32,5 +35,3 @@ Schedule *LAXCrossover::cross(Schedule *a, Schedule *b) {
 
   return new Schedule(ires, prio);
 }
-
-

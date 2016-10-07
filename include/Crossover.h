@@ -1,8 +1,7 @@
 #ifndef MS_RCPSP_CROSSOVER_H
 #define MS_RCPSP_CROSSOVER_H
 
-#include "Schedule.h"
-
+template <class T>
 class Crossover {
  private:
   double p_cross;
@@ -10,8 +9,8 @@ class Crossover {
  public:
   Crossover(double _p_cross) : p_cross(_p_cross) {}
   virtual ~Crossover() {}
-  virtual Schedule *cross(Schedule *a, Schedule *b) = 0;
+  virtual T *cross(T *a, T *b) = 0;
   bool should_cross();
 };
 
-#endif // MS_RCPSP_CROSSOVER_H
+#endif  // MS_RCPSP_CROSSOVER_H
