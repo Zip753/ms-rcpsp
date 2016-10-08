@@ -21,6 +21,7 @@
 #include "include/UniformCrossover.h"
 #include "include/PrioSchedule.h"
 #include "include/SimpleSchedule.h"
+#include "include/TournamentSelector.h"
 
 DEFINE_int32(pop_size, 100, "Population size.");
 DEFINE_int32(iters, 200, "Number of generations.");
@@ -34,6 +35,8 @@ DEFINE_bool(simple, false, "Use simple schedule representation.");
 
 template <class T>
 std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
+  std::unique_ptr<Selector> sel =
+      std::make_unique<TournamentSelector>(FLAGS_tournament_size);
   std::unique_ptr<Crossover<T>> cross;
   if (FLAGS_lax) {
     cross = std::make_unique<LAXCrossover<T>>(FLAGS_crossover);
@@ -41,8 +44,7 @@ std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
     cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
   }
   Mutator<T> mut(FLAGS_mutation);
-  Algorithm<T> algo(FLAGS_pop_size, FLAGS_tournament_size, *cross, mut,
-                    FLAGS_iters, false);
+  Algorithm<T> algo(FLAGS_pop_size, *sel, *cross, mut, FLAGS_iters, false);
   std::shared_ptr<Schedule> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");

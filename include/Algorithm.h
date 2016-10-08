@@ -25,12 +25,12 @@ class Algorithm {
  public:
   /**
    * @param pop_size Size of the population.
-   * @param tournament_size Size of the tournament for selection.
-   * @param c Pointer to the crossover operator.
-   * @param m Pointer to the mutation operator.
+   * @param s Selection operator.
+   * @param c Crossover operator.
+   * @param m Mutation operator.
    */
   Algorithm(int pop_size,
-            int tournament_size,
+            const Selector &s,
             const Crossover<T> &c,
             const Mutator<T> &m,
             int _steps = -1,
@@ -46,7 +46,7 @@ class Algorithm {
 
  private:
   Population* population;
-  const Selector selector;
+  const Selector& selector;
   const Crossover<T>& crossover;
   const Mutator<T>& mutator;
   /** Number of generations. */

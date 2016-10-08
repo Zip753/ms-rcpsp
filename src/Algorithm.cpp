@@ -85,13 +85,13 @@ Algorithm<T>::~Algorithm() {
 
 template <class T>
 Algorithm<T>::Algorithm(int pop_size,
-                        int tournament_size,
+                        const Selector& s,
                         const Crossover<T> &c,
                         const Mutator<T> &m,
                         int _steps,
                         bool _rem_clones) :
-    selector(Selector(tournament_size)), crossover(c), mutator(m),
-    steps(_steps), remove_clones(_rem_clones)
+    selector(s), crossover(c), mutator(m), steps(_steps),
+    remove_clones(_rem_clones)
      {
   Schedule** specimen = new Schedule*[pop_size];
   for (int i = 0; i < pop_size; ++i) {
