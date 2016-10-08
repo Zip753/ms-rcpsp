@@ -24,7 +24,7 @@ class PrioSchedule : public Schedule {
   PrioSchedule(PrioSchedule* s);
   ~PrioSchedule() override;
 
-  void compute_fitness() override;
+  int compute_fitness() override;
 
   /** Task priorities. */
   int* prio;

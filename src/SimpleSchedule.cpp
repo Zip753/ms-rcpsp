@@ -97,18 +97,20 @@ void SimpleSchedule::fix_all() {
   delete[] used;
 }
 
-void SimpleSchedule::compute_fitness() {
+int SimpleSchedule::compute_fitness() {
   fix_all();
 
   for (int i = 0; i < n; i++) {
-      int finish = finish_time(i);
-      if (_fitness < finish)
-        _fitness = finish;
-    }
+    int finish = finish_time(i);
+    if (_fitness < finish)
+      _fitness = finish;
+  }
 
   std::fill_n(business, Project::get()->get_res_count(), 0);
   for (int i = 0; i < n; i++) {
-      int res = resource(i);
-      business[res] += tasks[i]->duration;
-    }
+    int res = resource(i);
+    business[res] += tasks[i]->duration;
+  }
+
+  return _fitness;
 }

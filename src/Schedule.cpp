@@ -16,7 +16,7 @@ bool Schedule::eq(Schedule* s) {
 
 int Schedule::fitness() {
   if (_fitness == -1) {
-    compute_fitness();
+    _fitness = compute_fitness();
   }
   return _fitness;
 }

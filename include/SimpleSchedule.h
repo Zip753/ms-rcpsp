@@ -45,7 +45,7 @@ class SimpleSchedule : public Schedule {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
 
-  void compute_fitness() override;
+  int compute_fitness() override;
 };
 
 #endif  // MS_RCPSP_SIMPLESCHEDULE_H

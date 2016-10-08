@@ -79,7 +79,7 @@ class Schedule {
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
    */
-  virtual void compute_fitness() = 0;
+  virtual int compute_fitness() = 0;
 };
 
 #endif  // MS_RCPSP_SCHEDULE_H

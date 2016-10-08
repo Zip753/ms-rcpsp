@@ -110,7 +110,7 @@ void PrioSchedule::fix_all() {
   delete[] dep_count;
 }
 
-void PrioSchedule::compute_fitness() {
+int PrioSchedule::compute_fitness() {
   fix_all();
 
   for (int i = 0; i < n; i++) {
@@ -124,4 +124,6 @@ void PrioSchedule::compute_fitness() {
     int res = resource(i);
     business[res] += tasks[i]->duration;
   }
+
+  return _fitness;
 }
