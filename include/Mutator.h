@@ -3,7 +3,11 @@
 
 #include "Schedule.h"
 
-/** @brief Implementation of mutation operator. */
+/** @brief Base class for mutation operators.
+ *
+ * If you want to implement your own mutation operator, create a subclass of
+ * Mutator and implement Mutator#mutate and Mutator#mutate_gene functions.
+ */
 template <class T>
 class Mutator {
  public:
@@ -23,7 +27,6 @@ class Mutator {
   /** Mutation probability. */
   double p_mut;
 
- private:
   /**
    * Mutates single gene in the specimen.
    * @param sample Specimen to operate on.

@@ -3,6 +3,7 @@
 
 #include "Mutator.h"
 
+/** @brief Implementation of simple mutation operator. */
 template <class T>
 class SimpleMutator : public Mutator<T> {
  public:
