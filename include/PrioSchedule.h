@@ -22,9 +22,9 @@ class PrioSchedule : public Schedule {
   PrioSchedule();
   PrioSchedule(int* _ires, int* _prio);
   PrioSchedule(PrioSchedule* s);
-  ~PrioSchedule();
+  ~PrioSchedule() override;
 
-  void compute_fitness();
+  void compute_fitness() override;
 
   /** Task priorities. */
   int* prio;

@@ -13,7 +13,7 @@ template <class T>
 class LAXCrossover : public Crossover<T> {
  public:
   LAXCrossover(double _p_cross) : Crossover<T>(_p_cross) {}
-  T* cross(T* a, T* b) const;
+  T* cross(T* a, T* b) const override;
 };
 
 #endif // MS_RCPSP_LAXCROSSOVER_H

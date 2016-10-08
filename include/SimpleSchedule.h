@@ -15,7 +15,7 @@ class SimpleSchedule : public Schedule {
   SimpleSchedule();
   SimpleSchedule(int* _ires);
   SimpleSchedule(SimpleSchedule* s);
-  ~SimpleSchedule();
+  ~SimpleSchedule() override;
 
   /**
    * List of relative business for each resource. Used to implement
@@ -45,7 +45,7 @@ class SimpleSchedule : public Schedule {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
 
-  void compute_fitness();
+  void compute_fitness() override;
 };
 
 #endif  // MS_RCPSP_SIMPLESCHEDULE_H
