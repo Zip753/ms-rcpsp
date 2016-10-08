@@ -8,7 +8,6 @@
 template<>
 PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
                                                 PrioSchedule* b) const {
-  Project* proj = Project::get();
   int n = a->size();
   int* ires = new int[n];
   int* prio = new int[n];
@@ -20,8 +19,8 @@ PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
     } else if (a->business[a_res] > b->business[b_res]) {
       ires[i] = b->ires[i];
     } else {
-      double a_sal = proj->get_salary(a_res);
-      double b_sal = proj->get_salary(b_res);
+      double a_sal = Project::get()->get_salary(a_res);
+      double b_sal = Project::get()->get_salary(b_res);
       if (a_sal < b_sal)
         ires[i] = a->ires[i];
       else
@@ -41,7 +40,6 @@ PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
 template<>
 SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
                                                     SimpleSchedule* b) const {
-  Project* proj = Project::get();
   int n = a->size();
   int* ires = new int[n];
   for (int i = 0; i < n; i++) {
@@ -52,8 +50,8 @@ SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
     } else if (a->business[a_res] > b->business[b_res]) {
       ires[i] = b->ires[i];
     } else {
-      double a_sal = proj->get_salary(a_res);
-      double b_sal = proj->get_salary(b_res);
+      double a_sal = Project::get()->get_salary(a_res);
+      double b_sal = Project::get()->get_salary(b_res);
       if (a_sal < b_sal)
         ires[i] = a->ires[i];
       else

@@ -130,8 +130,5 @@ int main(int argc, char* argv[]) {
   fprintf(best_file, "%d", sch->fitness());
   fclose(best_file);
 
-  /* Cleanup project. */
-  Project::remove();
-
   return 0;
 }

@@ -1,12 +1,14 @@
 #include "../include/Project.h"
 
+#include <memory>
 #include <vector>
 
-Project* Project::_project = 0;
+std::shared_ptr<Project> Project::_project = nullptr;
 
 void Project::create(int _n, Task **_tasks, int _res_count, int *_res_id,
                      double *_res_sal) {
-  _project = new Project(_n, _tasks, _res_count, _res_id, _res_sal);
+  _project = std::shared_ptr<Project>(
+      new Project(_n, _tasks, _res_count, _res_id, _res_sal));
 
   /* Create list of inverse dependencies. */
   std::vector<int> *next = new std::vector<int>[_n];

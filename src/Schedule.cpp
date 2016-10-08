@@ -33,10 +33,9 @@ void Schedule::printState(bool is_short) {
 void Schedule::writeToFile(FILE* stream) {
   fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
   std::map<int, std::list<std::pair<int, int> > > timeline;
-  Project* proj = Project::get();
   for (int i = 0; i < n; i++) {
     int st = start[i] + 1;
-    int res = proj->get_res_id(resource(i));
+    int res = Project::get()->get_res_id(resource(i));
     int task_id = tasks[i]->id;
 
     if (timeline.count(st) == 0) {
@@ -54,9 +53,8 @@ void Schedule::writeToFile(FILE* stream) {
 }
 
 Schedule::Schedule() {
-  Project* proj = Project::get();
-  n = proj->size();
-  this->tasks = proj->tasks;
+  n = Project::get()->size();
+  this->tasks = Project::get()->tasks;
 
   start = new int[n];
   std::fill_n(start, n, 0);

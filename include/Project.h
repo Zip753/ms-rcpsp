@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_PROJECT_H
 #define MS_RCPSP_PROJECT_H
 
+#include <memory>
+
 #include "Task.h"
 
 /**
@@ -14,7 +16,7 @@ class Project {
                      double* _res_sal);
 
   /** @return Pointer to project instance. */
-  inline static Project* get() { return _project; }
+  inline static std::shared_ptr<Project> get() { return _project; }
 
   /** Returns the number of tasks in the project. */
   inline int size() { return n; }
@@ -34,9 +36,6 @@ class Project {
    */
   inline double get_salary(int res) { return res_salary[res]; }
 
-  /** Deletes singleton instance. */
-  static void remove() { delete _project; }
-
   ~Project();
 
   /** List of project tasks. */
@@ -52,7 +51,7 @@ class Project {
   /** Number of resources. */
   int res_count;
   /** Shortcut to Project. */
-  static Project* _project;
+  static std::shared_ptr<Project> _project;
   /** @see ProjectReader::read() */
   Project(int _n, Task** _tasks, int _res_count, int* _res_id,
           double* _res_sal)
