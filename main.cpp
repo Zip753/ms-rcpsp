@@ -8,12 +8,12 @@
 #include "include/ProjectReader.h"
 #include "include/Project.h"
 #include "include/Schedule.h"
-#include "include/Population.h"
-#include "include/Selector.h"
 #include "include/Mutator.h"
 #include "include/LAXCrossover.h"
 #include "include/Algorithm.h"
 #include "include/UniformCrossover.h"
+#include "include/PrioSchedule.h"
+#include "include/SimpleSchedule.h"
 
 DEFINE_int32(pop_size, 100, "Population size.");
 DEFINE_int32(iters, 200, "Number of generations.");
@@ -23,6 +23,30 @@ DEFINE_int32(tournament_size, -1, "Size of tournament for selection.");
 DEFINE_string(suffix, "", "Suffix for output file names.");
 DEFINE_bool(lax, false, "Use LAX crossover operator.");
 DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
+DEFINE_bool(simple, false, "Use simple schedule representation.");
+
+template <class T>
+Schedule* InitAndSolve(const std::string& stat_file_name) {
+  Crossover<T> *cross;
+  if (FLAGS_lax) {
+      cross = new LAXCrossover<T>(FLAGS_crossover);
+    } else {
+      cross = new UniformCrossover<T>(FLAGS_crossover);
+    }
+  Mutator<T> *mut = new Mutator<T>(FLAGS_mutation);
+  Algorithm<T> *algo = new Algorithm<T>(FLAGS_pop_size, FLAGS_tournament_size,
+                                        cross, mut, FLAGS_iters, false);
+  Schedule* sch;
+  if (FLAGS_output_stat) {
+    printf("Yes, stat!\n");
+    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
+    sch = algo->solve(stat_file);
+    fclose(stat_file);
+  } else {
+    sch = algo->solve(nullptr);
+  }
+  return sch;
+}
 
 int main(int argc, char *argv[]) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -32,12 +56,13 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  /* Set tournament size dynamically, if none provided. */
   if (FLAGS_tournament_size == -1) {
     FLAGS_tournament_size = FLAGS_pop_size / 20;
   }
-
   printf("Tournament size: %d\n", FLAGS_tournament_size);
 
+  /* Parse filename. */
   std::string input_full_name = std::string(argv[1]);
   std::string input_base_name =
       input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
@@ -49,66 +74,58 @@ int main(int argc, char *argv[]) {
   printf("Folder path: %s\n", folder_path.c_str());
   printf("Base name: %s\n", base_name.c_str());
 
-  FILE *input_file = fopen(input_full_name.c_str(), "r");
+  /* Read project data from file. */
+  FILE* input_file = fopen(input_full_name.c_str(), "r");
   ProjectReader::read(input_file);
   fclose(input_file);
-
   printf("Tasks: %d\n", Project::get()->size());
 
-//    Schedule* s = new Schedule();
-//    printf("FITNESS = %d\n", s->fitness());
-//    s->show();
-
-  Crossover<Schedule> *cross;
-  if (FLAGS_lax) {
-    cross = new LAXCrossover<Schedule>(FLAGS_crossover);
-  } else {
-    cross = new UniformCrossover<Schedule>(FLAGS_crossover);
-  }
-  Mutator<Schedule> *mut = new Mutator<Schedule>(FLAGS_mutation);
-  Algorithm *algo = new Algorithm(FLAGS_pop_size, FLAGS_tournament_size,
-                                  cross, mut, FLAGS_iters, false);
-
+  /* Project solution output: */
   std::string output_file_name = base_name;
   if (!FLAGS_suffix.empty()) {
     output_file_name += "." + FLAGS_suffix;
   }
   output_file_name += ".sol";
-  FILE *output_file = fopen(output_file_name.c_str(), "w");
+  FILE* output_file = fopen(output_file_name.c_str(), "w");
 
-  Schedule *sch;
-  if (FLAGS_output_stat) {
-    std::string stat_file_name = base_name;
-    if (!FLAGS_suffix.empty()) {
-      stat_file_name += "." + FLAGS_suffix;
-    }
-    stat_file_name += ".stat";
-    printf("Stat file name: %s\n", stat_file_name.c_str());
-    FILE *stat_file = fopen(stat_file_name.c_str(), "w");
-
-    sch = algo->solve(stat_file);
-    fclose(stat_file);
-  } else {
-    sch = algo->solve(nullptr);
+  /* Population statistics output: */
+  std::string stat_file_name = base_name;
+  if (!FLAGS_suffix.empty()) {
+    stat_file_name += "." + FLAGS_suffix;
   }
+  stat_file_name += ".stat";
+  printf("Stat file name: %s\n", stat_file_name.c_str());
 
-  printf("SOLUTION: ");
-  sch->show(true);
-
+  /* Minimum fitness output: */
   std::string best_file_name = base_name;
   if (!FLAGS_suffix.empty()) {
     best_file_name += "." + FLAGS_suffix;
   }
   best_file_name += ".best";
-  FILE *best_file = fopen(best_file_name.c_str(), "w");
-  fprintf(best_file, "%d", sch->fitness());
+  FILE* best_file = fopen(best_file_name.c_str(), "w");
 
-  sch->show(output_file);
+  /* Run the algorithm. */
+  Schedule *sch;
+  if (FLAGS_simple) {
+    sch = InitAndSolve<SimpleSchedule>(stat_file_name);
+  } else {
+    printf("Going prio...\n");
+    sch = InitAndSolve<PrioSchedule>(stat_file_name);
+  }
 
-  fclose(best_file);
+  /* Output solution to stdout. */
+  printf("SOLUTION: ");
+  sch->printState(true);
+
+  /* Output solution to file. */
+  sch->writeToFile(output_file);
   fclose(output_file);
 
-  delete algo;
+  /* Output best fitness value to file. */
+  fprintf(best_file, "%d", sch->fitness());
+  fclose(best_file);
+
+  /* Cleanup project. */
   Project::remove();
 
   return 0;

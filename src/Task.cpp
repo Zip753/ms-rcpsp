@@ -5,11 +5,3 @@ Task::~Task() {
   delete[] dep;
   delete[] next;
 }
-
-int Task::res_size() {
-  return nres;
-}
-
-int Task::dep_size() {
-  return ndep;
-}

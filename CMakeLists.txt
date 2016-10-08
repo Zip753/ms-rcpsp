@@ -24,7 +24,7 @@ set(SOURCE_FILES
         src/Schedule.cpp
         src/Selector.cpp
         src/Task.cpp
-        main.cpp include/Crossover.h src/UniformCrossover.cpp include/UniformCrossover.h src/Crossover.cpp src/OnePointCrossover.cpp include/OnePointCrossover.h)
+        main.cpp include/Crossover.h src/UniformCrossover.cpp include/UniformCrossover.h src/Crossover.cpp src/OnePointCrossover.cpp include/OnePointCrossover.h src/SimpleSchedule.cpp include/SimpleSchedule.h include/PrioSchedule.h src/PrioSchedule.cpp)
 
 include_directories(/usr/include/gflags)
 

@@ -3,8 +3,9 @@
 
 #include "Crossover.h"
 
-#include <utility>
-
+/**
+ * Implementation of Least Assignments Crossover.
+ */
 template <class T>
 class LAXCrossover : public Crossover<T> {
  public:

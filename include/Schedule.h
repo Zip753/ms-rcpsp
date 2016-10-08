@@ -1,42 +1,70 @@
 #ifndef MS_RCPSP_SCHEDULE_H
 #define MS_RCPSP_SCHEDULE_H
 
+#include <cstdio>
 #include "Task.h"
 
-#include <cstdio>
-#include <set>
-#include <utility>
-
+/**
+ * Abstract base class for schedule representations.
+ */
 class Schedule {
  public:
-  Schedule();
-  Schedule(int *_ires, int *_prio);
-  Schedule(Schedule *s);
-  ~Schedule();
+  /** Prints current state to stdout. */
+  void printState(bool short_output);
 
+  /** Outputs solution to file stream in compatible format. */
+  void writeToFile(FILE *stream);
+
+  /** Checks schedule equality. */
+  bool eq(Schedule* s);
+
+  virtual ~Schedule() {}
+
+  /** List of resources assigned to corresponding tasks. */
+  int *ires;
+
+  /** List of task start times. */
+  int *start;
+
+  /** Returns number of tasks. */
+  int size() { return n; }
+
+  /** Calculates fitness function. Caches result in _fitness. */
   int fitness();
-  void show(bool sh = false);
-  void show(FILE *stream);
-  int size();
 
-  int *ires;     // own
-  int *prio;     // own, priorities of tasks
-  int *start;    // own
-  int *business; // own
-  int max_res_count(int i);
-  int resource(int i);
-  bool eq(Schedule *s);
+  /**
+   * Returns index of resource assigned to the task at index i.
+   * @param i Index of the task.
+   */
+  inline int resource(int i) { return tasks[i]->res[ires[i]]; }
 
- private:
+  /**
+   * Number of resources capable of performing task at index i.
+   * @param i Index of the task.
+   */
+  int max_res_count(int i) { return tasks[i]->res_size(); }
+
+ protected:
+  Schedule();
+  Schedule(int* _ires) : Schedule() { ires = _ires; }
+
+  /** Number of tasks. */
   int n;
-  Task **tasks; // reference
+
+  /** Cached fitness value for this specimen. */
   int _fitness = -1;
 
-  bool *visited;
+  /** List of tasks to complete. Shortcut to Project::tasks. */
+  Task** tasks;
 
-  void init(bool initialize); // constructor hook
-  void fix_all();
-  int finish_time(int i);
+  /**
+   * Finish time of the task at index i.
+   * @param i Index of the task.
+   */
+  inline int finish_time(int i) { return start[i] + tasks[i]->duration; }
+
+  /** Computes fitness and writes it to _fitness cache variable. */
+  virtual void compute_fitness() = 0;
 };
 
-#endif // SCHEDULE_H
+#endif  // MS_RCPSP_SCHEDULE_H

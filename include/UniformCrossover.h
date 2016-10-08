@@ -3,6 +3,9 @@
 
 #include "Crossover.h"
 
+/**
+ * Implementation of uniform crossover.
+ */
 template <class T>
 class UniformCrossover : public Crossover<T> {
  public:
@@ -10,4 +13,4 @@ class UniformCrossover : public Crossover<T> {
   T *cross(T *a, T *b);
 };
 
-#endif // MS_RCPSP_UNIFORMCROSSOVER_H
+#endif  // MS_RCPSP_UNIFORMCROSSOVER_H

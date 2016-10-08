@@ -3,29 +3,61 @@
 
 #include "Task.h"
 
+/**
+ * Singleton class that represents the project in the scheduling problem.
+ */
 class Project {
+
  public:
+  /** Creates singleton instance. */
   static void create(int _n, Task **_tasks, int _res_count, int *_res_id,
                      double *_res_sal);
-  static void remove();
-  static Project *get();
+
+  /** @return Pointer to project instance. */
+  inline static Project* get() { return _project; }
+
+  /** Returns the number of tasks in the project. */
+  inline int size() { return n; }
+
+  /** Returns number of resources. */
+  inline int get_res_count() { return res_count; }
+
+  /**
+   * Returns resource ID of the resource at the given index.
+   * @param res index of the resource
+   */
+  inline int get_res_id(int res) { return res_id[res]; }
+
+  /**
+   * Returns the hourly salary of the resource at the given index.
+   * @param res index of the resource
+   */
+  inline double get_salary(int res) { return res_salary[res]; }
+
+  /** Deletes singleton instance. */
+  static void remove() { delete _project; }
+
   ~Project();
 
-  int size();
-  int get_res_count();
-  int get_res_id(int res);
-  double get_salary(int res);
-  Task **tasks;
+  /** List of project tasks. */
+  Task** tasks;
 
  private:
+  /** Number of tasks. */
   int n;
+  /** IDs of resources. */
   int *res_id;
+  /** Salaries of resources. */
   double *res_salary;
+  /** Number of resources. */
   int res_count;
+  /** Shortcut to Project. */
   static Project *_project;
-  Project(int _n, Task **_tasks, int _res_count, int *_res_id, double *_res_sal)
+  /** @see ProjectReader::read() */
+  Project(int _n, Task** _tasks, int _res_count, int *_res_id,
+          double* _res_sal)
       : tasks(_tasks), n(_n), res_id(_res_id), res_salary(_res_sal),
-        res_count(_res_count) {};
+        res_count(_res_count) {}
 };
 
-#endif // MS_RCPSP_PROJECT_H
+#endif  // MS_RCPSP_PROJECT_H

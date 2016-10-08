@@ -3,6 +3,9 @@
 
 #include "Crossover.h"
 
+/**
+ * Implementation of one-point crossover.
+ */
 template <class T>
 class OnePointCrossover : public Crossover<T> {
  public:
@@ -10,4 +13,4 @@ class OnePointCrossover : public Crossover<T> {
   T *cross(T *a, T *b);
 };
 
-#endif // MS_RCPSP_ONEPOINTCROSSOVER_H
+#endif  // MS_RCPSP_ONEPOINTCROSSOVER_H
