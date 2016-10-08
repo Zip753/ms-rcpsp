@@ -9,9 +9,15 @@
 
 #include <cstdio>
 
+/** @mainpage
+ * This is the library that implements the backbone for genetic algorithms.
+ * It is possible to add new mutation and crossover operators, as well as new
+ * specimen (schedule) representations by extending respective base classes.
+ */
+
 /**
- * Representation of genetic algorithm. Glues everything together. Assumes that
- * type T is the subclass of Schedule.
+ * @brief Representation of genetic algorithm. Glues everything together.
+ * @param T Type of specimen representation, subclass of Schedule.
  */
 template <class T>
 class Algorithm {
@@ -22,7 +28,7 @@ class Algorithm {
    * @param c Pointer to the crossover operator.
    * @param m Pointer to the mutation operator.
    */
-  Algorithm(int pop_size, int tournament_size, Crossover<T> *c, Mutator<T> *m,
+  Algorithm(int pop_size, int tournament_size, Crossover<T>* c, Mutator<T>* m,
             int _steps = -1, bool _rem_clones = true);
   ~Algorithm();
 
@@ -31,13 +37,13 @@ class Algorithm {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  Schedule *solve(FILE *stream);
+  Schedule* solve(FILE* stream);
 
  private:
-  Population *population;
-  Selector *selector;
-  Crossover<T> *crossover;
-  Mutator<T> *mutator;
+  Population* population;
+  Selector* selector;
+  Crossover<T>* crossover;
+  Mutator<T>* mutator;
   /** Number of generations. */
   int steps;
   /** If true, removes clones from the population. */
@@ -49,9 +55,7 @@ class Algorithm {
 
   void addToPopulation(Schedule** pop, int* i, Schedule* sample);
 
-  /**
-   * Updates best result for the current generation and the global best.
-   */
+  /** Updates best result for the current generation and the global best. */
   void update_best();
 };
 

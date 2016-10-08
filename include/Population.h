@@ -5,10 +5,7 @@
 
 #include "Schedule.h"
 
-/**
- * Representation of population, i.e. set of specimen (schedules).
- * @param T Type of specimen class.
- */
+/** @brief Representation of population, i.e. set of specimen (schedules). */
 class Population {
  public:
   /**
@@ -20,10 +17,10 @@ class Population {
 
   ~Population();
 
-  /** Size of the population. */
+  /** Returns size of the population. */
   int size();
 
-  /** Specimen with the smallest fitness function in the population. */
+  /** Returns specimen with the smallest fitness function in the population. */
   Schedule* best();
 
   /** List of specimen. */
@@ -34,7 +31,7 @@ class Population {
    * specimen.
    * @param stream Destination file stream.
    */
-  void showStat(FILE *stream);
+  void showStat(FILE* stream);
 
  private:
   /** Size of the population. */

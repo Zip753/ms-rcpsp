@@ -1,9 +1,7 @@
 #ifndef MS_RCPSP_TASK_H
 #define MS_RCPSP_TASK_H
 
-/**
- * Representation of tasks in the project.
- */
+/** @brief Representation of task. */
 class Task {
  public:
   /**
@@ -19,8 +17,12 @@ class Task {
         nres(_nres) {}
   ~Task();
 
-  int id, duration;
-  /** List of dependencies, i.e. tasks that have to be completed before this. */
+  /** Task ID, as specified in input file. */
+  int id;
+  /** Task duration. */
+  int duration;
+  /** List of dependencies, i.e. tasks that have to be completed before this
+   * task. */
   int* dep;
   /** List of resources capable of completing the task. */
   int* res;
@@ -30,7 +32,8 @@ class Task {
   /** Returns number of resources capable of completing the task. */
   int res_size() const { return nres; }
 
-  /** Returns number of dependent tasks. */
+  /** Returns number of dependencies, i.e. tasks that have to be completed
+   * before this task. */
   int dep_size() const { return ndep; }
 
   /** Number of inverse dependencies. */
@@ -40,4 +43,4 @@ class Task {
   int ndep, nres;
 };
 
-#endif // MS_RCPSP_TASK_H
+#endif  // MS_RCPSP_TASK_H

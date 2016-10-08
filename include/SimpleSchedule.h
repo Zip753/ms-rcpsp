@@ -4,46 +4,38 @@
 #include "Schedule.h"
 
 /**
- * Class that represents the specimen in the scheduling problem.
+ * @brief Simple representation of schedule.
+ *
+ * This representation uses schedule builder procedure to find a feasible
+ * schedule given the resource assignment and then calculate the fitness
+ * function (project execution time) based on the found schedule.
  */
 class SimpleSchedule : public Schedule {
  public:
   SimpleSchedule();
-
-  /**
-   * Creates schedule using given resource assignment.
-   * @param _ires List of resource assignments.
-   */
-  SimpleSchedule(int *_ires);
-
-  /**
-   * Creates a copy of given SimpleSchedule.
-   */
-  SimpleSchedule(SimpleSchedule *s);
-
+  SimpleSchedule(int* _ires);
+  SimpleSchedule(SimpleSchedule* s);
   ~SimpleSchedule();
 
   /**
    * List of relative business for each resource. Used to implement
    * LAXCrossover.
    */
-  int *business;
+  int* business;
 
  private:
-  /**
-   * Helper list, used in SimpleSchedule::update_start().
-   */
-  bool *visited;
+  /** Helper list, used in SimpleSchedule#update_start. */
+  bool* visited;
 
   /**
-   * Constructor hook, to keep constructors DRY.
-   * @param create_ires If true, allocates resource list.
+   * Contructor helper.
+   * @param initialize If true, allocate and initialize resources.
    */
   void init(bool create_ires);
 
   /**
-   * Recursive function to update start time of a task.
-   * @param i index of the task
+   * Update start time of a task recursively.
+   * @param i Index of the task.
    */
   void update_start(int i);
 

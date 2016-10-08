@@ -3,13 +3,11 @@
 
 #include <cstdio>
 
-/**
- * I/O reader of Project.
- */
+/** @brief Input reader of Project. */
 class ProjectReader {
  public:
   /** Reads project from source file. Initializes Project singleton. */
-  static void read(FILE *stream);
+  static void read(FILE* stream);
 };
 
 #endif  // MS_RCPSP_PROJECTREADER_H

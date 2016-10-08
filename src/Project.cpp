@@ -2,7 +2,7 @@
 
 #include <vector>
 
-Project *Project::_project = 0;
+Project* Project::_project = 0;
 
 void Project::create(int _n, Task **_tasks, int _res_count, int *_res_id,
                      double *_res_sal) {

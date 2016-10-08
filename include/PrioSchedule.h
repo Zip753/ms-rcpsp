@@ -8,22 +8,39 @@
 #include "Task.h"
 #include "Schedule.h"
 
+
+/**
+ * @brief Representation of schedule that uses task priorities.
+ *
+ * This schedule representation introduces task priorities, so that when a
+ * resource can execute several tasks at some point, he always executes the
+ * task with the biggest priority, as opposed to executing random task as in
+ * SimpleSchedule.
+ */
 class PrioSchedule : public Schedule {
  public:
   PrioSchedule();
-  PrioSchedule(int *_ires, int *_prio);
-  PrioSchedule(PrioSchedule *s);
+  PrioSchedule(int* _ires, int* _prio);
+  PrioSchedule(PrioSchedule* s);
   ~PrioSchedule();
 
   void compute_fitness();
 
-  int *prio;     // own, priorities of tasks
-  int *business; // own
+  /** Task priorities. */
+  int* prio;
+
+  /** Businesses of resources. Used to implement LAXCrossover. */
+  int* business;
 
  private:
-  bool *visited;
+  /**
+   * Contructor helper.
+   * @param initialize If true, allocate and initialize resources and
+   * priorities.
+   */
+  void init(bool initialize);
 
-  void init(bool initialize); // constructor hook
+  /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
 };
 

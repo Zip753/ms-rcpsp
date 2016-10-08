@@ -1,9 +1,7 @@
 #ifndef MS_RCPSP_RANDOM_H
 #define MS_RCPSP_RANDOM_H
 
-/**
- * Helper class used to generate random values.
- */
+/** @brief Helper class used to generate random values. */
 class Random {
  public:
   /** Generates random integer number. */
@@ -12,7 +10,7 @@ class Random {
   /**
    * Checks whether the randomly generated number satisfied the given
    * probability.
-   * @param prob probability value from 0 to 1
+   * @param prob Probability value from 0 to 1.
    */
   static bool rand(double prob);
 

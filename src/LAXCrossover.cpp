@@ -6,12 +6,12 @@
 #include "../include/SimpleSchedule.h"
 
 template<>
-PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule *a,
-                                                PrioSchedule *b) {
-  Project *proj = Project::get();
+PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
+                                                PrioSchedule* b) {
+  Project* proj = Project::get();
   int n = a->size();
-  int *ires = new int[n];
-  int *prio = new int[n];
+  int* ires = new int[n];
+  int* prio = new int[n];
   for (int i = 0; i < n; i++) {
     int a_res = a->resource(i);
     int b_res = b->resource(i);
@@ -39,12 +39,11 @@ PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule *a,
 }
 
 template<>
-SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule *a,
-                                                    SimpleSchedule *b) {
-
+SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
+                                                    SimpleSchedule* b) {
   Project* proj = Project::get();
   int n = a->size();
-  int *ires = new int[n];
+  int* ires = new int[n];
   for (int i = 0; i < n; i++) {
     int a_res = a->resource(i);
     int b_res = b->resource(i);

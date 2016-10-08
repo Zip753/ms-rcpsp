@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <queue>
+#include <utility>
 #include <vector>
 
 #include "../include/Project.h"
@@ -18,8 +19,6 @@ void PrioSchedule::init(bool initialize) {
     std::random_shuffle(prio, prio + n);
   }
 
-  visited = new bool[n];
-
   int rcount = Project::get()->get_res_count();
   business = new int[rcount];
 }
@@ -28,7 +27,7 @@ PrioSchedule::PrioSchedule() : Schedule() {
   init(true);
 }
 
-PrioSchedule::PrioSchedule(PrioSchedule *s) : Schedule() {
+PrioSchedule::PrioSchedule(PrioSchedule* s) : Schedule() {
   init(false);
   ires = new int[n];
   prio = new int[n];
@@ -47,7 +46,6 @@ PrioSchedule::~PrioSchedule() {
   delete[] ires;
   delete[] prio;
   delete[] start;
-  delete[] visited;
   if (business != nullptr) delete[] business;
 }
 
@@ -71,11 +69,11 @@ void PrioSchedule::fix_all() {
   int res_count = Project::get()->get_res_count();
 
   // availability time for resources
-  int *time = new int[res_count];
+  int* time = new int[res_count];
   std::fill_n(time, res_count, 0);
 
   // number of complete dependencies for tasks
-  int *dep_count = new int[n];
+  int* dep_count = new int[n];
   std::fill_n(dep_count, n, 0);
 
   while (!queue.empty()) {

@@ -4,16 +4,14 @@
 #include "Population.h"
 #include "Schedule.h"
 
-/**
- * Implementation of tournament selection operator.
- */
+/** @brief Implementation of tournament selection operator. */
 class Selector {
  public:
-  /** @param _n tournament size, defaults to 5. */
+  /** @param _n Tournament size. */
   Selector(int _n = 5) : n(_n) {}
 
   /** Selects the candidate specimen from the population. */
-  Schedule* select(Population *p);
+  Schedule* select(Population* p);
 
  private:
   /** Size of the tournament. */

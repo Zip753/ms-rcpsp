@@ -1,3 +1,8 @@
+/**
+ * Example of library usage. Reads project from file and finds a suboptimal
+ * feasible schedule.
+ */
+
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -38,7 +43,6 @@ Schedule* InitAndSolve(const std::string& stat_file_name) {
                                         cross, mut, FLAGS_iters, false);
   Schedule* sch;
   if (FLAGS_output_stat) {
-    printf("Yes, stat!\n");
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
     sch = algo->solve(stat_file);
     fclose(stat_file);
@@ -70,9 +74,6 @@ int main(int argc, char *argv[]) {
       input_full_name.substr(0, input_full_name.find_last_of("/\\") + 1);
   std::string base_name = folder_path +
       input_base_name.substr(0, input_base_name.find_last_of('.'));
-  printf("File base name: %s\n", input_base_name.c_str());
-  printf("Folder path: %s\n", folder_path.c_str());
-  printf("Base name: %s\n", base_name.c_str());
 
   /* Read project data from file. */
   FILE* input_file = fopen(input_full_name.c_str(), "r");
@@ -94,7 +95,6 @@ int main(int argc, char *argv[]) {
     stat_file_name += "." + FLAGS_suffix;
   }
   stat_file_name += ".stat";
-  printf("Stat file name: %s\n", stat_file_name.c_str());
 
   /* Minimum fitness output: */
   std::string best_file_name = base_name;
@@ -109,7 +109,6 @@ int main(int argc, char *argv[]) {
   if (FLAGS_simple) {
     sch = InitAndSolve<SimpleSchedule>(stat_file_name);
   } else {
-    printf("Going prio...\n");
     sch = InitAndSolve<PrioSchedule>(stat_file_name);
   }
 

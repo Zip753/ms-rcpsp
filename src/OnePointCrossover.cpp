@@ -5,8 +5,8 @@
 #include "../include/PrioSchedule.h"
 
 template<>
-SimpleSchedule* OnePointCrossover<SimpleSchedule>::cross(SimpleSchedule *a,
-                                                         SimpleSchedule *b) {
+SimpleSchedule* OnePointCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
+                                                         SimpleSchedule* b) {
   SimpleSchedule* s = new SimpleSchedule(a);
 
   int n = s->size();
@@ -18,8 +18,8 @@ SimpleSchedule* OnePointCrossover<SimpleSchedule>::cross(SimpleSchedule *a,
 }
 
 template<>
-PrioSchedule* OnePointCrossover<PrioSchedule>::cross(PrioSchedule *a,
-                                                     PrioSchedule *b) {
+PrioSchedule* OnePointCrossover<PrioSchedule>::cross(PrioSchedule* a,
+                                                     PrioSchedule* b) {
   PrioSchedule* s = new PrioSchedule(a);
 
   int n = s->size();

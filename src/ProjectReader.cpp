@@ -2,14 +2,15 @@
 
 #include "../include/Project.h"
 
-void ProjectReader::read(FILE *stream) {
+void ProjectReader::read(FILE* stream) {
   int n, res_count;
   fscanf(stream, "%d%d", &n, &res_count);
-  Task **tasks = new Task *[n];
+  Task** tasks = new Task*[n];
   int id, dur, ndep, nres;
-  int *dep, *res;
-  int *res_id = new int[res_count];
-  double *res_sal = new double[res_count];
+  int* dep;
+  int* res;
+  int* res_id = new int[res_count];
+  double* res_sal = new double[res_count];
   for (int i = 0; i < res_count; i++) {
     fscanf(stream, "%d%lf", &res_id[i], &res_sal[i]);
   }

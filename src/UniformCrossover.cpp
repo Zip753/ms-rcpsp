@@ -5,9 +5,9 @@
 #include "../include/SimpleSchedule.h"
 
 template<>
-PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule *a,
-                                                    PrioSchedule *b) {
-  PrioSchedule *s = new PrioSchedule(a);
+PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule* a,
+                                                    PrioSchedule* b) {
+  PrioSchedule* s = new PrioSchedule(a);
 
   int n = s->size();
   for (int i = 0; i < n; i++) {
@@ -24,9 +24,9 @@ PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule *a,
 }
 
 template<>
-SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(SimpleSchedule *a,
-                                                        SimpleSchedule *b) {
-  SimpleSchedule *s = new SimpleSchedule(a);
+SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
+                                                        SimpleSchedule* b) {
+  SimpleSchedule* s = new SimpleSchedule(a);
 
   int n = s->size();
   for (int i = 0; i < n; i++) {

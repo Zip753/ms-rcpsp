@@ -2,16 +2,16 @@
 
 #include <list>
 #include <map>
+#include <utility>
 
 #include "../include/Project.h"
 
-bool Schedule::eq(Schedule *s) {
+bool Schedule::eq(Schedule* s) {
   if (n != s->size()) return false;
   for (int i = 0; i < n; i++)
     if (ires[i] != s->ires[i])
       return false;
   return true;
-
 }
 
 int Schedule::fitness() {
@@ -31,10 +31,10 @@ void Schedule::printState(bool is_short) {
 }
 
 
-void Schedule::writeToFile(FILE *stream) {
+void Schedule::writeToFile(FILE* stream) {
   fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
   std::map<int, std::list<std::pair<int, int> > > timeline;
-  Project *proj = Project::get();
+  Project* proj = Project::get();
   for (int i = 0; i < n; i++) {
     int st = start[i] + 1;
     int res = proj->get_res_id(resource(i));

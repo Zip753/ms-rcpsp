@@ -4,14 +4,14 @@
 #include "Task.h"
 
 /**
- * Singleton class that represents the project in the scheduling problem.
+ * @brief Singleton representation of project in the scheduling problem.
  */
 class Project {
 
  public:
   /** Creates singleton instance. */
-  static void create(int _n, Task **_tasks, int _res_count, int *_res_id,
-                     double *_res_sal);
+  static void create(int _n, Task **_tasks, int _res_count, int* _res_id,
+                     double* _res_sal);
 
   /** @return Pointer to project instance. */
   inline static Project* get() { return _project; }
@@ -46,15 +46,15 @@ class Project {
   /** Number of tasks. */
   int n;
   /** IDs of resources. */
-  int *res_id;
+  int* res_id;
   /** Salaries of resources. */
-  double *res_salary;
+  double* res_salary;
   /** Number of resources. */
   int res_count;
   /** Shortcut to Project. */
-  static Project *_project;
+  static Project* _project;
   /** @see ProjectReader::read() */
-  Project(int _n, Task** _tasks, int _res_count, int *_res_id,
+  Project(int _n, Task** _tasks, int _res_count, int* _res_id,
           double* _res_sal)
       : tasks(_tasks), n(_n), res_id(_res_id), res_salary(_res_sal),
         res_count(_res_count) {}

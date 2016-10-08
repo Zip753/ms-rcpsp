@@ -23,7 +23,7 @@ SimpleSchedule::SimpleSchedule() : Schedule() {
   init(true);
 }
 
-SimpleSchedule::SimpleSchedule(SimpleSchedule *s) : Schedule() {
+SimpleSchedule::SimpleSchedule(SimpleSchedule* s) : Schedule() {
   init(false);
   ires = new int[n];
   for (int i = 0; i < n; i++) {
@@ -31,7 +31,7 @@ SimpleSchedule::SimpleSchedule(SimpleSchedule *s) : Schedule() {
   }
 }
 
-SimpleSchedule::SimpleSchedule(int *_ires) : Schedule(_ires) {
+SimpleSchedule::SimpleSchedule(int* _ires) : Schedule(_ires) {
   init(false);
 }
 
@@ -66,7 +66,7 @@ void SimpleSchedule::reschedule() {
 void SimpleSchedule::fix_all() {
   reschedule();
 
-  bool *used = new bool[n];
+  bool* used = new bool[n];
   std::fill_n(used, n, false);
 
   for (int i = 0; i < n; i++) {
