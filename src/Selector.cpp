@@ -2,7 +2,7 @@
 
 #include "../include/Random.h"
 
-Schedule* Selector::select(Population* p) {
+Schedule* Selector::select(Population* p) const {
   // select n random genotypes
   int p_size = p->size();
   int tourn_size = n;

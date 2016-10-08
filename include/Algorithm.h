@@ -1,13 +1,14 @@
 #ifndef MS_RCPSP_ALGORITHM_H
 #define MS_RCPSP_ALGORITHM_H
 
+#include <cstdio>
+#include <memory>
+
 #include "Crossover.h"
 #include "Mutator.h"
 #include "Population.h"
 #include "Schedule.h"
 #include "Selector.h"
-
-#include <cstdio>
 
 /** @mainpage
  * This is the library that implements the backbone for genetic algorithms.
@@ -28,8 +29,12 @@ class Algorithm {
    * @param c Pointer to the crossover operator.
    * @param m Pointer to the mutation operator.
    */
-  Algorithm(int pop_size, int tournament_size, Crossover<T>* c, Mutator<T>* m,
-            int _steps = -1, bool _rem_clones = true);
+  Algorithm(int pop_size,
+            int tournament_size,
+            const Crossover<T> &c,
+            const Mutator<T> &m,
+            int _steps = -1,
+            bool _rem_clones = true);
   ~Algorithm();
 
   /**
@@ -37,21 +42,21 @@ class Algorithm {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  Schedule* solve(FILE* stream);
+  std::shared_ptr<Schedule> solve(FILE* stream);
 
  private:
   Population* population;
-  Selector* selector;
-  Crossover<T>* crossover;
-  Mutator<T>* mutator;
+  const Selector selector;
+  const Crossover<T>& crossover;
+  const Mutator<T>& mutator;
   /** Number of generations. */
   int steps;
   /** If true, removes clones from the population. */
   bool remove_clones;
   /** Copy of the best solution for the current population. */
-  Schedule* best = nullptr;
+  std::shared_ptr<Schedule> best = nullptr;
   /** Copy of the best solution for the whole run. */
-  Schedule* global_best = nullptr;
+  std::shared_ptr<Schedule> global_best = nullptr;
 
   void addToPopulation(Schedule** pop, int* i, Schedule* sample);
 

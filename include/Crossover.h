@@ -18,21 +18,23 @@ class Crossover {
   /** Crossover probability. */
   double p_cross;
 
- public:
+ protected:
   /**
    * Creates crossover operator with supplied probability.
    * @param _p_cross Probability of crossover.
    */
   Crossover(double _p_cross) : p_cross(_p_cross) {}
+
+ public:
   virtual ~Crossover() {}
 
   /**
    * Takes two specimen and performs crossover on them. Results in a new object.
    */
-  virtual T* cross(T* a, T* b) = 0;
+  virtual T* cross(T* a, T* b) const = 0;
 
   /** Checks whether the crossover should take place. */
-  inline bool should_cross() { return Random::rand(p_cross); }
+  inline bool should_cross() const { return Random::rand(p_cross); }
 };
 
 #endif  // MS_RCPSP_CROSSOVER_H

@@ -30,7 +30,6 @@ void Schedule::printState(bool is_short) {
   printf("fitness (finish): %d\n", fitness());
 }
 
-
 void Schedule::writeToFile(FILE* stream) {
   fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
   std::map<int, std::list<std::pair<int, int> > > timeline;

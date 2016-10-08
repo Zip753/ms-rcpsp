@@ -6,7 +6,9 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <memory>
 #include <string>
+#include <utility>
 
 #include <gflags/gflags.h>
 
@@ -31,28 +33,28 @@ DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 DEFINE_bool(simple, false, "Use simple schedule representation.");
 
 template <class T>
-Schedule* InitAndSolve(const std::string& stat_file_name) {
-  Crossover<T> *cross;
+std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
+  std::unique_ptr<Crossover<T>> cross;
   if (FLAGS_lax) {
-      cross = new LAXCrossover<T>(FLAGS_crossover);
-    } else {
-      cross = new UniformCrossover<T>(FLAGS_crossover);
-    }
-  Mutator<T> *mut = new Mutator<T>(FLAGS_mutation);
-  Algorithm<T> *algo = new Algorithm<T>(FLAGS_pop_size, FLAGS_tournament_size,
-                                        cross, mut, FLAGS_iters, false);
-  Schedule* sch;
+    cross = std::make_unique<LAXCrossover<T>>(FLAGS_crossover);
+  } else {
+    cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
+  }
+  Mutator<T> mut(FLAGS_mutation);
+  Algorithm<T> algo(FLAGS_pop_size, FLAGS_tournament_size, *cross, mut,
+                    FLAGS_iters, false);
+  std::shared_ptr<Schedule> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
-    sch = algo->solve(stat_file);
+    sch = std::move(algo.solve(stat_file));
     fclose(stat_file);
   } else {
-    sch = algo->solve(nullptr);
+    sch = std::move(algo.solve(nullptr));
   }
   return sch;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   if (argc != 2) {
     fprintf(stderr, "Invalid number of arguments.\n"
@@ -105,11 +107,11 @@ int main(int argc, char *argv[]) {
   FILE* best_file = fopen(best_file_name.c_str(), "w");
 
   /* Run the algorithm. */
-  Schedule *sch;
+  std::shared_ptr<Schedule> sch;
   if (FLAGS_simple) {
-    sch = InitAndSolve<SimpleSchedule>(stat_file_name);
+    sch = std::move(InitAndSolve<SimpleSchedule>(stat_file_name));
   } else {
-    sch = InitAndSolve<PrioSchedule>(stat_file_name);
+    sch = std::move(InitAndSolve<PrioSchedule>(stat_file_name));
   }
 
   /* Output solution to stdout. */

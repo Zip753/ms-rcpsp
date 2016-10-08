@@ -20,7 +20,7 @@ class Schedule {
   void printState(bool short_output);
 
   /** Outputs solution to file stream in compatible format. */
-  void writeToFile(FILE *stream);
+  void writeToFile(FILE* stream);
 
   /** Checks schedule equality. */
   bool eq(Schedule* s);
@@ -28,10 +28,10 @@ class Schedule {
   virtual ~Schedule() {}
 
   /** List of resources assigned to corresponding tasks. */
-  int *ires;
+  int* ires;
 
   /** List of task start times. */
-  int *start;
+  int* start;
 
   /** Returns number of tasks. */
   int size() { return n; }

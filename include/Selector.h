@@ -11,11 +11,11 @@ class Selector {
   Selector(int _n = 5) : n(_n) {}
 
   /** Selects the candidate specimen from the population. */
-  Schedule* select(Population* p);
+  Schedule* select(Population* p) const;
 
  private:
   /** Size of the tournament. */
-  int n;
+  const int n;
 };
 
 #endif  // MS_RCPSP_SELECTOR_H

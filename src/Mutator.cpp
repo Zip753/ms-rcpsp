@@ -5,7 +5,7 @@
 #include "../include/SimpleSchedule.h"
 
 template <class T>
-void Mutator<T>::force_mutate(Schedule* sample) {
+void Mutator<T>::force_mutate(Schedule* sample) const {
   int idx = Random::randint() % sample->size();
   mutate_gene(dynamic_cast<T*>(sample), idx);
 }
@@ -15,7 +15,7 @@ void Mutator<T>::force_mutate(Schedule* sample) {
  ************************************/
 
 template<>
-void Mutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i) {
+void Mutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i) const {
   int max_ires = sample->max_res_count(i);
   if (max_ires > 1) {
     int new_res = Random::randint() % (max_ires - 1);
@@ -27,8 +27,8 @@ void Mutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i) {
 }
 
 template<>
-PrioSchedule* Mutator<PrioSchedule>::mutate(PrioSchedule* sample) {
-  PrioSchedule *s = new PrioSchedule(sample);
+PrioSchedule* Mutator<PrioSchedule>::mutate(PrioSchedule* sample) const {
+  PrioSchedule* s = new PrioSchedule(sample);
 
   for (int i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
@@ -54,7 +54,7 @@ template class Mutator<PrioSchedule>;
  **************************************/
 
 template<>
-void Mutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i) {
+void Mutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i) const {
   int max_ires = sample->max_res_count(i);
   if (max_ires > 1) {
     int new_res = Random::randint() % (max_ires - 1);
@@ -66,8 +66,8 @@ void Mutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i) {
 }
 
 template<>
-SimpleSchedule* Mutator<SimpleSchedule>::mutate(SimpleSchedule* sample) {
-  SimpleSchedule *s = new SimpleSchedule(sample);
+SimpleSchedule* Mutator<SimpleSchedule>::mutate(SimpleSchedule* sample) const {
+  SimpleSchedule* s = new SimpleSchedule(sample);
 
   for (int i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all

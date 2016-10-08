@@ -6,7 +6,7 @@
 
 template<>
 PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule* a,
-                                                    PrioSchedule* b) {
+                                                    PrioSchedule* b) const {
   PrioSchedule* s = new PrioSchedule(a);
 
   int n = s->size();
@@ -24,8 +24,8 @@ PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule* a,
 }
 
 template<>
-SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
-                                                        SimpleSchedule* b) {
+SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(
+    SimpleSchedule* a, SimpleSchedule* b) const {
   SimpleSchedule* s = new SimpleSchedule(a);
 
   int n = s->size();

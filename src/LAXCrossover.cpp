@@ -7,7 +7,7 @@
 
 template<>
 PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
-                                                PrioSchedule* b) {
+                                                PrioSchedule* b) const {
   Project* proj = Project::get();
   int n = a->size();
   int* ires = new int[n];
@@ -40,7 +40,7 @@ PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
 
 template<>
 SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
-                                                    SimpleSchedule* b) {
+                                                    SimpleSchedule* b) const {
   Project* proj = Project::get();
   int n = a->size();
   int* ires = new int[n];

@@ -11,13 +11,13 @@ class Mutator {
   Mutator(double _p_mut) : p_mut(_p_mut) {};
 
   /** Performs mutation on the given sample. Returns new sample instance. */
-  T* mutate(T* sample);
+  T* mutate(T* sample) const;
 
   /**
    * Mutates given sample without creating a new one.
    * Used to force mutation in the specimen for clone removal.
    */
-  void force_mutate(Schedule* sample);
+  void force_mutate(Schedule* sample) const;
 
  private:
   /** Mutation probability. */
@@ -28,7 +28,7 @@ class Mutator {
    * @param sample Specimen to operate on.
    * @param idx Index of the gene to be mutated.
    */
-  void mutate_gene(T* sample, int idx);
+  void mutate_gene(T* sample, int idx) const;
 };
 
 #endif  // MS_RCPSP_MUTATOR_H
