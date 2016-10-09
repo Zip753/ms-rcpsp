@@ -12,7 +12,8 @@
  * create a subclass of Schedule and implement Schedule#compute_fitness
  * function. Then you have to instantiate all Crossover and Mutator operators
  * you're going to use for your new subclass. For instantiation example see
- * src/UniformCrossover.cpp.
+ * src/UniformCrossover.cpp. Finally, you have to define equality operator,
+ * for clone removal to work.
  */
 class Schedule {
  public:
@@ -21,9 +22,6 @@ class Schedule {
 
   /** Outputs solution to file stream in compatible format. */
   void writeToFile(FILE* stream);
-
-  /** Checks schedule equality. */
-  bool eq(Schedule* s);
 
   virtual ~Schedule() {}
 

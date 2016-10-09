@@ -32,6 +32,9 @@ class PrioSchedule : public Schedule {
   /** Businesses of resources. Used to implement LAXCrossover. */
   int* business;
 
+  /** Checks schedule equality in terms of representation. */
+  bool operator==(PrioSchedule s) const;
+
  private:
   /**
    * Contructor helper.

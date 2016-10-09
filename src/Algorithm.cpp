@@ -60,7 +60,7 @@ void Algorithm<T>::addToPopulation(Schedule** pop, int* idx, T* sample) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
       for (int i = 0; i < *idx; i++)
-        if (pop[i]->eq(sample)) {
+        if (*dynamic_cast<T*>(pop[i]) == *sample) {
           contains = true;
           break;
         }

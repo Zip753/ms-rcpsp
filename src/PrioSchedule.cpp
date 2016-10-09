@@ -8,6 +8,14 @@
 #include "../include/Project.h"
 #include "../include/Random.h"
 
+bool PrioSchedule::operator==(PrioSchedule s) const {
+  if (n != s.size()) return false;
+  for (int i = 0; i < n; i++)
+    if (ires[i] != s.ires[i] || prio[i] != s.prio[i])
+      return false;
+  return true;
+}
+
 void PrioSchedule::init(bool initialize) {
   if (initialize) {
     ires = new int[n];

@@ -5,6 +5,14 @@
 #include "../include/Project.h"
 #include "../include/Random.h"
 
+bool SimpleSchedule::operator==(SimpleSchedule s) const {
+  if (n != s.size()) return false;
+  for (int i = 0; i < n; i++)
+    if (ires[i] != s.ires[i])
+      return false;
+  return true;
+}
+
 void SimpleSchedule::init(bool create_ires) {
   if (create_ires) {
     ires = new int[n];

@@ -6,14 +6,6 @@
 
 #include "../include/Project.h"
 
-bool Schedule::eq(Schedule* s) {
-  if (n != s->size()) return false;
-  for (int i = 0; i < n; i++)
-    if (ires[i] != s->ires[i])
-      return false;
-  return true;
-}
-
 int Schedule::fitness() {
   if (_fitness == -1) {
     _fitness = compute_fitness();

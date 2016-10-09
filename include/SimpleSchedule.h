@@ -23,6 +23,9 @@ class SimpleSchedule : public Schedule {
    */
   int* business;
 
+  /** Checks schedule equality in terms of representation. */
+  bool operator==(SimpleSchedule s) const;
+
  private:
   /** Helper list, used in SimpleSchedule#update_start. */
   bool* visited;
