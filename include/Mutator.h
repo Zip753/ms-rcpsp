@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_MUTATOR_H
 #define MS_RCPSP_MUTATOR_H
 
+#include "Project.h"
+#include "Random.h"
 #include "Schedule.h"
 
 /** @brief Base class for mutation operators.
@@ -21,7 +23,10 @@ class Mutator {
    * Mutates given sample without creating a new one.
    * Used to force mutation in the specimen for clone removal.
    */
-  void force_mutate(Schedule* sample) const;
+  void force_mutate(T* sample) const {
+    int idx = Random::randint() % Project::get()->size();
+    mutate_gene(sample, idx);
+  }
 
  protected:
   /** Mutation probability. */

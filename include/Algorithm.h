@@ -58,7 +58,7 @@ class Algorithm {
   /** Copy of the best solution for the whole run. */
   std::shared_ptr<Schedule> global_best = nullptr;
 
-  void addToPopulation(Schedule** pop, int* i, Schedule* sample);
+  void addToPopulation(Schedule** pop, int* i, T* sample);
 
   /** Updates best result for the current generation and the global best. */
   void update_best();

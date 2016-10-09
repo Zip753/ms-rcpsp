@@ -7,7 +7,7 @@
 #include "../include/SimpleSchedule.h"
 
 template <class T>
-std::shared_ptr<Schedule> Algorithm<T>::solve(FILE *stat) {
+std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
   if (steps == -1) {
     return 0;
   }
@@ -29,8 +29,8 @@ std::shared_ptr<Schedule> Algorithm<T>::solve(FILE *stat) {
       Schedule* b;
       do { b = selector.select(population); } while (b == a);
       if (i == n - 1 || crossover.should_cross()) {
-        T *a_cross = crossover.cross(dynamic_cast<T*>(a), dynamic_cast<T*>(b));
-        Schedule *a_mut = mutator.mutate(a_cross);
+        T* a_cross = crossover.cross(dynamic_cast<T*>(a), dynamic_cast<T*>(b));
+        T* a_mut = mutator.mutate(a_cross);
         addToPopulation(next_pop, &i, a_mut);
         delete a_cross;
       } else {
@@ -55,7 +55,7 @@ void Algorithm<T>::update_best() {
 }
 
 template <class T>
-void Algorithm<T>::addToPopulation(Schedule** pop, int* idx, Schedule* sample) {
+void Algorithm<T>::addToPopulation(Schedule** pop, int* idx, T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;

@@ -11,15 +11,8 @@
  */
 class Selector {
  public:
-  /** @param _n Tournament size. */
-  Selector(int _n = 5) : n(_n) {}
-
   /** Selects the candidate specimen from the population. */
   virtual Schedule* select(Population* p) const = 0;
-
- protected:
-  /** Size of the tournament. */
-  const int n;
 };
 
 #endif  // MS_RCPSP_SELECTOR_H

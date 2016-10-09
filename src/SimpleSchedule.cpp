@@ -57,7 +57,7 @@ void SimpleSchedule::update_start(int i) {
 
 void SimpleSchedule::reschedule() {
   // first, set earliest start (from fin)
-  std::fill_n(visited, n, 0);
+  std::fill_n(visited, n, false);
   for (int i = 0; i < n; ++i) {
     update_start(i);
   }
@@ -74,9 +74,7 @@ void SimpleSchedule::fix_all() {
     int min_start_idx = -1;
     for (int j = 0; j < n; j++)
       if (!used[j]) {
-        if (min_start_idx == -1)
-          min_start_idx = j;
-        else if (start[j] < start[min_start_idx])
+        if (min_start_idx == -1 || start[j] < start[min_start_idx])
           min_start_idx = j;
       }
     used[min_start_idx] = true;

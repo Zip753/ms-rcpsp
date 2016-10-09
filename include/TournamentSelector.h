@@ -7,9 +7,14 @@
 /** @brief Implementation of tournament selection operator. */
 class TournamentSelector : public Selector {
  public:
-  TournamentSelector(int _n) : Selector(_n) {}
+  /** @param _n Tournament size. */
+  TournamentSelector(int _n) : n(_n) {}
 
   Schedule* select(Population* p) const override;
+
+ private:
+  /** Size of the tournament. */
+  const int n;
 };
 
 #endif  // MS_RCPSP_TOURNAMENTSELECTOR_H
