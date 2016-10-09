@@ -82,9 +82,10 @@ int main(int argc, char* argv[]) {
       input_base_name.substr(0, input_base_name.find_last_of('.'));
 
   /* Read project data from file. */
-  FILE* input_file = fopen(input_full_name.c_str(), "r");
-  ProjectReader::read(input_file);
-  fclose(input_file);
+  if (!ProjectReader::read(input_full_name)) {
+    fprintf(stderr, "Invalid input file format.\n");
+    return 1;
+  }
   printf("Tasks: %d\n", Project::get()->size());
 
   /* Project solution output: */
