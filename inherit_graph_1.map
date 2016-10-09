@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_crossover.html" title="Abstract base class for crossover implementations. " alt="" coords="5,56,120,83"/>
+<area shape="rect" id="node2" href="$class_l_a_x_crossover.html" title="Implementation of Least Assignments Crossover. " alt="" coords="183,5,321,32"/>
+<area shape="rect" id="node3" href="$class_one_point_crossover.html" title="Implementation of one&#45;point crossover. " alt="" coords="168,56,336,83"/>
+<area shape="rect" id="node4" href="$class_uniform_crossover.html" title="Implementation of uniform crossover. " alt="" coords="172,107,332,133"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Crossover&lt; T &gt;" name="Crossover&lt; T &gt;">
+<area shape="rect" id="node2" href="$class_l_a_x_crossover.html" title="Implementation of Least Assignments Crossover. " alt="" coords="5,80,144,107"/>
+<area shape="rect" id="node3" href="$class_one_point_crossover.html" title="Implementation of one&#45;point crossover. " alt="" coords="168,80,336,107"/>
+<area shape="rect" id="node4" href="$class_uniform_crossover.html" title="Implementation of uniform crossover. " alt="" coords="360,80,520,107"/>
+</map>
