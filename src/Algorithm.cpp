@@ -31,11 +31,11 @@ std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
       if (i == n - 1 || crossover.should_cross()) {
         T* a_cross = crossover.cross(dynamic_cast<T*>(a), dynamic_cast<T*>(b));
         T* a_mut = mutator.mutate(a_cross);
-        addToPopulation(next_pop, &i, a_mut);
+        addToPopulation(next_pop, i++, a_mut);
         delete a_cross;
       } else {
-        addToPopulation(next_pop, &i, mutator.mutate(dynamic_cast<T*>(a)));
-        addToPopulation(next_pop, &i, mutator.mutate(dynamic_cast<T*>(b)));
+        addToPopulation(next_pop, i++, mutator.mutate(dynamic_cast<T*>(a)));
+        addToPopulation(next_pop, i++, mutator.mutate(dynamic_cast<T*>(b)));
       }
     }
     delete population;
@@ -55,11 +55,11 @@ void Algorithm<T>::update_best() {
 }
 
 template <class T>
-void Algorithm<T>::addToPopulation(Schedule** pop, int* idx, T* sample) {
+void Algorithm<T>::addToPopulation(Schedule** pop, int idx, T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
-      for (int i = 0; i < *idx; i++)
+      for (int i = 0; i < idx; i++)
         if (*dynamic_cast<T*>(pop[i]) == *sample) {
           contains = true;
           break;
@@ -67,15 +67,13 @@ void Algorithm<T>::addToPopulation(Schedule** pop, int* idx, T* sample) {
       if (contains) {
         mutator.force_mutate(sample);
       } else {
-        pop[(*idx)++] = sample;
+        pop[idx] = sample;
         return;
       }
     }
-    delete sample;
-    pop[(*idx)++] = new T();
-  } else {
-    pop[(*idx)++] = sample;
+    dynamic_cast<Schedule*>(sample)->reset();
   }
+  pop[idx] = sample;
 }
 
 template <class T>

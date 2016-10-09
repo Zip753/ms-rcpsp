@@ -20,11 +20,7 @@ void PrioSchedule::init(bool initialize) {
   if (initialize) {
     ires = new int[n];
     prio = new int[n];
-    for (int i = 0; i < n; i++) {
-      ires[i] = Random::randint() % Project::get()->tasks[i]->res_size();
-      prio[i] = i;
-    }
-    std::random_shuffle(prio, prio + n);
+    reset();
   }
 
   int rcount = Project::get()->get_res_count();
@@ -134,4 +130,12 @@ int PrioSchedule::compute_fitness() {
   }
 
   return _fitness;
+}
+
+void PrioSchedule::reset() {
+  for (int i = 0; i < n; i++) {
+    ires[i] = Random::randint() % Project::get()->tasks[i]->res_size();
+    prio[i] = i;
+  }
+  std::random_shuffle(prio, prio + n);
 }

@@ -49,6 +49,8 @@ class SimpleSchedule : public Schedule {
   void fix_all();
 
   int compute_fitness() override;
+
+  void reset() override;
 };
 
 #endif  // MS_RCPSP_SIMPLESCHEDULE_H

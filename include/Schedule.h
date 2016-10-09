@@ -52,6 +52,9 @@ class Schedule {
    */
   int max_res_count(int i) { return tasks[i]->res_size(); }
 
+  /** Reset schedule representation to random state. */
+  virtual void reset() = 0;
+
  protected:
   Schedule();
   Schedule(int* _ires) : Schedule() { ires = _ires; }

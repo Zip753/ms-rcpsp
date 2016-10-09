@@ -16,9 +16,7 @@ bool SimpleSchedule::operator==(SimpleSchedule s) const {
 void SimpleSchedule::init(bool create_ires) {
   if (create_ires) {
     ires = new int[n];
-    for (int i = 0; i < n; i++) {
-      ires[i] = Random::randint() % Project::get()->tasks[i]->res_size();
-    }
+    reset();
   }
 
   visited = new bool[n];
@@ -119,4 +117,10 @@ int SimpleSchedule::compute_fitness() {
   }
 
   return _fitness;
+}
+
+void SimpleSchedule::reset() {
+  for (int i = 0; i < n; i++) {
+    ires[i] = Random::randint() % Project::get()->tasks[i]->res_size();
+  }
 }
