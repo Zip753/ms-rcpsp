@@ -17,7 +17,7 @@
 #include "include/Schedule.h"
 #include "include/Mutator.h"
 #include "include/LAXCrossover.h"
-#include "include/Algorithm.h"
+#include "include/GeneticAlgorithm.h"
 #include "include/UniformCrossover.h"
 #include "include/PrioSchedule.h"
 #include "include/SimpleSchedule.h"
@@ -46,7 +46,7 @@ std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   }
   std::shared_ptr<Mutator<T>> mut =
       std::make_shared<SimpleMutator<T>>(FLAGS_mutation);
-  Algorithm<T> algo(FLAGS_pop_size, sel, cross, mut, FLAGS_iters, false);
+  GeneticAlgorithm<T> algo(FLAGS_pop_size, sel, cross, mut, FLAGS_iters, false);
   std::shared_ptr<T> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");

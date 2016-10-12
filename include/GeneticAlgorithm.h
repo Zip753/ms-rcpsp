@@ -21,7 +21,7 @@
  * @param T Type of specimen representation, subclass of Schedule.
  */
 template <class T>
-class Algorithm {
+class GeneticAlgorithm {
  public:
   /**
    * @param pop_size Size of the population.
@@ -29,13 +29,13 @@ class Algorithm {
    * @param c Crossover operator.
    * @param m Mutation operator.
    */
-  Algorithm(int pop_size,
-            const std::shared_ptr<Selector<T>> &s,
-            const std::shared_ptr<Crossover<T>> c,
-            const std::shared_ptr<Mutator<T>> &m,
-            int _steps = -1,
-            bool _rem_clones = true);
-  ~Algorithm();
+  GeneticAlgorithm(int pop_size,
+                   const std::shared_ptr<Selector<T>> &s,
+                   const std::shared_ptr<Crossover<T>> c,
+                   const std::shared_ptr<Mutator<T>> &m,
+                   int _steps = -1,
+                   bool _rem_clones = true);
+  ~GeneticAlgorithm();
 
   /**
    * Executes the genetic algorithm.
@@ -63,5 +63,7 @@ class Algorithm {
   /** Updates best result for the current generation and the global best. */
   void update_best();
 };
+
+#include "../src/GeneticAlgorithm.tpp"
 
 #endif  // MS_RCPSP_ALGORITHM_H

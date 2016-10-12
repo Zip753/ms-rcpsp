@@ -1,4 +1,4 @@
-#include "../include/Algorithm.h"
+#include "../include/GeneticAlgorithm.h"
 
 #include <memory>
 #include <utility>
@@ -7,7 +7,7 @@
 #include "../include/SimpleSchedule.h"
 
 template <class T>
-std::shared_ptr<T> Algorithm<T>::solve(FILE* stat) {
+std::shared_ptr<T> GeneticAlgorithm<T>::solve(FILE* stat) {
   if (steps == -1) {
     return 0;
   }
@@ -47,7 +47,7 @@ std::shared_ptr<T> Algorithm<T>::solve(FILE* stat) {
 }
 
 template <class T>
-void Algorithm<T>::update_best() {
+void GeneticAlgorithm<T>::update_best() {
   best = std::make_shared<T>(population->best());
   if (global_best == nullptr || global_best->fitness() > best->fitness()) {
     global_best = best;
@@ -55,7 +55,7 @@ void Algorithm<T>::update_best() {
 }
 
 template <class T>
-void Algorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
+void GeneticAlgorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
@@ -77,17 +77,17 @@ void Algorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
 }
 
 template <class T>
-Algorithm<T>::~Algorithm() {
+GeneticAlgorithm<T>::~GeneticAlgorithm() {
   delete population;
 }
 
 template <class T>
-Algorithm<T>::Algorithm(int pop_size,
-                        const std::shared_ptr<Selector<T>> &s,
-                        const std::shared_ptr<Crossover<T>> c,
-                        const std::shared_ptr<Mutator<T>> &m,
-                        int _steps,
-                        bool _rem_clones) :
+GeneticAlgorithm<T>::GeneticAlgorithm(int pop_size,
+                                      const std::shared_ptr<Selector<T>> &s,
+                                      const std::shared_ptr<Crossover<T>> c,
+                                      const std::shared_ptr<Mutator<T>> &m,
+                                      int _steps,
+                                      bool _rem_clones) :
     selector(s), crossover(c), mutator(m), steps(_steps),
     remove_clones(_rem_clones) {
   T** specimen = new T*[pop_size];
@@ -96,6 +96,3 @@ Algorithm<T>::Algorithm(int pop_size,
   }
   population = new Population<T>(pop_size, specimen);
 }
-
-template class Algorithm<PrioSchedule>;
-template class Algorithm<SimpleSchedule>;
