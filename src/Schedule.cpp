@@ -51,3 +51,5 @@ Schedule::Schedule() {
   start = new int[n];
   std::fill_n(start, n, 0);
 }
+
+Schedule::~Schedule() {}

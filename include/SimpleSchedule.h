@@ -26,6 +26,8 @@ class SimpleSchedule : public Schedule {
   /** Checks schedule equality in terms of representation. */
   bool operator==(SimpleSchedule s) const;
 
+  void reset() override;
+
  private:
   /** Helper list, used in SimpleSchedule#update_start. */
   bool* visited;
@@ -49,8 +51,6 @@ class SimpleSchedule : public Schedule {
   void fix_all();
 
   int compute_fitness() override;
-
-  void reset() override;
 };
 
 #endif  // MS_RCPSP_SIMPLESCHEDULE_H

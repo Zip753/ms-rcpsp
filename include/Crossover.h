@@ -26,7 +26,7 @@ class Crossover {
   Crossover(double _p_cross) : p_cross(_p_cross) {}
 
  public:
-  virtual ~Crossover() {}
+  virtual ~Crossover() = 0;
 
   /**
    * Takes two specimen and performs crossover on them. Results in a new object.
@@ -36,5 +36,8 @@ class Crossover {
   /** Checks whether the crossover should take place. */
   inline bool should_cross() const { return Random::rand(p_cross); }
 };
+
+template <class T>
+Crossover<T>::~Crossover() {}
 
 #endif  // MS_RCPSP_CROSSOVER_H

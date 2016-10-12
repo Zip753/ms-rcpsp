@@ -28,6 +28,8 @@ class Mutator {
     mutate_gene(sample, idx);
   }
 
+  virtual ~Mutator() = 0;
+
  protected:
   /** Mutation probability. */
   double p_mut;
@@ -39,5 +41,8 @@ class Mutator {
    */
   virtual void mutate_gene(T* sample, int idx) const = 0;
 };
+
+template <class T>
+Mutator<T>::~Mutator() {}
 
 #endif  // MS_RCPSP_MUTATOR_H

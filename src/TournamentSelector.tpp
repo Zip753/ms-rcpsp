@@ -2,7 +2,8 @@
 
 #include "../include/Random.h"
 
-Schedule* TournamentSelector::select(Population* p) const {
+template <class T>
+T* TournamentSelector<T>::select(Population<T>* p) const {
   int p_size = p->size();
   int tourn_size = n;
   if (p_size < tourn_size)

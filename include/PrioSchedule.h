@@ -35,6 +35,8 @@ class PrioSchedule : public Schedule {
   /** Checks schedule equality in terms of representation. */
   bool operator==(PrioSchedule s) const;
 
+  void reset() override;
+
  private:
   /**
    * Contructor helper.
@@ -45,8 +47,6 @@ class PrioSchedule : public Schedule {
 
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
-
-  void reset() override;
 };
 
 #endif  // MS_RCPSP_PRIOSCHEDULE_H

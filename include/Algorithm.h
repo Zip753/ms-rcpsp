@@ -30,7 +30,7 @@ class Algorithm {
    * @param m Mutation operator.
    */
   Algorithm(int pop_size,
-            const Selector &s,
+            const Selector<T> &s,
             const Crossover<T> &c,
             const Mutator<T> &m,
             int _steps = -1,
@@ -42,11 +42,11 @@ class Algorithm {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  std::shared_ptr<Schedule> solve(FILE* stream);
+  std::shared_ptr<T> solve(FILE* stream);
 
  private:
-  Population* population;
-  const Selector& selector;
+  Population<T>* population;
+  const Selector<T>& selector;
   const Crossover<T>& crossover;
   const Mutator<T>& mutator;
   /** Number of generations. */
@@ -54,11 +54,11 @@ class Algorithm {
   /** If true, removes clones from the population. */
   bool remove_clones;
   /** Copy of the best solution for the current population. */
-  std::shared_ptr<Schedule> best = nullptr;
+  std::shared_ptr<T> best = nullptr;
   /** Copy of the best solution for the whole run. */
-  std::shared_ptr<Schedule> global_best = nullptr;
+  std::shared_ptr<T> global_best = nullptr;
 
-  void addToPopulation(Schedule** pop, int i, T* sample);
+  void addToPopulation(T** pop, int i, T* sample);
 
   /** Updates best result for the current generation and the global best. */
   void update_best();

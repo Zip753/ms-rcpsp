@@ -1,17 +1,15 @@
 #include "../include/Population.h"
 
-Population::~Population() {
+template <class T>
+Population<T>::~Population() {
   for (int i = 0; i < n; i++)
     delete genotype[i];
   delete[] genotype;
 }
 
-int Population::size() {
-  return n;
-}
-
-Schedule* Population::best() {
-  Schedule* ans = genotype[0];
+template <class T>
+T* Population<T>::best() {
+  T* ans = genotype[0];
   for (int i = 1; i < n; i++) {
     if (genotype[i]->fitness() < ans->fitness())
       ans = genotype[i];
@@ -19,7 +17,8 @@ Schedule* Population::best() {
   return ans;
 }
 
-void Population::showStat(FILE* stream) {
+template <class T>
+void Population<T>::showStat(FILE* stream) {
   int best_val = best()->fitness(),
       worst_val = 0;
   double mean = 0;

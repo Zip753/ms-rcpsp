@@ -7,7 +7,7 @@
 #include "../include/SimpleSchedule.h"
 
 template <class T>
-std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
+std::shared_ptr<T> Algorithm<T>::solve(FILE* stat) {
   if (steps == -1) {
     return 0;
   }
@@ -23,10 +23,10 @@ std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
     }
     // Move on to next generation.
     int n = population->size();
-    Schedule **next_pop = new Schedule *[n];
+    T** next_pop = new T*[n];
     for (int i = 0; i < n;) {
-      Schedule* a = selector.select(population);
-      Schedule* b;
+      T* a = selector.select(population);
+      T* b;
       do { b = selector.select(population); } while (b == a);
       if (i == n - 1 || crossover.should_cross()) {
         T* a_cross = crossover.cross(dynamic_cast<T*>(a), dynamic_cast<T*>(b));
@@ -39,7 +39,7 @@ std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
       }
     }
     delete population;
-    population = new Population(n, next_pop);
+    population = new Population<T>(n, next_pop);
   }
   update_best();
 
@@ -48,14 +48,14 @@ std::shared_ptr<Schedule> Algorithm<T>::solve(FILE* stat) {
 
 template <class T>
 void Algorithm<T>::update_best() {
-  best = std::make_shared<T>(dynamic_cast<T*>(population->best()));
+  best = std::make_shared<T>(population->best());
   if (global_best == nullptr || global_best->fitness() > best->fitness()) {
     global_best = best;
   }
 }
 
 template <class T>
-void Algorithm<T>::addToPopulation(Schedule** pop, int idx, T* sample) {
+void Algorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
@@ -71,7 +71,7 @@ void Algorithm<T>::addToPopulation(Schedule** pop, int idx, T* sample) {
         return;
       }
     }
-    dynamic_cast<Schedule*>(sample)->reset();
+    sample->reset();
   }
   pop[idx] = sample;
 }
@@ -83,19 +83,18 @@ Algorithm<T>::~Algorithm() {
 
 template <class T>
 Algorithm<T>::Algorithm(int pop_size,
-                        const Selector& s,
+                        const Selector<T> &s,
                         const Crossover<T> &c,
                         const Mutator<T> &m,
                         int _steps,
                         bool _rem_clones) :
     selector(s), crossover(c), mutator(m), steps(_steps),
-    remove_clones(_rem_clones)
-     {
-  Schedule** specimen = new Schedule*[pop_size];
+    remove_clones(_rem_clones) {
+  T** specimen = new T*[pop_size];
   for (int i = 0; i < pop_size; ++i) {
     specimen[i] = new T();
   }
-  population = new Population(pop_size, specimen);
+  population = new Population<T>(pop_size, specimen);
 }
 
 template class Algorithm<PrioSchedule>;

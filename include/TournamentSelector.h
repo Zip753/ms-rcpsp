@@ -5,16 +5,19 @@
 #include "Selector.h"
 
 /** @brief Implementation of tournament selection operator. */
-class TournamentSelector : public Selector {
+template <class T>
+class TournamentSelector : public Selector<T> {
  public:
   /** @param _n Tournament size. */
   TournamentSelector(int _n) : n(_n) {}
 
-  Schedule* select(Population* p) const override;
+  T* select(Population<T>* p) const override;
 
  private:
   /** Size of the tournament. */
   const int n;
 };
+
+#include "../src/TournamentSelector.tpp"
 
 #endif  // MS_RCPSP_TOURNAMENTSELECTOR_H

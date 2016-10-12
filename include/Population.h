@@ -6,6 +6,7 @@
 #include "Schedule.h"
 
 /** @brief Representation of population, i.e. set of specimen (schedules). */
+template <class T>
 class Population {
  public:
   /**
@@ -13,18 +14,18 @@ class Population {
    * @param size Size of population.
    * @param t List of specimen.
    */
-  Population(int size, Schedule** t) : genotype(t), n(size) {}
+  Population(int size, T** t) : genotype(t), n(size) {}
 
   ~Population();
 
   /** Returns size of the population. */
-  int size();
+  int size() { return n; }
 
   /** Returns specimen with the smallest fitness function in the population. */
-  Schedule* best();
+  T* best();
 
   /** List of specimen. */
-  Schedule** genotype;
+  T** genotype;
 
   /**
    * Shows statistical information of the population: best, average and worst
@@ -37,5 +38,7 @@ class Population {
   /** Size of the population. */
   int n;
 };
+
+#include "../src/Population.tpp"
 
 #endif  // MS_RCPSP_POPULATION_H

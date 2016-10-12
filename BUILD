@@ -5,7 +5,7 @@ filegroup(
 
 filegroup(
     name = "headers",
-    srcs = glob(["include/*.h"]),
+    srcs = glob(["include/*.h", "src/*.tpp"]),
 )
 
 cc_library(

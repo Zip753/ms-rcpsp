@@ -35,9 +35,9 @@ DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 DEFINE_bool(simple, false, "Use simple schedule representation.");
 
 template <class T>
-std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
-  std::unique_ptr<Selector> sel =
-      std::make_unique<TournamentSelector>(FLAGS_tournament_size);
+std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
+  std::unique_ptr<Selector<T>> sel =
+      std::make_unique<TournamentSelector<T>>(FLAGS_tournament_size);
   std::unique_ptr<Crossover<T>> cross;
   if (FLAGS_lax) {
     cross = std::make_unique<LAXCrossover<T>>(FLAGS_crossover);
@@ -47,7 +47,7 @@ std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
   std::unique_ptr<Mutator<T>> mut =
       std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
   Algorithm<T> algo(FLAGS_pop_size, *sel, *cross, *mut, FLAGS_iters, false);
-  std::shared_ptr<Schedule> sch;
+  std::shared_ptr<T> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
     sch = std::move(algo.solve(stat_file));
@@ -56,6 +56,23 @@ std::shared_ptr<Schedule> InitAndSolve(const std::string& stat_file_name) {
     sch = std::move(algo.solve(nullptr));
   }
   return sch;
+}
+
+template <class T>
+void SolveAndOutput(const std::string& stat_file_name,
+                    FILE* output_file,
+                    FILE* best_file) {
+  std::shared_ptr<T> sch = std::move(InitAndSolve<T>(stat_file_name));
+
+  /* Output solution to stdout. */
+  printf("SOLUTION: ");
+  sch->printState(true);
+
+  /* Output solution to file. */
+  sch->writeToFile(output_file);
+
+  /* Output best fitness value to file. */
+  fprintf(best_file, "%d", sch->fitness());
 }
 
 int main(int argc, char* argv[]) {
@@ -112,23 +129,13 @@ int main(int argc, char* argv[]) {
   FILE* best_file = fopen(best_file_name.c_str(), "w");
 
   /* Run the algorithm. */
-  std::shared_ptr<Schedule> sch;
   if (FLAGS_simple) {
-    sch = std::move(InitAndSolve<SimpleSchedule>(stat_file_name));
+    SolveAndOutput<SimpleSchedule>(stat_file_name, output_file, best_file);
   } else {
-    sch = std::move(InitAndSolve<PrioSchedule>(stat_file_name));
+    SolveAndOutput<PrioSchedule>(stat_file_name, output_file, best_file);
   }
 
-  /* Output solution to stdout. */
-  printf("SOLUTION: ");
-  sch->printState(true);
-
-  /* Output solution to file. */
-  sch->writeToFile(output_file);
   fclose(output_file);
-
-  /* Output best fitness value to file. */
-  fprintf(best_file, "%d", sch->fitness());
   fclose(best_file);
 
   return 0;

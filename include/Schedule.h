@@ -23,7 +23,7 @@ class Schedule {
   /** Outputs solution to file stream in compatible format. */
   void writeToFile(FILE* stream);
 
-  virtual ~Schedule() {}
+  virtual ~Schedule() = 0;
 
   /** List of resources assigned to corresponding tasks. */
   int* ires;
