@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_algorithm.html" title="Representation of genetic algorithm. Glues everything together. " alt="" coords="5,5,115,32"/>
+<area shape="rect" id="node1" href="$class_evolutionary_algorithm_1_1_algorithm.html" title="Base abstract class for all optimization algorithms. " alt="" coords="5,5,155,47"/>
+<area shape="rect" id="node2" href="$class_evolutionary_algorithm_1_1_genetic_algorithm.html" title="Representation of genetic algorithm. Glues everything together. " alt="" coords="203,5,365,47"/>
 </map>

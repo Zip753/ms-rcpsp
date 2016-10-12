@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_project.html" title="Singleton representation of project in the scheduling problem. " alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node1" href="$class_evolutionary_algorithm_1_1_selector.html" title="Base abstract class for selection operators. " alt="" coords="5,5,155,47"/>
+<area shape="rect" id="node2" href="$class_evolutionary_algorithm_1_1_tournament_selector.html" title="Implementation of tournament selection operator. " alt="" coords="203,5,381,47"/>
 </map>

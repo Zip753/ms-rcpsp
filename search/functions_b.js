@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['task',['Task',['../class_task.html#ae5e2ed0eb108ae5f558f2c9ac6f4315f',1,'Task']]]
+  ['validate',['validate',['../class_scheduling_problem_1_1_validator.html#ac1f5b870a203caba0c39994243f71818',1,'SchedulingProblem::Validator']]]
 ];

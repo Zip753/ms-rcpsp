@@ -1,4 +1,0 @@
-<map id="SimpleSchedule" name="SimpleSchedule">
-<area shape="rect" id="node2" href="$class_schedule.html" title="Base abstract class for specimen (schedule) representations. " alt="" coords="25,95,101,121"/>
-<area shape="rect" id="node3" href="$class_task.html" title="Representation of task. " alt="" coords="38,5,89,32"/>
-</map>

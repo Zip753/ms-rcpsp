@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mutator',['Mutator',['../class_mutator.html',1,'']]]
+  ['laxcrossover',['LAXCrossover',['../class_evolutionary_algorithm_1_1_l_a_x_crossover.html',1,'EvolutionaryAlgorithm']]]
 ];

@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['get',['get',['../class_project.html#a1e7dd93b613690b52c9e98605f793268',1,'Project']]],
-  ['get_5fres_5fcount',['get_res_count',['../class_project.html#af86706705e8075b624e679199d286998',1,'Project']]],
-  ['get_5fres_5fid',['get_res_id',['../class_project.html#a51b80dc4df1a095be22e7435e8eac627',1,'Project']]],
-  ['get_5fsalary',['get_salary',['../class_project.html#a64f6f47e8d62d440d1a8e849ab9f7447',1,'Project']]]
+  ['operator_3d_3d',['operator==',['../class_scheduling_problem_1_1_prio_schedule.html#ab073ac0a8318f523817880086138b854',1,'SchedulingProblem::PrioSchedule::operator==()'],['../class_scheduling_problem_1_1_simple_schedule.html#ae16ce2889b2375d5fb1127178ed1f844',1,'SchedulingProblem::SimpleSchedule::operator==()']]],
+  ['optimize',['optimize',['../class_evolutionary_algorithm_1_1_genetic_algorithm.html#a146a1c93ffea9d22be532667724264e6',1,'EvolutionaryAlgorithm::GeneticAlgorithm']]]
 ];

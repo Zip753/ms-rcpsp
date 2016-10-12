@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['onepointcrossover',['OnePointCrossover',['../class_one_point_crossover.html',1,'']]]
+  ['mutator',['Mutator',['../class_evolutionary_algorithm_1_1_mutator.html',1,'EvolutionaryAlgorithm']]]
 ];

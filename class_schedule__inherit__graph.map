@@ -1,4 +1,0 @@
-<map id="Schedule" name="Schedule">
-<area shape="rect" id="node2" href="$class_prio_schedule.html" title="Representation of schedule that uses task priorities. " alt="" coords="5,80,104,107"/>
-<area shape="rect" id="node3" href="$class_simple_schedule.html" title="Simple representation of schedule. " alt="" coords="129,80,245,107"/>
-</map>

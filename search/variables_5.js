@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['n',['n',['../class_schedule.html#acbef62e3f5caa3fbe10b5ec2def9210e',1,'Schedule::n()'],['../class_selector.html#a25f1d76a5217664a051c9afa662eace3',1,'Selector::n()']]],
-  ['next',['next',['../class_task.html#a7921b4ca842d8a748b2e4d48b5d882b3',1,'Task']]],
-  ['next_5fsize',['next_size',['../class_task.html#ab217804dd9b5e8cb6944b6685c9ea2b5',1,'Task']]]
+  ['n',['n',['../class_scheduling_problem_1_1_schedule.html#a4792c6c5336aee76bedf2f647b1eec87',1,'SchedulingProblem::Schedule']]],
+  ['next',['next',['../class_scheduling_problem_1_1_task.html#ae20b76ea2712dc2fc4ea4dcf9265ee23',1,'SchedulingProblem::Task']]],
+  ['next_5fsize',['next_size',['../class_scheduling_problem_1_1_task.html#a9ca099b55bb76413abc0970313c512d6',1,'SchedulingProblem::Task']]]
 ];

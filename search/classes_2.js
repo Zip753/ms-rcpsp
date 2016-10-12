@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['laxcrossover',['LAXCrossover',['../class_l_a_x_crossover.html',1,'']]]
+  ['geneticalgorithm',['GeneticAlgorithm',['../class_evolutionary_algorithm_1_1_genetic_algorithm.html',1,'EvolutionaryAlgorithm']]]
 ];
