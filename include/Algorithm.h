@@ -30,9 +30,9 @@ class Algorithm {
    * @param m Mutation operator.
    */
   Algorithm(int pop_size,
-            const Selector<T> &s,
-            const Crossover<T> &c,
-            const Mutator<T> &m,
+            const std::shared_ptr<Selector<T>> &s,
+            const std::shared_ptr<Crossover<T>> c,
+            const std::shared_ptr<Mutator<T>> &m,
             int _steps = -1,
             bool _rem_clones = true);
   ~Algorithm();
@@ -46,9 +46,9 @@ class Algorithm {
 
  private:
   Population<T>* population;
-  const Selector<T>& selector;
-  const Crossover<T>& crossover;
-  const Mutator<T>& mutator;
+  std::shared_ptr<Selector<T>> selector;
+  std::shared_ptr<Crossover<T>> crossover;
+  std::shared_ptr<Mutator<T>> mutator;
   /** Number of generations. */
   int steps;
   /** If true, removes clones from the population. */

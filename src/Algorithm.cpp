@@ -25,17 +25,17 @@ std::shared_ptr<T> Algorithm<T>::solve(FILE* stat) {
     int n = population->size();
     T** next_pop = new T*[n];
     for (int i = 0; i < n;) {
-      T* a = selector.select(*population);
+      T* a = selector->select(*population);
       T* b;
-      do { b = selector.select(*population); } while (b == a);
-      if (i == n - 1 || crossover.should_cross()) {
-        T* a_cross = crossover.cross(a, b);
-        T* a_mut = mutator.mutate(a_cross);
+      do { b = selector->select(*population); } while (b == a);
+      if (i == n - 1 || crossover->should_cross()) {
+        T* a_cross = crossover->cross(a, b);
+        T* a_mut = mutator->mutate(a_cross);
         addToPopulation(next_pop, i++, a_mut);
         delete a_cross;
       } else {
-        addToPopulation(next_pop, i++, mutator.mutate(a));
-        addToPopulation(next_pop, i++, mutator.mutate(b));
+        addToPopulation(next_pop, i++, mutator->mutate(a));
+        addToPopulation(next_pop, i++, mutator->mutate(b));
       }
     }
     delete population;
@@ -60,12 +60,12 @@ void Algorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
       for (int i = 0; i < idx; i++)
-        if (pop[i] == *sample) {
+        if (*pop[i] == *sample) {
           contains = true;
           break;
         }
       if (contains) {
-        mutator.force_mutate(sample);
+        mutator->force_mutate(sample);
       } else {
         pop[idx] = sample;
         return;
@@ -83,9 +83,9 @@ Algorithm<T>::~Algorithm() {
 
 template <class T>
 Algorithm<T>::Algorithm(int pop_size,
-                        const Selector<T> &s,
-                        const Crossover<T> &c,
-                        const Mutator<T> &m,
+                        const std::shared_ptr<Selector<T>> &s,
+                        const std::shared_ptr<Crossover<T>> c,
+                        const std::shared_ptr<Mutator<T>> &m,
                         int _steps,
                         bool _rem_clones) :
     selector(s), crossover(c), mutator(m), steps(_steps),

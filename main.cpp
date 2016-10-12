@@ -36,17 +36,17 @@ DEFINE_bool(simple, false, "Use simple schedule representation.");
 
 template <class T>
 std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
-  std::unique_ptr<Selector<T>> sel =
-      std::make_unique<TournamentSelector<T>>(FLAGS_tournament_size);
-  std::unique_ptr<Crossover<T>> cross;
+  std::shared_ptr<Selector<T>> sel =
+      std::make_shared<TournamentSelector<T>>(FLAGS_tournament_size);
+  std::shared_ptr<Crossover<T>> cross;
   if (FLAGS_lax) {
-    cross = std::make_unique<LAXCrossover<T>>(FLAGS_crossover);
+    cross = std::make_shared<LAXCrossover<T>>(FLAGS_crossover);
   } else {
-    cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
+    cross = std::make_shared<UniformCrossover<T>>(FLAGS_crossover);
   }
-  std::unique_ptr<Mutator<T>> mut =
-      std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
-  Algorithm<T> algo(FLAGS_pop_size, *sel, *cross, *mut, FLAGS_iters, false);
+  std::shared_ptr<Mutator<T>> mut =
+      std::make_shared<SimpleMutator<T>>(FLAGS_mutation);
+  Algorithm<T> algo(FLAGS_pop_size, sel, cross, mut, FLAGS_iters, false);
   std::shared_ptr<T> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
