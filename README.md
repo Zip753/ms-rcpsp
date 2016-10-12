@@ -35,6 +35,73 @@ You must have `libgflags` installed to use this option. For example, on Ubuntu y
 sudo apt-get install libgflags-dev
 ```
 
+## Quick start
+This is a quick guide for those who want to use the library to experiment with their own solutions.
+
+Read scheduling project from file:
+```c++
+SchedulingProblem::ProjectReader::read("project.def");
+```
+Create your own solution:
+```c++
+// MyAlgo.h
+
+template <class T>
+class MyAlgo : EvolutionaryAlgorithm::Algorithm<T> {
+ public:
+  std::shared_ptr<T> optimize() override;
+};
+
+#include "MyAlgo.tpp"
+
+// MyAlgo.tpp
+
+template <class T>
+std::shared_ptr<T> MyAlgo<T>::optimize() {
+  // implement your solution here
+}
+```
+Or use existing one:
+```c++
+// Create operators.
+// SimpleSchedule is the default implementation of Schedule.
+std::shared_ptr<Selector<SimpleSchedule>> sel =
+    std::make_shared<TournamentSelector<SimpleSchedule>>(FLAGS_tournament_size);
+std::shared_ptr<Crossover<SimpleSchedule>> cross =
+    std::make_shared<OnePointCrossover<SimpleSchedule>>(FLAGS_crossover);
+std::shared_ptr<Mutator<SimpleSchedule>> mut =
+    std::make_shared<SimpleMutator<SimpleSchedule>>(FLAGS_mutation);
+// Initialize GA.
+GeneticAlgorithm<SimpleSchedule> algo(pop_size, /* population size */
+                                      sel,      /* selection operator */
+                                      cross,    /* crossover operator */
+                                      mut,      /* mutation operator */
+                                      200,      /* number of generations */
+                                      false     /* don't remove clones */);
+// Run GA.
+std::shared_ptr<SimpleSchedule> schedule = algo.optimize();
+// Output result.
+std::cout << "Result fitness value: " << schedule->fitness() << std::endl;
+```
+Validate your solution:
+```c++
+std::pair<bool, std::string> valid =
+    SchedulingProblem::Validator::validate(schedule);
+if (valid.first) {
+  std::cout << "Solution is valid." << std::endl;
+} else {
+  std::cout << "Error message: " << valid.second << std::endl;
+}
+```
+
+## Extension
+The API allows you to implement your own parts of GA:
+ * specimen (schedule) representation, along with crossover and mutation operators for it
+ * selection operators
+ * standalone crossover and mutation operators for existing representations
+
+In order to do so, you have to subclass one of dedicated base classes and implement all necessary functions. For details, please refer to [API documentation](https://zip753.github.io/ms-rcpsp/).
+
 ## Test data
 The solutions have been tested and validated on benchmarking corpus of iMOPSE project. The dataset and validation tool can be found [here](http://imopse.ii.pwr.edu.pl/download.html).
 
@@ -46,11 +113,3 @@ In order to comprehend the problem the solutions better, I have implemented the 
 As you can see, each worker is busy throughout the whole project, therefore it is easy to state that the following solution is optimal for the given input. On contrary, the next image isn't that trivial and contains gaps due to the numerous task dependencies:
 
 ![](img/d6_res.png)
-
-## Extension
-The API allows you to implement your own parts of GA:
- * specimen (schedule) representation, along with crossover and mutation operators for it
- * selection operators
- * standalone crossover and mutation operators for existing representations
-
-In order to do so, you have to subclass one of dedicated base classes and implement all necessary functions. For details, please refer to [API documentation](https://zip753.github.io/ms-rcpsp/).
