@@ -5,6 +5,11 @@
 #include "Random.h"
 #include "Schedule.h"
 
+using SchedulingProblem::Project;
+using Util::Random;
+
+namespace EvolutionaryAlgorithm {
+
 /** @brief Base class for mutation operators.
  *
  * If you want to implement your own mutation operator, create a subclass of
@@ -44,5 +49,7 @@ class Mutator {
 
 template <class T>
 Mutator<T>::~Mutator() {}
+
+};  // namespace EvolutionaryAlgorithm
 
 #endif  // MS_RCPSP_MUTATOR_H

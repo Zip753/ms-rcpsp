@@ -1,8 +1,12 @@
 #include "../include/OnePointCrossover.h"
 
+#include "../include/PrioSchedule.h"
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
-#include "../include/PrioSchedule.h"
+
+namespace EvolutionaryAlgorithm {
+
+using SchedulingProblem::SimpleSchedule;
 
 template<>
 SimpleSchedule* OnePointCrossover<SimpleSchedule>::cross(
@@ -17,6 +21,8 @@ SimpleSchedule* OnePointCrossover<SimpleSchedule>::cross(
   return s;
 }
 
+using SchedulingProblem::PrioSchedule;
+
 template<>
 PrioSchedule* OnePointCrossover<PrioSchedule>::cross(PrioSchedule* a,
                                                      PrioSchedule* b) const {
@@ -29,3 +35,5 @@ PrioSchedule* OnePointCrossover<PrioSchedule>::cross(PrioSchedule* a,
 
   return s;
 }
+
+};  // namespace EvolutionaryAlgorithm

@@ -11,6 +11,8 @@
 #include "Schedule.h"
 #include "Selector.h"
 
+namespace EvolutionaryAlgorithm {
+
 /** @mainpage
  * This is the library that implements the backbone for genetic algorithms.
  * It is possible to add new mutation and crossover operators, as well as new
@@ -66,6 +68,8 @@ class GeneticAlgorithm : Algorithm<T> {
   /** Updates best result for the current generation and the global best. */
   void update_best();
 };
+
+};  // namespace EvolutionaryAlgorithm
 
 #include "../src/GeneticAlgorithm.tpp"
 

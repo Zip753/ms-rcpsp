@@ -2,6 +2,11 @@
 #define MS_RCPSP_CROSSOVER_H
 
 #include "Random.h"
+
+using Util::Random;
+
+namespace EvolutionaryAlgorithm {
+
 /**
  * @brief Abstract base class for crossover implementations.
  *
@@ -39,5 +44,7 @@ class Crossover {
 
 template <class T>
 Crossover<T>::~Crossover() {}
+
+} //  namespace EvolutionaryAlgorithm
 
 #endif  // MS_RCPSP_CROSSOVER_H

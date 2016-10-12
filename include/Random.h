@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_RANDOM_H
 #define MS_RCPSP_RANDOM_H
 
+namespace Util {
+
 /** @brief Helper class used to generate random values. */
 class Random {
  public:
@@ -21,5 +23,7 @@ class Random {
   /** Cache variable to check whether the seed has already been initiated. */
   static bool _seed;
 };
+
+};  // namespace Util
 
 #endif  // MS_RCPSP_RANDOM_H

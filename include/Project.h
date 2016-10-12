@@ -5,6 +5,8 @@
 
 #include "Task.h"
 
+namespace SchedulingProblem {
+
 /**
  * @brief Singleton representation of project in the scheduling problem.
  */
@@ -58,5 +60,7 @@ class Project {
       : tasks(_tasks), n(_n), res_id(_res_id), res_salary(_res_sal),
         res_count(_res_count) {}
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_PROJECT_H

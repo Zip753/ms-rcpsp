@@ -3,6 +3,8 @@
 
 #include <memory>
 
+namespace EvolutionaryAlgorithm {
+
 /** @brief Base abstract class for all optimization algorithms.
  * @param T Class of optimized parameter.
  */
@@ -11,5 +13,7 @@ class Algorithm {
  public:
   virtual std::shared_ptr<T> optimize() = 0;
 };
+
+};  // namespace EvolutionaryAlgorithm
 
 #endif  // MS_RCPSP_ALGORITHM_H

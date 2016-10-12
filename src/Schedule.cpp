@@ -6,6 +6,8 @@
 
 #include "../include/Project.h"
 
+namespace SchedulingProblem {
+
 int Schedule::fitness() {
   if (_fitness == -1) {
     _fitness = compute_fitness();
@@ -53,3 +55,5 @@ Schedule::Schedule() {
 }
 
 Schedule::~Schedule() {}
+
+};  // namespace SchedulingProblem

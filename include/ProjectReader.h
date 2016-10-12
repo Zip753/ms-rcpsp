@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace SchedulingProblem {
+
 /** @brief Input reader of Project. */
 class ProjectReader {
  public:
@@ -11,5 +13,7 @@ class ProjectReader {
    */
   static bool read(const std::string &filename);
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_PROJECTREADER_H

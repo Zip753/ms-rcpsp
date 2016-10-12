@@ -5,6 +5,8 @@
 
 #include "Schedule.h"
 
+namespace EvolutionaryAlgorithm {
+
 /** @brief Representation of population, i.e. set of specimen (schedules). */
 template <class T>
 class Population {
@@ -38,6 +40,8 @@ class Population {
   /** Size of the population. */
   int n;
 };
+
+};  // namespace EvolutionaryAlgorithm
 
 #include "../src/Population.tpp"
 

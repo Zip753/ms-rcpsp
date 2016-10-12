@@ -35,6 +35,9 @@ DEFINE_bool(lax, false, "Use LAX crossover operator.");
 DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
 DEFINE_bool(simple, false, "Use simple schedule representation.");
 
+using namespace EvolutionaryAlgorithm;
+using namespace SchedulingProblem;
+
 template <class T>
 std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   std::shared_ptr<Selector<T>> sel =

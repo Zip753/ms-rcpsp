@@ -10,6 +10,8 @@
 #include "../include/Project.h"
 #include "../include/Schedule.h"
 
+namespace SchedulingProblem {
+
 std::pair<bool, std::string> Validator::validate(const Schedule& s) {
   std::ostringstream stream;
   for (int i = 0; i < Project::get()->size(); ++i) {
@@ -77,3 +79,5 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
 
   return {true, "OK"};
 }
+
+};  // namespace SchedulingProblem

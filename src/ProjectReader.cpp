@@ -10,6 +10,8 @@
 
 #include "../include/Project.h"
 
+namespace SchedulingProblem {
+
 bool ProjectReader::read(const std::string &filename) {
   int n, id, dur;
   size_t res_count, ndep, nres;
@@ -91,3 +93,5 @@ bool ProjectReader::read(const std::string &filename) {
   Project::create(n, tasks, res_count, res_id, res_sal);
   return true;
 }
+
+};  // namespace SchedulingProblem

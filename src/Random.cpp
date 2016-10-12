@@ -4,6 +4,8 @@
 #include <random>
 #include <zconf.h>
 
+namespace Util {
+
 bool Random::_seed = false;
 
 bool Random::rand(double prob) {
@@ -36,3 +38,5 @@ int Random::randint() {
   seed();
   return ::rand();
 }
+
+};  // namespace Util

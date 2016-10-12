@@ -4,6 +4,8 @@
 #include "Population.h"
 #include "Schedule.h"
 
+namespace EvolutionaryAlgorithm {
+
 /** @brief Base abstract class for selection operators.
  *
  * If you want to implement your own selection operator, create a subclass of
@@ -20,5 +22,7 @@ class Selector {
 
 template <class T>
 Selector<T>::~Selector() {}
+
+};  // namespace EvolutionaryAlgorithm
 
 #endif  // MS_RCPSP_SELECTOR_H

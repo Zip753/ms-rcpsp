@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+namespace SchedulingProblem {
+
 std::shared_ptr<Project> Project::_project = nullptr;
 
 void Project::create(int _n, Task **_tasks, int _res_count, int *_res_id,
@@ -38,3 +40,5 @@ Project::~Project() {
   delete[] res_id;
   delete[] res_salary;
 }
+
+};  // namespace SchedulingProblem

@@ -4,6 +4,10 @@
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
 
+namespace EvolutionaryAlgorithm {
+
+using SchedulingProblem::PrioSchedule;
+
 template<>
 PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule* a,
                                                     PrioSchedule* b) const {
@@ -23,6 +27,8 @@ PrioSchedule* UniformCrossover<PrioSchedule>::cross(PrioSchedule* a,
   return s;
 }
 
+using SchedulingProblem::SimpleSchedule;
+
 template<>
 SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(
     SimpleSchedule* a, SimpleSchedule* b) const {
@@ -37,3 +43,5 @@ SimpleSchedule* UniformCrossover<SimpleSchedule>::cross(
 
   return s;
 }
+
+};  // namespace EvolutionaryAlgorithm

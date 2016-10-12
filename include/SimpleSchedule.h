@@ -3,6 +3,8 @@
 
 #include "Schedule.h"
 
+namespace SchedulingProblem {
+
 /**
  * @brief Simple representation of schedule.
  *
@@ -52,5 +54,7 @@ class SimpleSchedule : public Schedule {
 
   int compute_fitness() override;
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_SIMPLESCHEDULE_H

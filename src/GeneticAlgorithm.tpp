@@ -6,6 +6,8 @@
 #include "../include/PrioSchedule.h"
 #include "../include/SimpleSchedule.h"
 
+namespace EvolutionaryAlgorithm {
+
 template <class T>
 std::shared_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
   if (steps == -1) {
@@ -96,3 +98,5 @@ GeneticAlgorithm<T>::GeneticAlgorithm(int pop_size,
   }
   population = new Population<T>(pop_size, specimen);
 }
+
+};  // namespace EvolutionaryAlgorithm

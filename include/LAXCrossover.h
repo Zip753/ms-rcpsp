@@ -3,6 +3,8 @@
 
 #include "Crossover.h"
 
+namespace EvolutionaryAlgorithm {
+
 /**
  * @brief Implementation of Least Assignments Crossover.
  *
@@ -15,5 +17,7 @@ class LAXCrossover : public Crossover<T> {
   LAXCrossover(double _p_cross) : Crossover<T>(_p_cross) {}
   T* cross(T* a, T* b) const override;
 };
+
+};  // namespace EvolutionaryAlgorithm
 
 #endif // MS_RCPSP_LAXCROSSOVER_H

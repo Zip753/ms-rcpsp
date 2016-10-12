@@ -1,5 +1,7 @@
 #include "../include/Population.h"
 
+namespace EvolutionaryAlgorithm {
+
 template <class T>
 Population<T>::~Population() {
   for (int i = 0; i < n; i++)
@@ -31,3 +33,5 @@ void Population<T>::showStat(FILE* stream) {
 
   fprintf(stream, "%d %.4lf %d\n", best_val, mean, worst_val);
 }
+
+};  // namespace EvolutionaryAlgorithm

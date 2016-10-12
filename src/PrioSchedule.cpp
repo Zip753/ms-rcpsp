@@ -8,6 +8,8 @@
 #include "../include/Project.h"
 #include "../include/Random.h"
 
+namespace SchedulingProblem {
+
 bool PrioSchedule::operator==(PrioSchedule s) const {
   if (n != s.size()) return false;
   for (int i = 0; i < n; i++)
@@ -134,8 +136,10 @@ int PrioSchedule::compute_fitness() {
 
 void PrioSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Random::randint() % Project::get()->tasks[i]->res_size();
+    ires[i] = Util::Random::randint() % Project::get()->tasks[i]->res_size();
     prio[i] = i;
   }
   std::random_shuffle(prio, prio + n);
 }
+
+};  // namespace SchedulingProblem

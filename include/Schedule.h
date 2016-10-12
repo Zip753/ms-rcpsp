@@ -5,6 +5,8 @@
 
 #include "Task.h"
 
+namespace SchedulingProblem {
+
 class Validator;
 
 /**
@@ -86,5 +88,7 @@ class Schedule {
 
   friend class Validator;
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_SCHEDULE_H

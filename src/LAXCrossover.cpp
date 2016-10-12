@@ -5,6 +5,11 @@
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
 
+namespace EvolutionaryAlgorithm {
+
+using SchedulingProblem::PrioSchedule;
+using SchedulingProblem::Project;
+
 template<>
 PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
                                                 PrioSchedule* b) const {
@@ -37,6 +42,8 @@ PrioSchedule* LAXCrossover<PrioSchedule>::cross(PrioSchedule* a,
   return new PrioSchedule(ires, prio);
 }
 
+using SchedulingProblem::SimpleSchedule;
+
 template<>
 SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
                                                     SimpleSchedule* b) const {
@@ -60,3 +67,5 @@ SimpleSchedule* LAXCrossover<SimpleSchedule>::cross(SimpleSchedule* a,
   }
   return new SimpleSchedule(ires);
 }
+
+};  // namespace EvolutionaryAlgorithm

@@ -8,6 +8,7 @@
 #include "Task.h"
 #include "Schedule.h"
 
+namespace SchedulingProblem {
 
 /**
  * @brief Representation of schedule that uses task priorities.
@@ -48,5 +49,7 @@ class PrioSchedule : public Schedule {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_PRIOSCHEDULE_H

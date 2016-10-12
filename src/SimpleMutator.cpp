@@ -4,9 +4,13 @@
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
 
+namespace EvolutionaryAlgorithm {
+
 /************************************
  * Specialization for PrioSchedule: *
  ************************************/
+
+using SchedulingProblem::PrioSchedule;
 
 template<>
 void SimpleMutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i)
@@ -48,6 +52,8 @@ template class SimpleMutator<PrioSchedule>;
  * Specialization for SimpleSchedule: *
  **************************************/
 
+using SchedulingProblem::SimpleSchedule;
+
 template<>
 void SimpleMutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i)
     const {
@@ -76,3 +82,5 @@ SimpleSchedule* SimpleMutator<SimpleSchedule>::mutate(SimpleSchedule* sample)
 }
 
 template class SimpleMutator<SimpleSchedule>;
+
+};  // namespace EvolutionaryAlgorithm

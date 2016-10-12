@@ -4,6 +4,8 @@
 #include "Population.h"
 #include "Selector.h"
 
+namespace EvolutionaryAlgorithm {
+
 /** @brief Implementation of tournament selection operator. */
 template <class T>
 class TournamentSelector : public Selector<T> {
@@ -17,6 +19,8 @@ class TournamentSelector : public Selector<T> {
   /** Size of the tournament. */
   const int n;
 };
+
+};  // namespace EvolutionaryAlgorithm
 
 #include "../src/TournamentSelector.tpp"
 

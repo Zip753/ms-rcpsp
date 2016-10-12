@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_TASK_H
 #define MS_RCPSP_TASK_H
 
+namespace SchedulingProblem {
+
 /** @brief Representation of task. */
 class Task {
  public:
@@ -42,5 +44,7 @@ class Task {
  private:
   int ndep, nres;
 };
+
+};  // namespace SchedulingProblem
 
 #endif  // MS_RCPSP_TASK_H
