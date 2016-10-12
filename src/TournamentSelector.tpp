@@ -3,8 +3,8 @@
 #include "../include/Random.h"
 
 template <class T>
-T* TournamentSelector<T>::select(Population<T>* p) const {
-  int p_size = p->size();
+T* TournamentSelector<T>::select(const Population<T>& p) const {
+  int p_size = p.size();
   int tourn_size = n;
   if (p_size < tourn_size)
     tourn_size = p_size;
@@ -13,11 +13,11 @@ T* TournamentSelector<T>::select(Population<T>* p) const {
   int best_id = 0;
   for (int i = 0; i < tourn_size; i++) {
     int idx = Random::randint() % p_size;
-    if (i == 0 || best_fitness > p->genotype[idx]->fitness()) {
+    if (i == 0 || best_fitness > p.genotype[idx]->fitness()) {
       best_id = idx;
-      best_fitness = p->genotype[idx]->fitness();
+      best_fitness = p.genotype[idx]->fitness();
     }
   }
 
-  return p->genotype[best_id];
+  return p.genotype[best_id];
 }

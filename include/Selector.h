@@ -13,7 +13,7 @@ template <class T>
 class Selector {
  public:
   /** Selects the candidate specimen from the population. */
-  virtual T* select(Population<T>* p) const = 0;
+  virtual T* select(const Population<T>& p) const = 0;
 
   virtual ~Selector() = 0;
 };

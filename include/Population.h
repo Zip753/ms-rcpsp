@@ -19,7 +19,7 @@ class Population {
   ~Population();
 
   /** Returns size of the population. */
-  int size() { return n; }
+  int size() const { return n; }
 
   /** Returns specimen with the smallest fitness function in the population. */
   T* best();

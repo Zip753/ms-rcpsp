@@ -11,7 +11,7 @@ class TournamentSelector : public Selector<T> {
   /** @param _n Tournament size. */
   TournamentSelector(int _n) : n(_n) {}
 
-  T* select(Population<T>* p) const override;
+  T* select(const Population<T>& p) const override;
 
  private:
   /** Size of the tournament. */

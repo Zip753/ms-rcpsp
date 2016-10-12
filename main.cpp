@@ -62,7 +62,7 @@ template <class T>
 void SolveAndOutput(const std::string& stat_file_name,
                     FILE* output_file,
                     FILE* best_file) {
-  std::shared_ptr<T> sch = std::move(InitAndSolve<T>(stat_file_name));
+  std::shared_ptr<Schedule> sch = std::move(InitAndSolve<T>(stat_file_name));
 
   /* Output solution to stdout. */
   printf("SOLUTION: ");

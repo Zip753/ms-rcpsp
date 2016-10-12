@@ -25,17 +25,17 @@ std::shared_ptr<T> Algorithm<T>::solve(FILE* stat) {
     int n = population->size();
     T** next_pop = new T*[n];
     for (int i = 0; i < n;) {
-      T* a = selector.select(population);
+      T* a = selector.select(*population);
       T* b;
-      do { b = selector.select(population); } while (b == a);
+      do { b = selector.select(*population); } while (b == a);
       if (i == n - 1 || crossover.should_cross()) {
-        T* a_cross = crossover.cross(dynamic_cast<T*>(a), dynamic_cast<T*>(b));
+        T* a_cross = crossover.cross(a, b);
         T* a_mut = mutator.mutate(a_cross);
         addToPopulation(next_pop, i++, a_mut);
         delete a_cross;
       } else {
-        addToPopulation(next_pop, i++, mutator.mutate(dynamic_cast<T*>(a)));
-        addToPopulation(next_pop, i++, mutator.mutate(dynamic_cast<T*>(b)));
+        addToPopulation(next_pop, i++, mutator.mutate(a));
+        addToPopulation(next_pop, i++, mutator.mutate(b));
       }
     }
     delete population;
@@ -60,7 +60,7 @@ void Algorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
       for (int i = 0; i < idx; i++)
-        if (*dynamic_cast<T*>(pop[i]) == *sample) {
+        if (pop[i] == *sample) {
           contains = true;
           break;
         }
