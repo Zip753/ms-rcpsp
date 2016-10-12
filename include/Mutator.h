@@ -29,7 +29,7 @@ class Mutator {
    * Used to force mutation in the specimen for clone removal.
    */
   void force_mutate(T* sample) const {
-    int idx = Random::randint() % Project::get()->size();
+    int idx = Random::randint() % sample->size();
     mutate_gene(sample, idx);
   }
 
