@@ -1,0 +1,6 @@
+data/
+best/
+.idea/
+*.sh
+*.rb
+bazel-*
