@@ -50,10 +50,10 @@ std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   std::shared_ptr<T> sch;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
-    sch = std::move(algo.solve(stat_file));
+    sch = std::move(algo.optimize(stat_file));
     fclose(stat_file);
   } else {
-    sch = std::move(algo.solve(nullptr));
+    sch = std::move(algo.optimize(nullptr));
   }
   return sch;
 }

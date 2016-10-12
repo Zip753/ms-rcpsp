@@ -1,9 +1,10 @@
-#ifndef MS_RCPSP_ALGORITHM_H
-#define MS_RCPSP_ALGORITHM_H
+#ifndef MS_RCPSP_GENETICALGORITHM_H
+#define MS_RCPSP_GENETICALGORITHM_H
 
 #include <cstdio>
 #include <memory>
 
+#include "Algorithm.h"
 #include "Crossover.h"
 #include "Mutator.h"
 #include "Population.h"
@@ -21,7 +22,7 @@
  * @param T Type of specimen representation, subclass of Schedule.
  */
 template <class T>
-class GeneticAlgorithm {
+class GeneticAlgorithm : Algorithm<T> {
  public:
   /**
    * @param pop_size Size of the population.
@@ -42,7 +43,9 @@ class GeneticAlgorithm {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  std::shared_ptr<T> solve(FILE* stream);
+  std::shared_ptr<T> optimize(FILE* stream);
+
+  std::shared_ptr<T> optimize() override { return optimize(nullptr); }
 
  private:
   Population<T>* population;
@@ -66,4 +69,4 @@ class GeneticAlgorithm {
 
 #include "../src/GeneticAlgorithm.tpp"
 
-#endif  // MS_RCPSP_ALGORITHM_H
+#endif  // MS_RCPSP_GENETICALGORITHM_H

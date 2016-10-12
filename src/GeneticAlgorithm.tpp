@@ -7,7 +7,7 @@
 #include "../include/SimpleSchedule.h"
 
 template <class T>
-std::shared_ptr<T> GeneticAlgorithm<T>::solve(FILE* stat) {
+std::shared_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
   if (steps == -1) {
     return 0;
   }
@@ -18,7 +18,7 @@ std::shared_ptr<T> GeneticAlgorithm<T>::solve(FILE* stat) {
     printf("step == %d\n", step);
     printf("best: ");
     best->printState(true);
-    if (stat != 0) {
+    if (stat != nullptr) {
       population->showStat(stat);
     }
     // Move on to next generation.
