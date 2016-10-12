@@ -12,17 +12,18 @@
 
 #include <gflags/gflags.h>
 
-#include "include/ProjectReader.h"
-#include "include/Project.h"
-#include "include/Schedule.h"
-#include "include/Mutator.h"
-#include "include/LAXCrossover.h"
 #include "include/GeneticAlgorithm.h"
-#include "include/UniformCrossover.h"
+#include "include/LAXCrossover.h"
+#include "include/Mutator.h"
 #include "include/PrioSchedule.h"
+#include "include/Project.h"
+#include "include/ProjectReader.h"
+#include "include/Schedule.h"
+#include "include/SimpleMutator.h"
 #include "include/SimpleSchedule.h"
 #include "include/TournamentSelector.h"
-#include "include/SimpleMutator.h"
+#include "include/UniformCrossover.h"
+#include "include/Validator.h"
 
 DEFINE_int32(pop_size, 100, "Population size.");
 DEFINE_int32(iters, 200, "Number of generations.");
@@ -54,6 +55,12 @@ std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
     fclose(stat_file);
   } else {
     sch = std::move(algo.optimize(nullptr));
+  }
+  auto valid = Validator::validate(*sch);
+  if (!valid.first) {
+    printf("The solution is invalid!\n%s\n", valid.second.c_str());
+  } else {
+    printf("The solution is valid.\n");
   }
   return sch;
 }

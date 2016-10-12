@@ -5,6 +5,8 @@
 
 #include "Task.h"
 
+class Validator;
+
 /**
  * @brief Base abstract class for specimen (schedule) representations.
  *
@@ -44,13 +46,13 @@ class Schedule {
    * Returns index of resource assigned to the task at index i.
    * @param i Index of the task.
    */
-  inline int resource(int i) { return tasks[i]->res[ires[i]]; }
+  inline int resource(int i) const { return tasks[i]->res[ires[i]]; }
 
   /**
    * Returns number of resources capable of performing task at index i.
    * @param i Index of the task.
    */
-  int max_res_count(int i) { return tasks[i]->res_size(); }
+  int max_res_count(int i) const { return tasks[i]->res_size(); }
 
   /** Reset schedule representation to random state. */
   virtual void reset() = 0;
@@ -75,12 +77,14 @@ class Schedule {
    * Returns finish time of the task at index i.
    * @param i Index of the task.
    */
-  inline int finish_time(int i) { return start[i] + tasks[i]->duration; }
+  inline int finish_time(int i) const { return start[i] + tasks[i]->duration; }
 
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
    */
   virtual int compute_fitness() = 0;
+
+  friend class Validator;
 };
 
 #endif  // MS_RCPSP_SCHEDULE_H
