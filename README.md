@@ -63,11 +63,11 @@ Or use existing one:
 // Create operators.
 // SimpleSchedule is the default implementation of Schedule.
 std::shared_ptr<Selector<SimpleSchedule>> sel =
-    std::make_shared<TournamentSelector<SimpleSchedule>>(FLAGS_tournament_size);
+    std::make_shared<TournamentSelector<SimpleSchedule>>(tournament_size);
 std::shared_ptr<Crossover<SimpleSchedule>> cross =
-    std::make_shared<OnePointCrossover<SimpleSchedule>>(FLAGS_crossover);
+    std::make_shared<OnePointCrossover<SimpleSchedule>>(crossover_prob);
 std::shared_ptr<Mutator<SimpleSchedule>> mut =
-    std::make_shared<SimpleMutator<SimpleSchedule>>(FLAGS_mutation);
+    std::make_shared<SimpleMutator<SimpleSchedule>>(mutation_prob);
 // Initialize GA.
 GeneticAlgorithm<SimpleSchedule> algo(pop_size, /* population size */
                                       sel,      /* selection operator */
