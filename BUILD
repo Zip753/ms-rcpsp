@@ -21,6 +21,6 @@ cc_binary(
     copts = ["-std=c++14"],
     deps = [
         ":ga_lib",
-        "//external:gflags",
+        "//gflags:gflags",
     ],
 )

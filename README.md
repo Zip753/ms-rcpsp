@@ -26,14 +26,11 @@ bazel build -c opt :ga_bin
 It will create `bazel-bin` directory, where you can find `ga_bin` binary along with `libga_lib.a` static library.
 
 ### CMake
-You can use `CMakeLists.txt` to build the binary just as you would expect:
+You can use `CMakeLists.txt` to build the solution just as you would expect:
 ```
-cmake CMakeLists.txt && make
+cmake . && make all
 ```
-You must have `libgflags` installed to use this option. For example, on Ubuntu you can install it as follows:
-```
-sudo apt-get install libgflags-dev
-```
+The binary and library will appear in `bin` and `lib` folders respectively.
 
 ## Quick start
 This is a quick guide for those who want to use the library to experiment with their own solutions.
