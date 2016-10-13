@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_RANDOM_H
 #define MS_RCPSP_RANDOM_H
 
+#include <random>
+
 namespace Util {
 
 /** @brief Helper class used to generate random values. */
@@ -17,11 +19,10 @@ class Random {
   static bool rand(double prob);
 
  private:
-  /** Seed random values. Makes sure that values are only seeded once. */
-  static void seed();
-
-  /** Cache variable to check whether the seed has already been initiated. */
-  static bool _seed;
+  static std::random_device rd;
+  static std::mt19937 gen;
+  static std::uniform_int_distribution<> rand_int;
+  static std::uniform_real_distribution<> rand_real;
 };
 
 };  // namespace Util

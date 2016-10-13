@@ -24,7 +24,7 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
       stream << ", capable resources: ";
       stream << s.max_res_count(i);
       stream << ").";
-      return {false, stream.str()};
+      return std::make_pair(false, stream.str());
     }
     // Check task dependencies.
     for (int j = 0; j < s.tasks[i]->dep_size(); ++j) {
@@ -39,7 +39,7 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
         stream << " finish time: ";
         stream << s.finish_time(dep_id);
         stream << ").";
-        return {false, stream.str()};
+        return std::make_pair(false, stream.str());
       }
     }
   }
@@ -72,12 +72,12 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
         stream << " start time: ";
         stream << s.start[tasks[i + 1]];
         stream << ").";
-        return {false, stream.str()};
+        return std::make_pair(false, stream.str());
       }
     }
   }
 
-  return {true, "OK"};
+  return std::make_pair(true, "OK");
 }
 
 };  // namespace SchedulingProblem
