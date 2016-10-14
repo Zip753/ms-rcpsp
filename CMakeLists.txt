@@ -9,7 +9,6 @@ set(SOURCE_FILES ${srcs} ${hdrs})
 add_subdirectory(gflags)
 
 add_library(ga_lib ${SOURCE_FILES})
-target_link_libraries(ga_lib gflags)
 
 add_executable(ga_bin ${SOURCE_FILES} main.cpp)
 target_link_libraries(ga_bin gflags)
