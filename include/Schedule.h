@@ -2,6 +2,7 @@
 #define MS_RCPSP_SCHEDULE_H
 
 #include <cstdio>
+#include <vector>
 
 #include "Task.h"
 
@@ -30,10 +31,10 @@ class Schedule {
   virtual ~Schedule() = 0;
 
   /** List of resources assigned to corresponding tasks. */
-  int* ires;
+  std::vector<int> ires;
 
   /** List of task start times. */
-  int* start;
+  std::vector<int> start;
 
   /** Returns number of tasks. */
   int size() { return n; }
@@ -61,7 +62,7 @@ class Schedule {
 
  protected:
   Schedule();
-  Schedule(int* _ires) : Schedule() { ires = _ires; }
+  Schedule(std::vector<int> _ires) : Schedule() { ires = _ires; }
 
   /** Number of tasks. */
   int n;
@@ -73,7 +74,7 @@ class Schedule {
   int _fitness = -1;
 
   /** List of tasks to complete. Shortcut to Project::tasks. */
-  Task** tasks;
+  std::vector<Task*> tasks;
 
   /**
    * Returns finish time of the task at index i.

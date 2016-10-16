@@ -2,8 +2,11 @@
 
 #include <memory>
 #include <utility>
+#include <vector>
 
+#include "../include/Mutator.h"
 #include "../include/PrioSchedule.h"
+#include "../include/Selector.h"
 #include "../include/SimpleSchedule.h"
 
 namespace EvolutionaryAlgorithm {
@@ -25,7 +28,7 @@ std::shared_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
     }
     // Move on to next generation.
     int n = population->size();
-    T** next_pop = new T*[n];
+    std::vector<T*> next_pop = std::vector<T*>(n);
     for (int i = 0; i < n;) {
       T* a = selector->select(*population);
       T* b;
@@ -33,15 +36,19 @@ std::shared_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
       if (i == n - 1 || crossover->should_cross()) {
         T* a_cross = crossover->cross(a, b);
         T* a_mut = mutator->mutate(a_cross);
-        addToPopulation(next_pop, i++, a_mut);
+        TryRemoveClones(next_pop, i, a_mut);
+        next_pop[i++] = a_mut;
         delete a_cross;
       } else {
-        addToPopulation(next_pop, i++, mutator->mutate(a));
-        addToPopulation(next_pop, i++, mutator->mutate(b));
+        T* a_mut = mutator->mutate(a);
+        TryRemoveClones(next_pop, i, a_mut);
+        next_pop[i++] = a_mut;
+        T* b_mut = mutator->mutate(b);
+        TryRemoveClones(next_pop, i, b_mut);
+        next_pop[i++] = b_mut;
       }
     }
-    delete population;
-    population = new Population<T>(n, next_pop);
+    population = std::make_unique<Population<T>>(n, next_pop);
   }
   update_best();
 
@@ -57,7 +64,8 @@ void GeneticAlgorithm<T>::update_best() {
 }
 
 template <class T>
-void GeneticAlgorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
+void GeneticAlgorithm<T>::TryRemoveClones(const std::vector<T*> &pop, int idx,
+                                          T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
@@ -69,18 +77,11 @@ void GeneticAlgorithm<T>::addToPopulation(T** pop, int idx, T* sample) {
       if (contains) {
         mutator->force_mutate(sample);
       } else {
-        pop[idx] = sample;
         return;
       }
     }
     sample->reset();
   }
-  pop[idx] = sample;
-}
-
-template <class T>
-GeneticAlgorithm<T>::~GeneticAlgorithm() {
-  delete population;
 }
 
 template <class T>
@@ -92,11 +93,11 @@ GeneticAlgorithm<T>::GeneticAlgorithm(int pop_size,
                                       bool _rem_clones) :
     selector(s), crossover(c), mutator(m), steps(_steps),
     remove_clones(_rem_clones) {
-  T** specimen = new T*[pop_size];
+  std::vector<T*> specimen = std::vector<T*>(pop_size);
   for (int i = 0; i < pop_size; ++i) {
     specimen[i] = new T();
   }
-  population = new Population<T>(pop_size, specimen);
+  population = std::make_unique<Population<T>>(pop_size, specimen);
 }
 
 };  // namespace EvolutionaryAlgorithm

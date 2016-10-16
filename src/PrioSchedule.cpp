@@ -20,13 +20,12 @@ bool PrioSchedule::operator==(PrioSchedule s) const {
 
 void PrioSchedule::init(bool initialize) {
   if (initialize) {
-    ires = new int[n];
-    prio = new int[n];
+    ires = std::vector<int>(n, 0);
+    prio = std::vector<int>(n, 0);
     reset();
   }
 
-  int rcount = Project::get()->get_res_count();
-  business = new int[rcount];
+  business = std::vector<int>(Project::get_res_count());
 }
 
 PrioSchedule::PrioSchedule() : Schedule() {
@@ -35,24 +34,17 @@ PrioSchedule::PrioSchedule() : Schedule() {
 
 PrioSchedule::PrioSchedule(PrioSchedule* s) : Schedule() {
   init(false);
-  ires = new int[n];
-  prio = new int[n];
+  ires = std::vector<int>(n, 0);
+  prio = std::vector<int>(n, 0);
   for (int i = 0; i < n; i++) {
     ires[i] = s->ires[i];
     prio[i] = s->prio[i];
   }
 }
 
-PrioSchedule::PrioSchedule(int* _ires, int* _prio)
+PrioSchedule::PrioSchedule(std::vector<int> _ires, std::vector<int> _prio)
     : Schedule(_ires), prio(_prio) {
   init(false);
-}
-
-PrioSchedule::~PrioSchedule() {
-  delete[] ires;
-  delete[] prio;
-  delete[] start;
-  if (business != nullptr) delete[] business;
 }
 
 void PrioSchedule::fix_all() {
@@ -72,15 +64,13 @@ void PrioSchedule::fix_all() {
       queue.push(std::make_pair(i, prio[i]));
     }
   }
-  int res_count = Project::get()->get_res_count();
+  int res_count = Project::get_res_count();
 
   // availability time for resources
-  int* time = new int[res_count];
-  std::fill_n(time, res_count, 0);
+  std::vector<int> time = std::vector<int>(res_count);
 
   // number of complete dependencies for tasks
-  int* dep_count = new int[n];
-  std::fill_n(dep_count, n, 0);
+  std::vector<int> dep_count = std::vector<int>(n);
 
   while (!queue.empty()) {
     // take next task
@@ -103,7 +93,7 @@ void PrioSchedule::fix_all() {
     time[res_idx] = finish_time(itask);
 
     // add all unblocked dependent tasks to the queue
-    for (int i = 0; i < tasks[itask]->next_size; ++i) {
+    for (int i = 0; i < tasks[itask]->next.size(); ++i) {
       int inext = tasks[itask]->next[i];
       dep_count[inext]++;
       if (dep_count[inext] == tasks[inext]->dep_size()) {
@@ -111,9 +101,6 @@ void PrioSchedule::fix_all() {
       }
     }
   }
-
-  delete[] time;
-  delete[] dep_count;
 }
 
 int PrioSchedule::compute_fitness() {
@@ -125,7 +112,7 @@ int PrioSchedule::compute_fitness() {
       _fitness = finish;
   }
 
-  std::fill_n(business, Project::get()->get_res_count(), 0);
+  std::fill(business.begin(), business.end(), 0);
   for (int i = 0; i < n; i++) {
     int res = resource(i);
     business[res] += tasks[i]->duration;
@@ -136,10 +123,10 @@ int PrioSchedule::compute_fitness() {
 
 void PrioSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::get()->tasks[i]->res_size();
+    ires[i] = Util::Random::randint() % Project::Tasks()[i]->res_size();
     prio[i] = i;
   }
-  std::random_shuffle(prio, prio + n);
+  std::random_shuffle(prio.begin(), prio.end());
 }
 
 };  // namespace SchedulingProblem

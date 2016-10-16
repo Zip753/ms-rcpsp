@@ -14,9 +14,7 @@ namespace SchedulingProblem {
 
 bool ProjectReader::read(const std::string &filename) {
   int n, id, dur;
-  size_t res_count, ndep, nres;
-  int* dep;
-  int* res;
+  size_t res_count;
   std::ifstream infile(filename);
   std::string line;
   std::smatch match;
@@ -34,9 +32,9 @@ bool ProjectReader::read(const std::string &filename) {
     if (!std::getline(infile, line)) return false;
   }
 
-  Task** tasks = new Task*[n];
-  int* res_id = new int[res_count];
-  double* res_sal = new double[res_count];
+  std::vector<Task*> tasks = std::vector<Task*>(n);
+  std::vector<int> res_id = std::vector<int>(res_count);
+  std::vector<double> res_sal = std::vector<double>(res_count);
   std::vector<std::map<int, int>> skills(res_count);
 
   pattern = "(\\d+)\\s+([\\d\\.]+)\\b";
@@ -75,8 +73,6 @@ bool ProjectReader::read(const std::string &filename) {
         resources.push_back(j);
       }
     }
-    res = new int[nres = resources.size()];
-    std::copy(resources.begin(), resources.end(), res);
 
     std::vector<int> dependencies;
     line = match.suffix();
@@ -84,11 +80,9 @@ bool ProjectReader::read(const std::string &filename) {
       dependencies.push_back(inv_task_id[stoi(match[1])]);
       line = match.suffix();
     }
-    dep = new int[ndep = dependencies.size()];
-    std::copy(dependencies.begin(), dependencies.end(), dep);
 
     // increment duration to match solutions
-    tasks[i] = new Task(id, dur + 1, dep, res, ndep, nres);
+    tasks[i] = new Task(id, dur + 1, dependencies, resources);
   }
   Project::create(n, tasks, res_count, res_id, res_sal);
   return true;

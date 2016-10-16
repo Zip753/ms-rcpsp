@@ -15,25 +15,25 @@ namespace SchedulingProblem {
 class SimpleSchedule : public Schedule {
  public:
   SimpleSchedule();
-  SimpleSchedule(int* _ires);
+  SimpleSchedule(std::vector<int> _ires);
   SimpleSchedule(SimpleSchedule* s);
-  ~SimpleSchedule() override;
+  ~SimpleSchedule() override {}
 
   /**
    * List of relative business for each resource. Used to implement
    * LAXCrossover.
    */
-  int* business;
+  std::vector<int> business;
 
   /** Checks schedule equality in terms of representation. */
   bool operator==(SimpleSchedule s) const;
 
   void reset() override;
 
- private:
   /** Helper list, used in SimpleSchedule#update_start. */
-  bool* visited;
+  std::vector<bool> visited;
 
+ private:
   /**
    * Contructor helper.
    * @param initialize If true, allocate and initialize resources.

@@ -2,6 +2,7 @@
 #define MS_RCPSP_POPULATION_H
 
 #include <cstdio>
+#include <vector>
 
 #include "Schedule.h"
 
@@ -16,7 +17,7 @@ class Population {
    * @param size Size of population.
    * @param t List of specimen.
    */
-  Population(int size, T** t) : genotype(t), n(size) {}
+  Population(int size, std::vector<T*> t) : genotype(t), n(size) {}
 
   ~Population();
 
@@ -27,7 +28,7 @@ class Population {
   T* best();
 
   /** List of specimen. */
-  T** genotype;
+  std::vector<T*> genotype;
 
   /**
    * Shows statistical information of the population: best, average and worst

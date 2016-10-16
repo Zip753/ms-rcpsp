@@ -31,7 +31,7 @@ int FLAGS_tournament_size = -1;
 const std::string FLAGS_suffix = "";
 const bool FLAGS_lax = false;
 const bool FLAGS_output_stat = false;
-const bool FLAGS_simple = false;
+bool FLAGS_simple = false;
 
 using namespace EvolutionaryAlgorithm;
 using namespace SchedulingProblem;
@@ -84,10 +84,27 @@ void SolveAndOutput(const std::string& stat_file_name,
 }
 
 int main(int argc, char* argv[]) {
-  if (argc != 2) {
+  if (argc < 2 || argc > 3) {
     fprintf(stderr, "Invalid number of arguments.\n"
         "Usage: %s input_file [flags...]\n", argv[0]);
     return 1;
+  }
+
+  std::string input_full_name;
+  if (argc == 3) {
+    if (strcmp(argv[1], "--simple") == 0) {
+      input_full_name = std::string(argv[2]);
+      FLAGS_simple = true;
+    } else if (strcmp(argv[2], "--simple") == 0) {
+      input_full_name = std::string(argv[1]);
+      FLAGS_simple = true;
+    } else {
+      fprintf(stderr, "Invalid flags.\n"
+          "Usage: %s input_file [flags...]\n", argv[0]);
+      return 1;
+    }
+  } else {
+    input_full_name = std::string(argv[1]);
   }
 
   /* Set tournament size dynamically, if none provided. */
@@ -97,7 +114,6 @@ int main(int argc, char* argv[]) {
   printf("Tournament size: %d\n", FLAGS_tournament_size);
 
   /* Parse filename. */
-  std::string input_full_name = std::string(argv[1]);
   std::string input_base_name =
       input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
   std::string folder_path =
@@ -110,7 +126,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Invalid input file format.\n");
     return 1;
   }
-  printf("Tasks: %d\n", Project::get()->size());
+  printf("Tasks: %d\n", Project::size());
 
   /* Project solution output: */
   std::string output_file_name = base_name;

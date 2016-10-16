@@ -38,7 +38,7 @@ class GeneticAlgorithm : Algorithm<T> {
                    const std::shared_ptr<Mutator<T>> &m,
                    int _steps = -1,
                    bool _rem_clones = true);
-  ~GeneticAlgorithm();
+  ~GeneticAlgorithm() {}
 
   /**
    * Executes the genetic algorithm.
@@ -50,7 +50,7 @@ class GeneticAlgorithm : Algorithm<T> {
   std::shared_ptr<T> optimize() override { return optimize(nullptr); }
 
  private:
-  Population<T>* population;
+  std::unique_ptr<Population<T>> population;
   std::shared_ptr<Selector<T>> selector;
   std::shared_ptr<Crossover<T>> crossover;
   std::shared_ptr<Mutator<T>> mutator;
@@ -63,7 +63,7 @@ class GeneticAlgorithm : Algorithm<T> {
   /** Copy of the best solution for the whole run. */
   std::shared_ptr<T> global_best = nullptr;
 
-  void addToPopulation(T** pop, int i, T* sample);
+  void TryRemoveClones(const std::vector<T*> &pop, int i, T* sample);
 
   /** Updates best result for the current generation and the global best. */
   void update_best();

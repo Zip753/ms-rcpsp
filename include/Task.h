@@ -1,6 +1,8 @@
 #ifndef MS_RCPSP_TASK_H
 #define MS_RCPSP_TASK_H
 
+#include <vector>
+
 namespace SchedulingProblem {
 
 /** @brief Representation of task. */
@@ -14,9 +16,8 @@ class Task {
    * @param _nres Number of capable resources.
    * @param _res List of capable resources.
    */
-  Task(int _id, int _dur, int *_dep, int *_res, int _ndep, int _nres)
-      : id(_id), duration(_dur), dep(_dep), res(_res), ndep(_ndep),
-        nres(_nres) {}
+  Task(int _id, int _dur, std::vector<int> _dep, std::vector<int> _res)
+      : id(_id), duration(_dur), dep(_dep), res(_res) {}
   ~Task();
 
   /** Task ID, as specified in input file. */
@@ -25,24 +26,18 @@ class Task {
   int duration;
   /** List of dependencies, i.e. tasks that have to be completed before this
    * task. */
-  int* dep;
+  std::vector<int> dep;
   /** List of resources capable of completing the task. */
-  int* res;
+  std::vector<int> res;
   /** List of inverse dependencies. */
-  int* next;
+  std::vector<int> next;
 
   /** Returns number of resources capable of completing the task. */
-  int res_size() const { return nres; }
+  int res_size() const { return res.size(); }
 
   /** Returns number of dependencies, i.e. tasks that have to be completed
    * before this task. */
-  int dep_size() const { return ndep; }
-
-  /** Number of inverse dependencies. */
-  int next_size;
-
- private:
-  int ndep, nres;
+  int dep_size() const { return dep.size(); }
 };
 
 };  // namespace SchedulingProblem

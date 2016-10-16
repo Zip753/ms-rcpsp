@@ -21,22 +21,22 @@ namespace SchedulingProblem {
 class PrioSchedule : public Schedule {
  public:
   PrioSchedule();
-  PrioSchedule(int* _ires, int* _prio);
+  PrioSchedule(std::vector<int> _ires, std::vector<int> _prio);
   PrioSchedule(PrioSchedule* s);
-  ~PrioSchedule() override;
+  ~PrioSchedule() override {}
 
   int compute_fitness() override;
 
   /** Task priorities. */
-  int* prio;
-
-  /** Businesses of resources. Used to implement LAXCrossover. */
-  int* business;
+  std::vector<int> prio;
 
   /** Checks schedule equality in terms of representation. */
   bool operator==(PrioSchedule s) const;
 
   void reset() override;
+
+  /** Businesses of resources. Used to implement LAXCrossover. */
+  std::vector<int> business;
 
  private:
   /**

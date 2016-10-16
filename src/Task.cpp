@@ -2,10 +2,6 @@
 
 namespace SchedulingProblem {
 
-Task::~Task() {
-  delete[] res;
-  delete[] dep;
-  delete[] next;
-}
+Task::~Task() {}
 
 };  // namespace SchedulingProblem

@@ -2,6 +2,7 @@
 #define MS_RCPSP_PROJECT_H
 
 #include <memory>
+#include <vector>
 
 #include "Task.h"
 
@@ -14,49 +15,50 @@ class Project {
 
  public:
   /** Creates singleton instance. */
-  static void create(int _n, Task **_tasks, int _res_count, int* _res_id,
-                     double* _res_sal);
-
-  /** @return Pointer to project instance. */
-  inline static std::shared_ptr<Project> get() { return _project; }
+  static void create(int _n,
+                     const std::vector<Task*> &_tasks,
+                     int _res_count,
+                     const std::vector<int> &_res_id,
+                     const std::vector<double> &_res_sal);
 
   /** Returns the number of tasks in the project. */
-  inline int size() { return n; }
+  inline static int size() { return _project->n; }
 
   /** Returns number of resources. */
-  inline int get_res_count() { return res_count; }
+  inline static int get_res_count() { return _project->res_count; }
 
   /**
    * Returns resource ID of the resource at the given index.
    * @param res index of the resource
    */
-  inline int get_res_id(int res) { return res_id[res]; }
+  inline static int get_res_id(int res) { return _project->res_id[res]; }
 
   /**
    * Returns the hourly salary of the resource at the given index.
    * @param res index of the resource
    */
-  inline double get_salary(int res) { return res_salary[res]; }
+  inline static double get_salary(int res) { return _project->res_salary[res]; }
 
   ~Project();
 
-  /** List of project tasks. */
-  Task** tasks;
+  static std::vector<Task*>& Tasks() { return _project->tasks; }
 
  private:
+  /** List of project tasks. */
+  std::vector<Task*> tasks;
   /** Number of tasks. */
   int n;
   /** IDs of resources. */
-  int* res_id;
+  std::vector<int> res_id;
   /** Salaries of resources. */
-  double* res_salary;
+  std::vector<double> res_salary;
   /** Number of resources. */
   int res_count;
   /** Shortcut to Project. */
-  static std::shared_ptr<Project> _project;
+  static std::unique_ptr<Project> _project;
   /** @see ProjectReader::read() */
-  Project(int _n, Task** _tasks, int _res_count, int* _res_id,
-          double* _res_sal)
+  Project(int _n, const std::vector<Task*> &_tasks, int _res_count,
+          const std::vector<int> &_res_id, const std::vector<double> &_res_sal)
       : tasks(_tasks), n(_n), res_id(_res_id), res_salary(_res_sal),
         res_count(_res_count) {}
 };

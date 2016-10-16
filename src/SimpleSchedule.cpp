@@ -17,14 +17,14 @@ bool SimpleSchedule::operator==(SimpleSchedule s) const {
 
 void SimpleSchedule::init(bool create_ires) {
   if (create_ires) {
-    ires = new int[n];
+    ires = std::vector<int>(n, 0);
     reset();
   }
 
-  visited = new bool[n];
+  visited = std::vector<bool>(n);
 
-  int rcount = Project::get()->get_res_count();
-  business = new int[rcount];
+  int rcount = Project::get_res_count();
+  business = std::vector<int>(rcount);
 }
 
 SimpleSchedule::SimpleSchedule() : Schedule() {
@@ -33,21 +33,14 @@ SimpleSchedule::SimpleSchedule() : Schedule() {
 
 SimpleSchedule::SimpleSchedule(SimpleSchedule* s) : Schedule() {
   init(false);
-  ires = new int[n];
+  ires = std::vector<int>(n, 0);
   for (int i = 0; i < n; i++) {
     ires[i] = s->ires[i];
   }
 }
 
-SimpleSchedule::SimpleSchedule(int* _ires) : Schedule(_ires) {
+SimpleSchedule::SimpleSchedule(std::vector<int> _ires) : Schedule(_ires) {
   init(false);
-}
-
-SimpleSchedule::~SimpleSchedule() {
-  delete[] ires;
-  delete[] start;
-  delete[] visited;
-  if (business != nullptr) delete[] business;
 }
 
 void SimpleSchedule::update_start(int i) {
@@ -65,7 +58,7 @@ void SimpleSchedule::update_start(int i) {
 
 void SimpleSchedule::reschedule() {
   // first, set earliest start (from fin)
-  std::fill_n(visited, n, false);
+  visited = std::vector<bool>(n, false);
   for (int i = 0; i < n; ++i) {
     update_start(i);
   }
@@ -112,7 +105,7 @@ int SimpleSchedule::compute_fitness() {
       _fitness = finish;
   }
 
-  std::fill_n(business, Project::get()->get_res_count(), 0);
+  std::fill(business.begin(), business.end(), 0);
   for (int i = 0; i < n; i++) {
     int res = resource(i);
     business[res] += tasks[i]->duration;
@@ -123,7 +116,7 @@ int SimpleSchedule::compute_fitness() {
 
 void SimpleSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::get()->tasks[i]->res_size();
+    ires[i] = Util::Random::randint() % Project::Tasks()[i]->res_size();
   }
 }
 

@@ -2,6 +2,7 @@
 
 #include <list>
 #include <map>
+#include <vector>
 #include <utility>
 
 #include "../include/Project.h"
@@ -29,7 +30,7 @@ void Schedule::writeToFile(FILE* stream) {
   std::map<int, std::list<std::pair<int, int> > > timeline;
   for (int i = 0; i < n; i++) {
     int st = start[i] + 1;
-    int res = Project::get()->get_res_id(resource(i));
+    int res = Project::get_res_id(resource(i));
     int task_id = tasks[i]->id;
 
     if (timeline.count(st) == 0) {
@@ -46,13 +47,9 @@ void Schedule::writeToFile(FILE* stream) {
   }
 }
 
-Schedule::Schedule() {
-  n = Project::get()->size();
-  this->tasks = Project::get()->tasks;
-
-  start = new int[n];
-  std::fill_n(start, n, 0);
-}
+Schedule::Schedule() : start(std::vector<int>(Project::size(), 0)),
+                       n(Project::size()),
+                       tasks(Project::Tasks()) {}
 
 Schedule::~Schedule() {}
 

@@ -6,7 +6,6 @@ template <class T>
 Population<T>::~Population() {
   for (int i = 0; i < n; i++)
     delete genotype[i];
-  delete[] genotype;
 }
 
 template <class T>
