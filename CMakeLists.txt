@@ -8,12 +8,13 @@ set(SOURCE_FILES ${srcs} ${hdrs})
 
 add_subdirectory(gflags)
 
-add_library(ga_lib ${SOURCE_FILES})
+add_library(ga_lib_static STATIC ${SOURCE_FILES})
+add_library(ga_lib_shared SHARED ${SOURCE_FILES})
 
 add_executable(ga_bin ${SOURCE_FILES} main.cpp)
 target_link_libraries(ga_bin gflags)
 
-set_target_properties(ga_lib ga_bin
+set_target_properties(ga_lib_static ga_lib_shared ga_bin
         PROPERTIES
         "ARCHIVE_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/lib"
         "LIBRARY_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/lib"
