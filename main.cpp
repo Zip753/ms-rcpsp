@@ -10,8 +10,6 @@
 #include <string>
 #include <utility>
 
-#include <gflags/gflags.h>
-
 #include "include/GeneticAlgorithm.h"
 #include "include/LAXCrossover.h"
 #include "include/Mutator.h"
@@ -25,15 +23,15 @@
 #include "include/UniformCrossover.h"
 #include "include/Validator.h"
 
-DEFINE_int32(pop_size, 100, "Population size.");
-DEFINE_int32(iters, 200, "Number of generations.");
-DEFINE_double(crossover, 0.3, "Probability of crossover.");
-DEFINE_double(mutation, 0.01, "Probability of single gene mutation.");
-DEFINE_int32(tournament_size, -1, "Size of tournament for selection.");
-DEFINE_string(suffix, "", "Suffix for output file names.");
-DEFINE_bool(lax, false, "Use LAX crossover operator.");
-DEFINE_bool(output_stat, false, "Output population statistics to .stat file.");
-DEFINE_bool(simple, false, "Use simple schedule representation.");
+const int FLAGS_pop_size = 100;
+const int FLAGS_iters = 200;
+const double FLAGS_crossover = 0.3;
+const double FLAGS_mutation = 0.01;
+int FLAGS_tournament_size = -1;
+const std::string FLAGS_suffix = "";
+const bool FLAGS_lax = false;
+const bool FLAGS_output_stat = false;
+const bool FLAGS_simple = false;
 
 using namespace EvolutionaryAlgorithm;
 using namespace SchedulingProblem;
@@ -86,7 +84,6 @@ void SolveAndOutput(const std::string& stat_file_name,
 }
 
 int main(int argc, char* argv[]) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
   if (argc != 2) {
     fprintf(stderr, "Invalid number of arguments.\n"
         "Usage: %s input_file [flags...]\n", argv[0]);
