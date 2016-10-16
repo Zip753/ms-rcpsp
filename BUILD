@@ -17,10 +17,8 @@ cc_library(
 cc_binary(
     name = "ga_bin",
     srcs = ["main.cpp"],
-    linkopts = ["-pthread"],
     copts = ["-std=c++14"],
     deps = [
         ":ga_lib",
-        "//gflags:gflags",
     ],
 )
