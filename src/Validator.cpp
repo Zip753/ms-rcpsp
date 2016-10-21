@@ -18,7 +18,7 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
     // Check resource indices.
     if (s.ires[i] < 0 || s.ires[i] >= s.max_res_count(i)) {
       stream << "Resource index out of boundaries (task ID: ";
-      stream << s.tasks[i]->id;
+      stream << s.task(i).id;
       stream << ", resource index: ";
       stream << s.ires[i];
       stream << ", capable resources: ";
@@ -27,15 +27,15 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
       return std::make_pair(false, stream.str());
     }
     // Check task dependencies.
-    for (int j = 0; j < s.tasks[i]->dep_size(); ++j) {
-      int dep_id = s.tasks[i]->dep[j];
+    for (int j = 0; j < s.task(i).dep_size(); ++j) {
+      int dep_id = s.task(i).dep[j];
       if (s.finish_time(dep_id) > s.start[i]) {
         stream << "Task dependency not met (task #";
-        stream << s.tasks[i]->id;
+        stream << s.task(i).id;
         stream << " start time: ";
         stream << s.start[i];
         stream << ", task #";
-        stream << s.tasks[dep_id]->id;
+        stream << s.task(dep_id).id;
         stream << " finish time: ";
         stream << s.finish_time(dep_id);
         stream << ").";
@@ -64,11 +64,11 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
         stream << "Resource #";
         stream << res_id;
         stream << " has conflicting assignments (task #";
-        stream << s.tasks[tasks[i]]->id;
+        stream << s.task(tasks[i]).id;
         stream << " finish time: ";
         stream << s.finish_time(tasks[i]);
         stream << ", task #";
-        stream << s.tasks[tasks[i + 1]]->id;
+        stream << s.task(tasks[i + 1]).id;
         stream << " start time: ";
         stream << s.start[tasks[i + 1]];
         stream << ").";

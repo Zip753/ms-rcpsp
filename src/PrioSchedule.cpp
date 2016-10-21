@@ -60,7 +60,7 @@ void PrioSchedule::fix_all() {
                       std::vector<std::pair<int, int>>,
                       PriorityComp> queue;
   for (int i = 0; i < n; ++i) {
-    if (tasks[i]->dep_size() == 0) {
+    if (task(i).dep_size() == 0) {
       queue.push(std::make_pair(i, prio[i]));
     }
   }
@@ -80,8 +80,8 @@ void PrioSchedule::fix_all() {
     // find max finish time of all dependencies
     int res_idx = resource(itask);
     int min_start = 0;
-    for (int i = 0; i < tasks[itask]->dep_size(); ++i) {
-      int idep = tasks[itask]->dep[i];
+    for (int i = 0; i < task(itask).dep_size(); ++i) {
+      int idep = task(itask).dep[i];
       int fin = finish_time(idep);
       if (min_start < fin)
         min_start = fin;
@@ -93,10 +93,10 @@ void PrioSchedule::fix_all() {
     time[res_idx] = finish_time(itask);
 
     // add all unblocked dependent tasks to the queue
-    for (int i = 0; i < tasks[itask]->next.size(); ++i) {
-      int inext = tasks[itask]->next[i];
+    for (int i = 0; i < task(itask).next.size(); ++i) {
+      int inext = task(itask).next[i];
       dep_count[inext]++;
-      if (dep_count[inext] == tasks[inext]->dep_size()) {
+      if (dep_count[inext] == task(inext).dep_size()) {
         queue.push(std::make_pair(inext, prio[inext]));
       }
     }
@@ -115,7 +115,7 @@ int PrioSchedule::compute_fitness() {
   std::fill(business.begin(), business.end(), 0);
   for (int i = 0; i < n; i++) {
     int res = resource(i);
-    business[res] += tasks[i]->duration;
+    business[res] += task(i).duration;
   }
 
   return _fitness;
@@ -123,7 +123,7 @@ int PrioSchedule::compute_fitness() {
 
 void PrioSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::Tasks()[i]->res_size();
+    ires[i] = Util::Random::randint() % Project::task(i).res_size();
     prio[i] = i;
   }
   std::random_shuffle(prio.begin(), prio.end());

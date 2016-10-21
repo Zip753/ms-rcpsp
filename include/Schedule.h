@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 
+#include "Project.h"
 #include "Task.h"
 
 namespace SchedulingProblem {
@@ -45,17 +46,19 @@ class Schedule {
    * */
   int fitness();
 
+  Task& task(int i) const { return Project::task(i); }
+
   /**
    * Returns index of resource assigned to the task at index i.
    * @param i Index of the task.
    */
-  inline int resource(int i) const { return tasks[i]->res[ires[i]]; }
+  inline int resource(int i) const { return task(i).res[ires[i]]; }
 
   /**
    * Returns number of resources capable of performing task at index i.
    * @param i Index of the task.
    */
-  int max_res_count(int i) const { return tasks[i]->res_size(); }
+  int max_res_count(int i) const { return task(i).res_size(); }
 
   /** Reset schedule representation to random state. */
   virtual void reset() = 0;
@@ -73,14 +76,11 @@ class Schedule {
    */
   int _fitness = -1;
 
-  /** List of tasks to complete. Shortcut to Project::tasks. */
-  std::vector<Task*> tasks;
-
   /**
    * Returns finish time of the task at index i.
    * @param i Index of the task.
    */
-  inline int finish_time(int i) const { return start[i] + tasks[i]->duration; }
+  inline int finish_time(int i) const { return start[i] + task(i).duration; }
 
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.

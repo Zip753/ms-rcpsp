@@ -32,9 +32,10 @@ bool ProjectReader::read(const std::string &filename) {
     if (!std::getline(infile, line)) return false;
   }
 
-  std::vector<Task*> tasks = std::vector<Task*>(n);
-  std::vector<int> res_id = std::vector<int>(res_count);
-  std::vector<double> res_sal = std::vector<double>(res_count);
+  std::vector<Task> tasks;
+  tasks.reserve(n);
+  std::vector<int> res_id(res_count);
+  std::vector<double> res_sal(res_count);
   std::vector<std::map<int, int>> skills(res_count);
 
   pattern = "(\\d+)\\s+([\\d\\.]+)\\b";
@@ -82,7 +83,7 @@ bool ProjectReader::read(const std::string &filename) {
     }
 
     // increment duration to match solutions
-    tasks[i] = new Task(id, dur + 1, dependencies, resources);
+    tasks.emplace_back(id, dur + 1, dependencies, resources);
   }
   Project::create(n, tasks, res_count, res_id, res_sal);
   return true;
