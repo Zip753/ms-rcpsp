@@ -46,8 +46,8 @@ SimpleSchedule::SimpleSchedule(std::vector<int> _ires) : Schedule(_ires) {
 void SimpleSchedule::update_start(int i) {
   if (!visited[i]) {
     visited[i] = true;
-    for (int j = 0; j < task(i).dep_size(); j++) {
-      int prev = task(i).dep[j];
+    for (int j = 0; j < task(i).num_dependencies(); j++) {
+      int prev = task(i).dependency(j);
       update_start(prev);
       int finish = finish_time(prev);
       if (start[i] < finish)
@@ -108,7 +108,7 @@ int SimpleSchedule::compute_fitness() {
   std::fill(business.begin(), business.end(), 0);
   for (int i = 0; i < n; i++) {
     int res = resource(i);
-    business[res] += task(i).duration;
+    business[res] += task(i).duration();
   }
 
   return _fitness;
@@ -116,7 +116,7 @@ int SimpleSchedule::compute_fitness() {
 
 void SimpleSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::task(i).res_size();
+    ires[i] = Util::Random::randint() % Project::task(i).num_resources();
   }
 }
 

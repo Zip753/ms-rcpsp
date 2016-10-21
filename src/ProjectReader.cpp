@@ -82,7 +82,7 @@ bool ProjectReader::read(const std::string &filename) {
       line = match.suffix();
     }
 
-    // increment duration to match solutions
+    // increment duration_ to match solutions
     tasks.emplace_back(id, dur + 1, dependencies, resources);
   }
   Project::create(n, tasks, res_count, res_id, res_sal);

@@ -60,16 +60,16 @@ void PrioSchedule::fix_all() {
                       std::vector<std::pair<int, int>>,
                       PriorityComp> queue;
   for (int i = 0; i < n; ++i) {
-    if (task(i).dep_size() == 0) {
+    if (task(i).num_dependencies() == 0) {
       queue.push(std::make_pair(i, prio[i]));
     }
   }
   int res_count = Project::get_res_count();
 
-  // availability time for resources
+  // availability time for resource_
   std::vector<int> time = std::vector<int>(res_count);
 
-  // number of complete dependencies for tasks
+  // number of complete dependency_ for tasks
   std::vector<int> dep_count = std::vector<int>(n);
 
   while (!queue.empty()) {
@@ -77,11 +77,11 @@ void PrioSchedule::fix_all() {
     int itask = queue.top().first;
     queue.pop();
 
-    // find max finish time of all dependencies
+    // find max finish time of all dependency_
     int res_idx = resource(itask);
     int min_start = 0;
-    for (int i = 0; i < task(itask).dep_size(); ++i) {
-      int idep = task(itask).dep[i];
+    for (int i = 0; i < task(itask).num_dependencies(); ++i) {
+      int idep = task(itask).dependency(i);
       int fin = finish_time(idep);
       if (min_start < fin)
         min_start = fin;
@@ -96,7 +96,7 @@ void PrioSchedule::fix_all() {
     for (int i = 0; i < task(itask).next.size(); ++i) {
       int inext = task(itask).next[i];
       dep_count[inext]++;
-      if (dep_count[inext] == task(inext).dep_size()) {
+      if (dep_count[inext] == task(inext).num_dependencies()) {
         queue.push(std::make_pair(inext, prio[inext]));
       }
     }
@@ -115,7 +115,7 @@ int PrioSchedule::compute_fitness() {
   std::fill(business.begin(), business.end(), 0);
   for (int i = 0; i < n; i++) {
     int res = resource(i);
-    business[res] += task(i).duration;
+    business[res] += task(i).duration();
   }
 
   return _fitness;
@@ -123,7 +123,7 @@ int PrioSchedule::compute_fitness() {
 
 void PrioSchedule::reset() {
   for (int i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::task(i).res_size();
+    ires[i] = Util::Random::randint() % Project::task(i).num_resources();
     prio[i] = i;
   }
   std::random_shuffle(prio.begin(), prio.end());

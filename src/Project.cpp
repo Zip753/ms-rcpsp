@@ -15,12 +15,12 @@ void Project::create(int _n,
   project_ = std::unique_ptr<Project>(
       new Project(_n, _tasks, _res_count, _res_id, _res_sal));
 
-  /* Create list of inverse dependencies. */
+  /* Create list of inverse dependency_. */
   std::vector<int> *next = new std::vector<int>[_n];
 
   for (int i = 0; i < _n; ++i) {
-    for (int j = 0; j < _tasks[i].dep_size(); ++j) {
-      int idep = task(i).dep[j];
+    for (int j = 0; j < _tasks[i].num_dependencies(); ++j) {
+      int idep = task(i).dependency(j);
       next[idep].push_back(i);
     }
   }

@@ -20,7 +20,7 @@ void Schedule::printState(bool is_short) {
   if (!is_short) {
     for (int i = 0; i < n; i++)
       printf("Task ID: %d, Resource ID: %d, start time: %d\n",
-             task(i).id, resource(i), start[i]);
+             task(i).id(), resource(i), start[i]);
   }
   printf("fitness (finish): %d\n", fitness());
 }
@@ -31,7 +31,7 @@ void Schedule::writeToFile(FILE* stream) {
   for (int i = 0; i < n; i++) {
     int st = start[i] + 1;
     int res = Project::get_res_id(resource(i));
-    int task_id = task(i).id;
+    int task_id = task(i).id();
 
     if (timeline.count(st) == 0) {
       timeline[st] = std::list<std::pair<int, int> >();
