@@ -9,7 +9,7 @@ using EvolutionaryAlgorithm::SimpleMutator;
 template <class T>
 class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
  public:
-  std::unique_ptr<T> optimize() override;
+  std::unique_ptr<T> optimize(FILE* stream) override;
   TabuSearchAlgorithm(int iters_, int neighbours_, int list_size_,
                       double p_mut) :
       iters_(iters_), neighbours_(neighbours_), list_size_(list_size_),

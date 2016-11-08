@@ -31,7 +31,7 @@ const double FLAGS_mutation = 0.01;
 int FLAGS_tournament_size = -1;
 const std::string FLAGS_suffix = "";
 const bool FLAGS_lax = false;
-const bool FLAGS_output_stat = false;
+const bool FLAGS_output_stat = true;
 bool FLAGS_simple = false;
 
 using namespace EvolutionaryAlgorithm;
@@ -49,16 +49,21 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   }
   std::unique_ptr<Mutator<T>> mut =
       std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
-//  GeneticAlgorithm<T> algo(FLAGS_pop_size, std::move(sel), std::move(cross),
-//                           std::move(mut), FLAGS_iters, false);
-  TabuSearchAlgorithm<T> algo = TabuSearchAlgorithm<T>(500, 100, 100, 0.01);
+  std::unique_ptr<Algorithm<T>> algo =
+//      std::make_unique<GeneticAlgorithm<T>>(FLAGS_pop_size,
+//                                            std::move(sel),
+//                                            std::move(cross),
+//                                            std::move(mut),
+//                                            FLAGS_iters,
+//                                            false);
+      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
-//    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
-//    sch = std::move(algo.optimize(stat_file));
-//    fclose(stat_file);
+    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
+    sch = std::move(algo->optimize(stat_file));
+    fclose(stat_file);
   } else {
-    sch = std::move(algo.optimize());
+    sch = std::move(algo->optimize());
   }
   // Force fitness computation to set start dates properly.
   sch->fitness();

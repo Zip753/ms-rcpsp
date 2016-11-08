@@ -2,6 +2,7 @@
 #define MS_RCPSP_ALGORITHM_H
 
 #include <memory>
+#include <utility>
 
 namespace EvolutionaryAlgorithm {
 
@@ -11,7 +12,11 @@ namespace EvolutionaryAlgorithm {
 template <class T>
 class Algorithm {
  public:
-  virtual std::unique_ptr<T> optimize() = 0;
+  virtual std::unique_ptr<T> optimize(FILE* stream) = 0;
+
+  std::unique_ptr<T> optimize() {
+    return std::move(optimize(nullptr));
+  }
 };
 
 };  // namespace EvolutionaryAlgorithm

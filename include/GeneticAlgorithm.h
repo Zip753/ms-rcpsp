@@ -24,7 +24,7 @@ namespace EvolutionaryAlgorithm {
  * @param T Type of specimen representation, subclass of Schedule.
  */
 template <class T>
-class GeneticAlgorithm : Algorithm<T> {
+class GeneticAlgorithm : public Algorithm<T> {
  public:
   /**
    * @param pop_size Size of the population.
@@ -45,11 +45,7 @@ class GeneticAlgorithm : Algorithm<T> {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  std::unique_ptr<T> optimize(FILE* stream);
-
-  std::unique_ptr<T> optimize() override {
-    return std::move(optimize(nullptr));
-  }
+  std::unique_ptr<T> optimize(FILE* stream) override;
 
  private:
   std::unique_ptr<Population<T>> population;
