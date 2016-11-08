@@ -29,7 +29,7 @@ const int FLAGS_iters = 200;
 const double FLAGS_crossover = 0.3;
 const double FLAGS_mutation = 0.01;
 int FLAGS_tournament_size = -1;
-const std::string FLAGS_suffix = "";
+std::string FLAGS_suffix = "";
 const bool FLAGS_lax = false;
 const bool FLAGS_output_stat = true;
 bool FLAGS_simple = false;
@@ -50,13 +50,13 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   std::unique_ptr<Mutator<T>> mut =
       std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
   std::unique_ptr<Algorithm<T>> algo =
-//      std::make_unique<GeneticAlgorithm<T>>(FLAGS_pop_size,
-//                                            std::move(sel),
-//                                            std::move(cross),
-//                                            std::move(mut),
-//                                            FLAGS_iters,
-//                                            false);
-      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
+      std::make_unique<GeneticAlgorithm<T>>(FLAGS_pop_size,
+                                            std::move(sel),
+                                            std::move(cross),
+                                            std::move(mut),
+                                            FLAGS_iters,
+                                            false);
+//      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
@@ -94,27 +94,24 @@ void SolveAndOutput(const std::string& stat_file_name,
 }
 
 int main(int argc, char* argv[]) {
-  if (argc < 2 || argc > 3) {
+  if (argc < 4 || argc > 5) {
     fprintf(stderr, "Invalid number of arguments.\n"
-        "Usage: %s input_file [flags...]\n", argv[0]);
+        "Usage: %s input_file output_dir suffix [--simple]\n", argv[0]);
     return 1;
   }
 
-  std::string input_full_name;
-  if (argc == 3) {
-    if (strcmp(argv[1], "--simple") == 0) {
-      input_full_name = std::string(argv[2]);
-      FLAGS_simple = true;
-    } else if (strcmp(argv[2], "--simple") == 0) {
-      input_full_name = std::string(argv[1]);
+  std::string input_full_name = std::string(argv[1]);
+  std::string output_folder_name = std::string(argv[2]);
+  FLAGS_suffix = std::string(argv[3]);
+
+  if (argc == 5) {
+    if (strcmp(argv[4], "--simple") == 0) {
       FLAGS_simple = true;
     } else {
       fprintf(stderr, "Invalid flags.\n"
-          "Usage: %s input_file [flags...]\n", argv[0]);
+          "Usage: %s input_file output_dir suffix [--simple]\n", argv[0]);
       return 1;
     }
-  } else {
-    input_full_name = std::string(argv[1]);
   }
 
   /* Set tournament size dynamically, if none provided. */
@@ -126,9 +123,7 @@ int main(int argc, char* argv[]) {
   /* Parse filename. */
   std::string input_base_name =
       input_full_name.substr(input_full_name.find_last_of("/\\") + 1);
-  std::string folder_path =
-      input_full_name.substr(0, input_full_name.find_last_of("/\\") + 1);
-  std::string base_name = folder_path +
+  std::string base_name = output_folder_name +
       input_base_name.substr(0, input_base_name.find_last_of('.'));
 
   /* Read project data from file. */
