@@ -33,9 +33,9 @@ class GeneticAlgorithm : Algorithm<T> {
    * @param m Mutation operator.
    */
   GeneticAlgorithm(int pop_size,
-                   const std::shared_ptr<Selector<T>> &s,
-                   const std::shared_ptr<Crossover<T>> c,
-                   const std::shared_ptr<Mutator<T>> &m,
+                   std::unique_ptr<Selector<T>> s,
+                   std::unique_ptr<Crossover<T>> c,
+                   std::unique_ptr<Mutator<T>> m,
                    int _steps = -1,
                    bool _rem_clones = true);
   ~GeneticAlgorithm() {}
@@ -45,25 +45,28 @@ class GeneticAlgorithm : Algorithm<T> {
    * @param stream File stream for statistics output.
    * @return The most adapted specimen in all populations (best solution found).
    */
-  std::shared_ptr<T> optimize(FILE* stream);
+  std::unique_ptr<T> optimize(FILE* stream);
 
-  std::shared_ptr<T> optimize() override { return optimize(nullptr); }
+  std::unique_ptr<T> optimize() override {
+    return std::move(optimize(nullptr));
+  }
 
  private:
   std::unique_ptr<Population<T>> population;
-  std::shared_ptr<Selector<T>> selector;
-  std::shared_ptr<Crossover<T>> crossover;
-  std::shared_ptr<Mutator<T>> mutator;
+  std::unique_ptr<Selector<T>> selector;
+  std::unique_ptr<Crossover<T>> crossover;
+  std::unique_ptr<Mutator<T>> mutator;
   /** Number of generations. */
   int steps;
   /** If true, removes clones from the population. */
   bool remove_clones;
   /** Copy of the best solution for the current population. */
-  std::shared_ptr<T> best = nullptr;
+  std::unique_ptr<T> best = nullptr;
   /** Copy of the best solution for the whole run. */
-  std::shared_ptr<T> global_best = nullptr;
+  std::unique_ptr<T> global_best = nullptr;
 
-  void TryRemoveClones(const std::vector<T*> &pop, int i, T* sample);
+  void TryRemoveClones(const std::vector<std::unique_ptr<T>> &pop, int idx,
+                       T* sample);
 
   /** Updates best result for the current generation and the global best. */
   void update_best();

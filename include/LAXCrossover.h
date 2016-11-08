@@ -15,7 +15,7 @@ template <class T>
 class LAXCrossover : public Crossover<T> {
  public:
   LAXCrossover(double _p_cross) : Crossover<T>(_p_cross) {}
-  T* cross(T* a, T* b) const override;
+  std::unique_ptr<T> cross(const T& a, const T& b) const override;
 };
 
 };  // namespace EvolutionaryAlgorithm

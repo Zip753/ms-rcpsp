@@ -76,7 +76,7 @@ html = <<-HTML
 
         chart.draw(dataTable);
 
-        var height = document.querySelector("#timeline div:first-child div:first-child div:first-child div svg").height.baseVal.value + 70;
+        var height = document.querySelector("#timeline div:first-child div:first-child div:first-child svg").height.baseVal.value + 70;
 
         var options = {
           height: height

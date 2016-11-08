@@ -11,10 +11,10 @@ class SimpleMutator : public Mutator<T> {
  public:
   SimpleMutator(double _p_mut) : Mutator<T>(_p_mut) {}
 
-  T* mutate(T* sample) const override;
+  std::unique_ptr<T> mutate(const T& sample) const override;
 
  private:
-  virtual void mutate_gene(T* sample, int idx) const override;
+  void mutate_gene(T* sample, int idx) const override;
 };
 
 };  // namespace EvolutionaryAlgorithm

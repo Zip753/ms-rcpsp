@@ -1,6 +1,7 @@
 #ifndef MS_RCPSP_CROSSOVER_H
 #define MS_RCPSP_CROSSOVER_H
 
+#include <bits/unique_ptr.h>
 #include "Random.h"
 
 using Util::Random;
@@ -36,7 +37,7 @@ class Crossover {
   /**
    * Takes two specimen and performs crossover on them. Results in a new object.
    */
-  virtual T* cross(T* a, T* b) const = 0;
+  virtual std::unique_ptr<T> cross(const T &a, const T &b) const = 0;
 
   /** Checks whether the crossover should take place. */
   inline bool should_cross() const { return Random::rand(p_cross); }

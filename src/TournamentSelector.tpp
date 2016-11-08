@@ -21,7 +21,7 @@ T* TournamentSelector<T>::select(const Population<T>& p) const {
     }
   }
 
-  return p.genotype[best_id];
+  return p.genotype[best_id].get();
 }
 
 };  // namespace EvolutionaryAlgorithm

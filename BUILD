@@ -5,13 +5,17 @@ filegroup(
 
 filegroup(
     name = "headers",
-    srcs = glob(["include/*.h", "src/*.tpp"]),
+    srcs = glob([
+        "include/*.h",
+        "src/*.tpp",
+    ]),
 )
 
 cc_library(
     name = "ga_lib",
     srcs = [":sources"],
     hdrs = [":headers"],
+    copts = ["-std=c++14"],
 )
 
 cc_binary(

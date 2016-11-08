@@ -10,7 +10,7 @@ template <class T>
 class OnePointCrossover : public Crossover<T> {
  public:
   OnePointCrossover(double _p_cross) : Crossover<T>(_p_cross) {}
-  T* cross(T* a, T* b) const override;
+  std::unique_ptr<T> cross(const T& a, const T& b) const override;
 };
 
 };  // namespace EvolutionaryAlgorithm

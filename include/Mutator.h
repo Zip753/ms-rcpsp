@@ -22,7 +22,7 @@ class Mutator {
   Mutator(double _p_mut) : p_mut(_p_mut) {};
 
   /** Performs mutation on the given sample. Returns new sample instance. */
-  virtual T* mutate(T* sample) const = 0;
+  virtual std::unique_ptr<T> mutate(const T& sample) const = 0;
 
   /**
    * Mutates given sample without creating a new one.

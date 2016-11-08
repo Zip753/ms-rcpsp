@@ -7,7 +7,7 @@
 
 namespace SchedulingProblem {
 
-bool SimpleSchedule::operator==(SimpleSchedule s) const {
+bool SimpleSchedule::operator==(const SimpleSchedule& s) const {
   if (n != s.size()) return false;
   for (int i = 0; i < n; i++)
     if (ires[i] != s.ires[i])
@@ -31,11 +31,11 @@ SimpleSchedule::SimpleSchedule() : Schedule() {
   init(true);
 }
 
-SimpleSchedule::SimpleSchedule(SimpleSchedule* s) : Schedule() {
+SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule() {
   init(false);
   ires = std::vector<int>(n, 0);
   for (int i = 0; i < n; i++) {
-    ires[i] = s->ires[i];
+    ires[i] = s.ires[i];
   }
 }
 

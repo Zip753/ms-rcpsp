@@ -22,7 +22,7 @@ class PrioSchedule : public Schedule {
  public:
   PrioSchedule();
   PrioSchedule(std::vector<int> _ires, std::vector<int> _prio);
-  PrioSchedule(PrioSchedule* s);
+  PrioSchedule(const PrioSchedule& s);
   ~PrioSchedule() override {}
 
   int compute_fitness() override;

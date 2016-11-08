@@ -11,7 +11,7 @@ namespace EvolutionaryAlgorithm {
 template <class T>
 class Algorithm {
  public:
-  virtual std::shared_ptr<T> optimize() = 0;
+  virtual std::unique_ptr<T> optimize() = 0;
 };
 
 };  // namespace EvolutionaryAlgorithm

@@ -19,6 +19,7 @@
 #include "include/Schedule.h"
 #include "include/SimpleMutator.h"
 #include "include/SimpleSchedule.h"
+#include "include/TabuSearchAlgorithm.h"
 #include "include/TournamentSelector.h"
 #include "include/UniformCrossover.h"
 #include "include/Validator.h"
@@ -37,26 +38,30 @@ using namespace EvolutionaryAlgorithm;
 using namespace SchedulingProblem;
 
 template <class T>
-std::shared_ptr<T> InitAndSolve(const std::string& stat_file_name) {
-  std::shared_ptr<Selector<T>> sel =
-      std::make_shared<TournamentSelector<T>>(FLAGS_tournament_size);
-  std::shared_ptr<Crossover<T>> cross;
+std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
+  std::unique_ptr<Selector<T>> sel =
+      std::make_unique<TournamentSelector<T>>(FLAGS_tournament_size);
+  std::unique_ptr<Crossover<T>> cross;
   if (FLAGS_lax) {
-    cross = std::make_shared<LAXCrossover<T>>(FLAGS_crossover);
+    cross = std::make_unique<LAXCrossover<T>>(FLAGS_crossover);
   } else {
-    cross = std::make_shared<UniformCrossover<T>>(FLAGS_crossover);
+    cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
   }
-  std::shared_ptr<Mutator<T>> mut =
-      std::make_shared<SimpleMutator<T>>(FLAGS_mutation);
-  GeneticAlgorithm<T> algo(FLAGS_pop_size, sel, cross, mut, FLAGS_iters, false);
-  std::shared_ptr<T> sch;
+  std::unique_ptr<Mutator<T>> mut =
+      std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
+//  GeneticAlgorithm<T> algo(FLAGS_pop_size, std::move(sel), std::move(cross),
+//                           std::move(mut), FLAGS_iters, false);
+  TabuSearchAlgorithm<T> algo = TabuSearchAlgorithm<T>(500, 100, 100, 0.01);
+  std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
-    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
-    sch = std::move(algo.optimize(stat_file));
-    fclose(stat_file);
+//    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
+//    sch = std::move(algo.optimize(stat_file));
+//    fclose(stat_file);
   } else {
-    sch = std::move(algo.optimize(nullptr));
+    sch = std::move(algo.optimize());
   }
+  // Force fitness computation to set start dates properly.
+  sch->fitness();
   auto valid = Validator::validate(*sch);
   if (!valid.first) {
     printf("The solution is invalid!\n%s\n", valid.second.c_str());
@@ -70,7 +75,7 @@ template <class T>
 void SolveAndOutput(const std::string& stat_file_name,
                     FILE* output_file,
                     FILE* best_file) {
-  std::shared_ptr<Schedule> sch = std::move(InitAndSolve<T>(stat_file_name));
+  std::unique_ptr<Schedule> sch(InitAndSolve<T>(stat_file_name));
 
   /* Output solution to stdout. */
   printf("SOLUTION: ");

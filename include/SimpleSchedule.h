@@ -16,7 +16,7 @@ class SimpleSchedule : public Schedule {
  public:
   SimpleSchedule();
   SimpleSchedule(std::vector<int> _ires);
-  SimpleSchedule(SimpleSchedule* s);
+  SimpleSchedule(const SimpleSchedule& s);
   ~SimpleSchedule() override {}
 
   /**
@@ -26,7 +26,7 @@ class SimpleSchedule : public Schedule {
   std::vector<int> business;
 
   /** Checks schedule equality in terms of representation. */
-  bool operator==(SimpleSchedule s) const;
+  bool operator==(const SimpleSchedule& s) const;
 
   void reset() override;
 

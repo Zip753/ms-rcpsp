@@ -32,13 +32,13 @@ PrioSchedule::PrioSchedule() : Schedule() {
   init(true);
 }
 
-PrioSchedule::PrioSchedule(PrioSchedule* s) : Schedule() {
+PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule() {
   init(false);
   ires = std::vector<int>(n, 0);
   prio = std::vector<int>(n, 0);
   for (int i = 0; i < n; i++) {
-    ires[i] = s->ires[i];
-    prio[i] = s->prio[i];
+    ires[i] = s.ires[i];
+    prio[i] = s.prio[i];
   }
 }
 

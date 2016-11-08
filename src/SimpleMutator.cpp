@@ -1,5 +1,7 @@
 #include "../include/SimpleMutator.h"
 
+#include <memory>
+
 #include "../include/PrioSchedule.h"
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
@@ -26,20 +28,21 @@ void SimpleMutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i)
 }
 
 template<>
-PrioSchedule* SimpleMutator<PrioSchedule>::mutate(PrioSchedule* sample) const {
-  PrioSchedule* s = new PrioSchedule(sample);
+std::unique_ptr<PrioSchedule> SimpleMutator<PrioSchedule>::mutate(
+    const PrioSchedule& sample) const {
+  std::unique_ptr<PrioSchedule> s = std::make_unique<PrioSchedule>(sample);
 
   for (int i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
     if (Random::rand(p_mut)) {
-      mutate_gene(s, i);
+      mutate_gene(s.get(), i);
     }
 
     if (Random::rand(p_mut)) {
       if (Random::rand(0.5)) {
-        ++sample->prio[i];
+        ++s->prio[i];
       } else {
-        --sample->prio[i];
+        --s->prio[i];
       }
     }
   }
@@ -68,17 +71,17 @@ void SimpleMutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i)
 }
 
 template<>
-SimpleSchedule* SimpleMutator<SimpleSchedule>::mutate(SimpleSchedule* sample)
-    const {
-  SimpleSchedule* s = new SimpleSchedule(sample);
+std::unique_ptr<SimpleSchedule> SimpleMutator<SimpleSchedule>::mutate(
+    const SimpleSchedule& sample) const {
+  std::unique_ptr<SimpleSchedule> s = std::make_unique<SimpleSchedule>(sample);
 
   for (int i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
     if (Random::rand(p_mut)) {
-      mutate_gene(s, i);
+      mutate_gene(s.get(), i);
     }
   }
-  return s;
+  return std::move(s);
 }
 
 template class SimpleMutator<SimpleSchedule>;

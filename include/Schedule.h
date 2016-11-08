@@ -39,7 +39,7 @@ class Schedule {
   std::vector<int> start;
 
   /** Returns number of tasks. */
-  int size() { return n; }
+  int size() const { return n; }
 
   /**
    * Calculates fitness function. Caches result in _fitness.
