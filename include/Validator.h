@@ -17,7 +17,7 @@ class Validator {
    * @return Pair of two elements: validity flag and output (possibly error)
    * message.
    */
-  static std::pair<bool, std::string> validate(const Schedule& s);
+  static std::pair<bool, std::string> Validate(const Schedule &s);
 };
 
 };  // namespace SchedulingProblem

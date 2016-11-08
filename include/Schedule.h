@@ -33,13 +33,13 @@ class Schedule {
   virtual ~Schedule() = 0;
 
   /** List of resources assigned to corresponding tasks. */
-  std::vector<int> ires;
+  std::vector<size_t> ires;
 
   /** List of task start times. */
   std::vector<int> start;
 
   /** Returns number of tasks. */
-  int size() const { return n; }
+  size_t size() const { return n; }
 
   /**
    * Calculates fitness function. Caches result in _fitness.
@@ -47,29 +47,29 @@ class Schedule {
    * */
   int fitness();
 
-  Task& task(int i) const { return Project::task(i); }
+  Task& task(size_t i) const { return Project::task(i); }
 
   /**
    * Returns index of resource assigned to the task at index i.
    * @param i Index of the task.
    */
-  inline int resource(int i) const { return task(i).resource(ires[i]); }
+  inline size_t resource(size_t i) const { return task(i).resource(ires[i]); }
 
   /**
    * Returns number of resources capable of performing task at index i.
    * @param i Index of the task.
    */
-  size_t max_res_count(int i) const { return task(i).num_resources(); }
+  size_t max_res_count(size_t i) const { return task(i).num_resources(); }
 
   /** Reset schedule representation to random state. */
   virtual void reset() = 0;
 
  protected:
   Schedule();
-  Schedule(std::vector<int> _ires) : Schedule() { ires = _ires; }
+  Schedule(std::vector<size_t> _ires) : Schedule() { ires = _ires; }
 
   /** Number of tasks. */
-  int n;
+  size_t n;
 
   /**
    * Cached fitness value for this specimen.
@@ -81,7 +81,9 @@ class Schedule {
    * Returns finish time of the task at index i.
    * @param i Index of the task.
    */
-  inline int finish_time(int i) const { return start[i] + task(i).duration(); }
+  inline int finish_time(size_t i) const {
+    return start[i] + task(i).duration();
+  }
 
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.

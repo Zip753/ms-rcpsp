@@ -17,7 +17,7 @@ class Task {
    * @param _nres Number of capable resources.
    * @param _res List of capable resources.
    */
-  Task(int _id, int _dur, std::vector<int> _dep, std::vector<int> _res)
+  Task(int _id, int _dur, std::vector<size_t> _dep, std::vector<size_t> _res)
       : id_(_id), duration_(_dur), dependency_(_dep), resource_(_res) {}
   ~Task();
 
@@ -25,12 +25,12 @@ class Task {
 
   inline int duration() const { return duration_; }
 
-  inline int resource(int i) const { return resource_[i]; }
+  inline size_t resource(size_t i) const { return resource_[i]; }
 
   /** Returns number of resources capable of completing the task. */
   inline size_t num_resources() const { return resource_.size(); }
 
-  inline int dependency(int i) const { return dependency_[i]; }
+  inline size_t dependency(size_t i) const { return dependency_[i]; }
 
   /** Returns number of dependencies, i.e. tasks that have to be completed
    * before this task. */
@@ -38,7 +38,7 @@ class Task {
 
   // TODO: make next private.
   /** List of inverse dependencies. */
-  std::vector<int> next;
+  std::vector<size_t> next;
 
  private:
   /** Task ID, as specified in input file. */
@@ -47,9 +47,9 @@ class Task {
   int duration_;
   /** List of dependencies, i.e. tasks that have to be completed before this
    * task. */
-  std::vector<int> dependency_;
+  std::vector<size_t> dependency_;
   /** List of resources capable of completing the task. */
-  std::vector<int> resource_;
+  std::vector<size_t> resource_;
 };
 
 };  // namespace SchedulingProblem

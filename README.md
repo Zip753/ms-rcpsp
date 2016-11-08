@@ -83,7 +83,7 @@ std::cout << "Result fitness value: " << schedule->fitness() << std::endl;
 Validate your solution:
 ```c++
 std::pair<bool, std::string> valid =
-    SchedulingProblem::Validator::validate(schedule);
+    SchedulingProblem::Validator::Validate(schedule);
 if (valid.first) {
   std::cout << "Solution is valid." << std::endl;
 } else {

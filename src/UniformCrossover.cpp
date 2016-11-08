@@ -13,8 +13,8 @@ std::unique_ptr<PrioSchedule> UniformCrossover<PrioSchedule>::cross(
     const PrioSchedule& a, const PrioSchedule& b) const {
   std::unique_ptr<PrioSchedule> s = std::make_unique<PrioSchedule>(a);
 
-  int n = s->size();
-  for (int i = 0; i < n; i++) {
+  size_t n = s->size();
+  for (size_t i = 0; i < n; i++) {
     if (Random::randint() % 2 == 1) {
       s->ires[i] = b.ires[i];
     }
@@ -34,8 +34,8 @@ std::unique_ptr<SimpleSchedule> UniformCrossover<SimpleSchedule>::cross(
     const SimpleSchedule& a, const SimpleSchedule& b) const {
   std::unique_ptr<SimpleSchedule> s = std::make_unique<SimpleSchedule>(a);
 
-  int n = s->size();
-  for (int i = 0; i < n; i++) {
+  size_t n = s->size();
+  for (size_t i = 0; i < n; i++) {
     if (Random::randint() % 2 == 1) {
       s->ires[i] = b.ires[i];
     }

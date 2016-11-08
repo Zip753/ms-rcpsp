@@ -32,11 +32,11 @@ class GeneticAlgorithm : public Algorithm<T> {
    * @param c Crossover operator.
    * @param m Mutation operator.
    */
-  GeneticAlgorithm(int pop_size,
+  GeneticAlgorithm(size_t pop_size,
                    std::unique_ptr<Selector<T>> s,
                    std::unique_ptr<Crossover<T>> c,
                    std::unique_ptr<Mutator<T>> m,
-                   int _steps = -1,
+                   size_t _steps,
                    bool _rem_clones = true);
   ~GeneticAlgorithm() {}
 
@@ -53,7 +53,7 @@ class GeneticAlgorithm : public Algorithm<T> {
   std::unique_ptr<Crossover<T>> crossover;
   std::unique_ptr<Mutator<T>> mutator;
   /** Number of generations. */
-  int steps;
+  size_t steps;
   /** If true, removes clones from the population. */
   bool remove_clones;
   /** Copy of the best solution for the current population. */
@@ -61,7 +61,7 @@ class GeneticAlgorithm : public Algorithm<T> {
   /** Copy of the best solution for the whole run. */
   std::unique_ptr<T> global_best = nullptr;
 
-  void TryRemoveClones(const std::vector<std::unique_ptr<T>> &pop, int idx,
+  void TryRemoveClones(const std::vector<std::unique_ptr<T>> &pop, size_t idx,
                        T* sample);
 
   /** Updates best result for the current generation and the global best. */

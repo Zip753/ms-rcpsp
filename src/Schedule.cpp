@@ -18,8 +18,8 @@ int Schedule::fitness() {
 
 void Schedule::printState(bool is_short) {
   if (!is_short) {
-    for (int i = 0; i < n; i++)
-      printf("Task ID: %d, Resource ID: %d, start time: %d\n",
+    for (size_t i = 0; i < n; i++)
+      printf("Task ID: %d, Resource ID: %lu, start time: %d\n",
              task(i).id(), resource(i), start[i]);
   }
   printf("fitness (finish): %d\n", fitness());
@@ -28,7 +28,7 @@ void Schedule::printState(bool is_short) {
 void Schedule::writeToFile(FILE* stream) {
   fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
   std::map<int, std::list<std::pair<int, int> > > timeline;
-  for (int i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
     int st = start[i] + 1;
     int res = Project::get_res_id(resource(i));
     int task_id = task(i).id();

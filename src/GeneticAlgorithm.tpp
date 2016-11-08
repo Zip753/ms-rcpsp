@@ -27,7 +27,7 @@ std::unique_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
       population->showStat(stat);
     }
     // Move on to next generation.
-    int n = population->size();
+    size_t n = population->size();
     std::vector<std::unique_ptr<T>> next_pop;
     next_pop.reserve(n);
     for (int iter = 0; iter < n;) {
@@ -65,11 +65,11 @@ void GeneticAlgorithm<T>::update_best() {
 
 template <class T>
 void GeneticAlgorithm<T>::TryRemoveClones(
-    const std::vector<std::unique_ptr<T>> &pop, int idx, T* sample) {
+    const std::vector<std::unique_ptr<T>> &pop, size_t idx, T* sample) {
   if (remove_clones) {
     for (int k = 0; k < 3; k++) {
       bool contains = false;
-      for (int i = 0; i < idx; i++)
+      for (size_t i = 0; i < idx; i++)
         if (*pop[i] == *sample) {
           contains = true;
           break;
@@ -85,17 +85,17 @@ void GeneticAlgorithm<T>::TryRemoveClones(
 }
 
 template <class T>
-GeneticAlgorithm<T>::GeneticAlgorithm(int pop_size,
+GeneticAlgorithm<T>::GeneticAlgorithm(size_t pop_size,
                                       std::unique_ptr<Selector<T>> s,
                                       std::unique_ptr<Crossover<T>> c,
                                       std::unique_ptr<Mutator<T>> m,
-                                      int _steps,
+                                      size_t _steps,
                                       bool _rem_clones) :
     selector(std::move(s)), crossover(std::move(c)), mutator(std::move(m)),
     steps(_steps), remove_clones(_rem_clones) {
   std::vector<std::unique_ptr<T>> specimen;
   specimen.reserve(pop_size);
-  for (int i = 0; i < pop_size; ++i) {
+  for (size_t i = 0; i < pop_size; ++i) {
     specimen.push_back(std::move(std::make_unique<T>()));
   }
   population = std::make_unique<Population<T>>(&specimen);

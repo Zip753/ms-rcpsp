@@ -14,7 +14,7 @@ class SimpleMutator : public Mutator<T> {
   std::unique_ptr<T> mutate(const T& sample) const override;
 
  private:
-  void mutate_gene(T* sample, int idx) const override;
+  void mutate_gene(T* sample, size_t idx) const override;
 };
 
 };  // namespace EvolutionaryAlgorithm

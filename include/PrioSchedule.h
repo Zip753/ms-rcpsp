@@ -21,7 +21,7 @@ namespace SchedulingProblem {
 class PrioSchedule : public Schedule {
  public:
   PrioSchedule();
-  PrioSchedule(std::vector<int> _ires, std::vector<int> _prio);
+  PrioSchedule(std::vector<size_t> _ires, std::vector<int> _prio);
   PrioSchedule(const PrioSchedule& s);
   ~PrioSchedule() override {}
 

@@ -29,7 +29,7 @@ class Mutator {
    * Used to force mutation in the specimen for clone removal.
    */
   void force_mutate(T* sample) const {
-    int idx = Random::randint() % sample->size();
+    size_t idx = Random::randint() % sample->size();
     mutate_gene(sample, idx);
   }
 
@@ -44,7 +44,7 @@ class Mutator {
    * @param sample Specimen to operate on.
    * @param idx Index of the gene to be mutated.
    */
-  virtual void mutate_gene(T* sample, int idx) const = 0;
+  virtual void mutate_gene(T* sample, size_t idx) const = 0;
 };
 
 template <class T>

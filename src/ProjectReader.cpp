@@ -13,7 +13,8 @@
 namespace SchedulingProblem {
 
 bool ProjectReader::read(const std::string &filename) {
-  int n, id, dur;
+  size_t n;
+  int id, dur;
   size_t res_count;
   std::ifstream infile(filename);
   std::string line;
@@ -22,13 +23,13 @@ bool ProjectReader::read(const std::string &filename) {
   while (std::getline(infile, line) &&
          !std::regex_search(line, match, pattern)) {}
   if (match.empty()) return false;
-  n = stoi(match[1]);
+  n = stoul(match[1]);
   pattern = "Resources:\\s+(\\d+)";
   if (!std::getline(infile, line) ||
       !std::regex_search(line, match, pattern)) return false;
   res_count = stoull(match[1]);
 
-  for (int i = 0; i < 4; ++i) {
+  for (size_t i = 0; i < 4; ++i) {
     if (!std::getline(infile, line)) return false;
   }
 
@@ -52,15 +53,15 @@ bool ProjectReader::read(const std::string &filename) {
     }
   }
 
-  for (int i = 0; i < 2; ++i) {
+  for (size_t i = 0; i < 2; ++i) {
     if (!std::getline(infile, line)) return false;
   }
 
   pattern = "(\\d+)\\s+(\\d+)\\s+Q(\\d+)\\:\\s+(\\d+)";
   std::regex dep_pattern("\\b(\\d+)\\b");
   int skill_id, skill_level;
-  std::map<int, int> inv_task_id;
-  for (int i = 0; i < n; i++) {
+  std::map<int, size_t> inv_task_id;
+  for (size_t i = 0; i < n; i++) {
     if (!std::getline(infile, line) ||
         !std::regex_search(line, match, pattern)) return false;
     id = stoi(match[1]);
@@ -68,17 +69,17 @@ bool ProjectReader::read(const std::string &filename) {
     dur = stoi(match[2]);
     skill_id = stoi(match[3]);
     skill_level = stoi(match[4]);
-    std::vector<int> resources;
+    std::vector<size_t> resources;
     for (size_t j = 0; j < res_count; ++j) {
       if (skills[j].count(skill_id) && skills[j][skill_id] >= skill_level) {
         resources.push_back(j);
       }
     }
 
-    std::vector<int> dependencies;
+    std::vector<size_t> dependencies;
     line = match.suffix();
     while (std::regex_search(line, match, dep_pattern)) {
-      dependencies.push_back(inv_task_id[stoi(match[1])]);
+      dependencies.push_back(inv_task_id[stoul(match[1])]);
       line = match.suffix();
     }
 

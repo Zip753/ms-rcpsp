@@ -12,9 +12,9 @@
 
 namespace SchedulingProblem {
 
-std::pair<bool, std::string> Validator::validate(const Schedule& s) {
+std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
-  for (int i = 0; i < Project::size(); ++i) {
+  for (size_t i = 0; i < Project::size(); ++i) {
     // Check resource indices.
     if (s.ires[i] < 0 || s.ires[i] >= s.max_res_count(i)) {
       stream << "Resource index out of boundaries (task ID: ";
@@ -27,17 +27,17 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
       return std::make_pair(false, stream.str());
     }
     // Check task dependencies.
-    for (int j = 0; j < s.task(i).num_dependencies(); ++j) {
-      int dep_id = s.task(i).dependency(j);
-      if (s.finish_time(dep_id) > s.start[i]) {
+    for (size_t j = 0; j < s.task(i).num_dependencies(); ++j) {
+      size_t dep_idx = s.task(i).dependency(j);
+      if (s.finish_time(dep_idx) > s.start[i]) {
         stream << "Task dependency not met (task #";
         stream << s.task(i).id();
         stream << " start time: ";
         stream << s.start[i];
         stream << ", task #";
-        stream << s.task(dep_id).id();
+        stream << s.task(dep_idx).id();
         stream << " finish time: ";
-        stream << s.finish_time(dep_id);
+        stream << s.finish_time(dep_idx);
         stream << ").";
         return std::make_pair(false, stream.str());
       }
@@ -45,16 +45,16 @@ std::pair<bool, std::string> Validator::validate(const Schedule& s) {
   }
 
   // Check resource assignment conflicts.
-  std::map<int, std::vector<int>> res_tasks;
-  for (int i = 0; i < Project::size(); ++i) {
+  std::map<int, std::vector<size_t>> res_tasks;
+  for (size_t i = 0; i < Project::size(); ++i) {
     int res_id = Project::get_res_id(s.resource(i));
     res_tasks[res_id].push_back(i);
   }
 
   for (auto& res : res_tasks) {
     int res_id = res.first;
-    std::vector<int>& tasks = res.second;
-    std::sort(tasks.begin(), tasks.end(), [&](int a, int b) {
+    std::vector<size_t>& tasks = res.second;
+    std::sort(tasks.begin(), tasks.end(), [&](size_t a, size_t b) {
       return s.start[a] < s.start[b] ||
           (s.start[a] == s.start[b] && s.finish_time(a) < s.finish_time(b));
     });

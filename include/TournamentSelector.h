@@ -11,13 +11,13 @@ template <class T>
 class TournamentSelector : public Selector<T> {
  public:
   /** @param _n Tournament size. */
-  TournamentSelector(int _n) : n(_n) {}
+  TournamentSelector(size_t _n) : n(_n) {}
 
   T* select(const Population<T>& p) const override;
 
  private:
   /** Size of the tournament. */
-  const int n;
+  const size_t n;
 };
 
 };  // namespace EvolutionaryAlgorithm

@@ -15,7 +15,7 @@ namespace SchedulingProblem {
 class SimpleSchedule : public Schedule {
  public:
   SimpleSchedule();
-  SimpleSchedule(std::vector<int> _ires);
+  SimpleSchedule(std::vector<size_t> _ires);
   SimpleSchedule(const SimpleSchedule& s);
   ~SimpleSchedule() override {}
 
@@ -44,7 +44,7 @@ class SimpleSchedule : public Schedule {
    * Update start time of a task recursively.
    * @param i Index of the task.
    */
-  void update_start(int i);
+  void update_start(size_t i);
 
   /** Critical path fix procedure. */
   void reschedule();

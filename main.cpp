@@ -67,7 +67,7 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   }
   // Force fitness computation to set start dates properly.
   sch->fitness();
-  auto valid = Validator::validate(*sch);
+  auto valid = Validator::Validate(*sch);
   if (!valid.first) {
     printf("The solution is invalid!\n%s\n", valid.second.c_str());
   } else {
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Invalid input file format.\n");
     return 1;
   }
-  printf("Tasks: %d\n", Project::size());
+  printf("Tasks: %lu\n", Project::size());
 
   /* Project solution output: */
   std::string output_file_name = base_name;

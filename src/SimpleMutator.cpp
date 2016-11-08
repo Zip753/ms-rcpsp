@@ -15,11 +15,11 @@ namespace EvolutionaryAlgorithm {
 using SchedulingProblem::PrioSchedule;
 
 template<>
-void SimpleMutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, int i)
+void SimpleMutator<PrioSchedule>::mutate_gene(PrioSchedule* sample, size_t i)
     const {
-  int max_ires = sample->max_res_count(i);
+  size_t max_ires = sample->max_res_count(i);
   if (max_ires > 1) {
-    int new_res = Random::randint() % (max_ires - 1);
+    size_t new_res = Random::randint() % (max_ires - 1);
     if (new_res < sample->ires[i])
       sample->ires[i] = new_res;
     else
@@ -32,7 +32,7 @@ std::unique_ptr<PrioSchedule> SimpleMutator<PrioSchedule>::mutate(
     const PrioSchedule& sample) const {
   std::unique_ptr<PrioSchedule> s = std::make_unique<PrioSchedule>(sample);
 
-  for (int i = 0; i < s->size(); i++) {
+  for (size_t i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
     if (Random::rand(p_mut)) {
       mutate_gene(s.get(), i);
@@ -58,11 +58,11 @@ template class SimpleMutator<PrioSchedule>;
 using SchedulingProblem::SimpleSchedule;
 
 template<>
-void SimpleMutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample, int i)
-    const {
-  int max_ires = sample->max_res_count(i);
+void SimpleMutator<SimpleSchedule>::mutate_gene(SimpleSchedule* sample,
+                                                size_t i) const {
+  size_t max_ires = sample->max_res_count(i);
   if (max_ires > 1) {
-    int new_res = Random::randint() % (max_ires - 1);
+    size_t new_res = Random::randint() % (max_ires - 1);
     if (new_res < sample->ires[i])
       sample->ires[i] = new_res;
     else
@@ -75,7 +75,7 @@ std::unique_ptr<SimpleSchedule> SimpleMutator<SimpleSchedule>::mutate(
     const SimpleSchedule& sample) const {
   std::unique_ptr<SimpleSchedule> s = std::make_unique<SimpleSchedule>(sample);
 
-  for (int i = 0; i < s->size(); i++) {
+  for (size_t i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
     if (Random::rand(p_mut)) {
       mutate_gene(s.get(), i);

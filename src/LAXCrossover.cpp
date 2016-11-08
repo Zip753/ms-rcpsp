@@ -13,12 +13,12 @@ using SchedulingProblem::Project;
 template<>
 std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::cross(
     const PrioSchedule& a, const PrioSchedule& b) const {
-  int n = a.size();
-  std::vector<int> ires = std::vector<int>(n);
+  size_t n = a.size();
+  std::vector<size_t> ires = std::vector<size_t>(n);
   std::vector<int> prio = std::vector<int>(n);
-  for (int i = 0; i < n; i++) {
-    int a_res = a.resource(i);
-    int b_res = b.resource(i);
+  for (size_t i = 0; i < n; i++) {
+    size_t a_res = a.resource(i);
+    size_t b_res = b.resource(i);
     if (a.business[a_res] < b.business[b_res]) {
       ires[i] = a.ires[i];
     } else if (a.business[a_res] > b.business[b_res]) {
@@ -47,11 +47,11 @@ using SchedulingProblem::SimpleSchedule;
 template<>
 std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::cross(
     const SimpleSchedule& a, const SimpleSchedule& b) const {
-  int n = a.size();
-  std::vector<int> ires = std::vector<int>(n);
-  for (int i = 0; i < n; i++) {
-    int a_res = a.resource(i);
-    int b_res = b.resource(i);
+  size_t n = a.size();
+  std::vector<size_t> ires = std::vector<size_t>(n);
+  for (size_t i = 0; i < n; i++) {
+    size_t a_res = a.resource(i);
+    size_t b_res = b.resource(i);
     if (a.business[a_res] < b.business[b_res]) {
       ires[i] = a.ires[i];
     } else if (a.business[a_res] > b.business[b_res]) {

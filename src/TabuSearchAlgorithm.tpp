@@ -6,7 +6,7 @@
 
 template <class T>
 bool TabuEquals(const T &a, const T &b) {
-  for (int i = 0; i < a.size(); ++i) {
+  for (size_t i = 0; i < a.size(); ++i) {
     if (a.ires[i] != b.ires[i]) return false;
   }
   return true;
@@ -22,10 +22,10 @@ bool TabuHit(const T& x, const std::deque<T>& tabu) {
 
 template <class T>
 std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
-  T start = T();
+  T start = T();;
   T global_best = start;
   std::deque<T> tabu;
-  for (int iter = 0; iter < iters_; ++iter) {
+  for (size_t iter = 0; iter < iters_; ++iter) {
     tabu.push_back(start);
     if (iter >= list_size_) {
       tabu.pop_front();
@@ -34,7 +34,7 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
     bool first = true;
     double mean = 0;
     int worst_val = 0;
-    for (int j = 0; j < neighbours_; ++j) {
+    for (size_t j = 0; j < neighbours_; ++j) {
       std::unique_ptr<T> neigbour = GenerateNeigbour(start);
       if (!TabuHit(*neigbour, tabu) &&
           (first || neigbour->fitness() < iter_best.fitness())) {
