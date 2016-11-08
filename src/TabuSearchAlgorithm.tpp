@@ -5,9 +5,17 @@
 #include <set>
 
 template <class T>
+bool TabuEquals(const T &a, const T &b) {
+  for (int i = 0; i < a.size(); ++i) {
+    if (a.ires[i] != b.ires[i]) return false;
+  }
+  return true;
+}
+
+template <class T>
 bool TabuHit(const T& x, const std::deque<T>& tabu) {
   for (auto& el : tabu) {
-    if (el == x) return true;
+    if (TabuEquals(x, el)) return true;
   }
   return false;
 }
