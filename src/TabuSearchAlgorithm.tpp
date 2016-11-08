@@ -23,26 +23,30 @@ bool TabuHit(const T& x, const std::deque<T>& tabu) {
 template <class T>
 std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize() {
   T start = T();
+  T global_best = start;
   std::deque<T> tabu;
   for (int iter = 0; iter < iters_; ++iter) {
     tabu.push_back(start);
     if (iter >= list_size_) {
       tabu.pop_front();
     }
-    T best;
+    T iter_best;
     bool first = true;
     for (int j = 0; j < neighbours_; ++j) {
       std::unique_ptr<T> neigbour = GenerateNeigbour(start);
       if (!TabuHit(*neigbour, tabu) &&
-          (first || neigbour->fitness() < best.fitness())) {
-        best = *neigbour;
+          (first || neigbour->fitness() < iter_best.fitness())) {
+        iter_best = *neigbour;
         first = false;
       }
     }
-    start = best;
+    start = iter_best;
     std::cout << "iter: " << iter << ", fitness: " << start.fitness() << "\n";
+    if (global_best.fitness() > iter_best.fitness()) {
+      global_best = iter_best;
+    }
   }
-  return std::make_unique<T>(start);
+  return std::make_unique<T>(global_best);
 }
 
 template <class T>
