@@ -1,9 +1,18 @@
 #!/bin/bash
 
 exec='bazel-bin/ga_bin'
+defset='dataset_def'
 
 config="$1"
-num_tests="$2"
+shift
+num_tests="$1"
+shift
+
+if [ "$1" == "--config" ]
+then
+  defset='config_def'
+  shift
+fi
 
 if [ ! -f $exec ]
 then
@@ -16,7 +25,7 @@ then
   mkdir 'data'
 fi
 
-for def_file in dataset_def/*.def
+for def_file in $defset/*.def
 do
   name=${def_file%%.*}
   name=${name##*/}
@@ -32,13 +41,13 @@ do
   fi
   mkdir "data/$name/$config"
 
-  for i in $(seq 1 4 $2)
+  for i in $(seq 1 4 $num_tests)
   do
     for j in $(seq $i $(($i+3)) )
     do
       if [ $j -le $num_tests ]
       then
-        $exec "$def_file" "data/$name/$config/" "$j" ${@:3} 1>/dev/null &
+        $exec "$def_file" "data/$name/$config/" "$j" $@ 1>/dev/null &
         echo "$name: $j"
       fi
     done

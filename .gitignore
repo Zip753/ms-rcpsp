@@ -4,3 +4,4 @@ best/
 bazel-*
 build/
 dataset_def/
+config_def/
