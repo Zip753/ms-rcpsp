@@ -8,11 +8,30 @@ then
   shift
 fi
 
+mode='default'
+
+if [ "$1" == "--one" ]
+then
+  mode='one'
+  shift
+elif [ "$1" == "--two" ]
+then
+  mode='two'
+  shift
+fi
+
 for def_file in $defset/*.def
 do
   name=${def_file%%.*}
   name=${name##*/}
-  echo -n "$name"
+  case $mode in
+    one|two)
+      echo -n "$(sed 's/_/\\_/g' <<< $name)"
+      ;;
+    *)
+      echo -n $name
+      ;;
+  esac
   for config in "$@"
   do
     min=123123
@@ -26,7 +45,7 @@ do
       mean=$(($mean+$n))
       cnt=$(($cnt+1))
     done
-    mean=`bc -l <<< "scale=2; $mean/$cnt"`
+    mean=`bc -l <<< "scale=2; $mean/$cnt" | sed 's/^\./0./'`
 
     std=0
     for b in data/$name/$config/*.best
@@ -35,8 +54,26 @@ do
       std=`bc -l <<< "$std+($n-$mean)*($n-$mean)"`
     done
 
-    std=`bc -l <<< "scale=2; sqrt($std/$cnt)"`
-    echo -n -e "\t$min\t$mean\t$std"
+    std=`bc -l <<< "scale=2; sqrt($std/$cnt)" | sed 's/^\./0./'`
+
+    case $mode in
+      one)
+        echo -n -e "!& \\\textbf{$mean} \$\\pm\$ $std ($min)"
+        ;;
+      two)
+        echo -n -e "!& $min & $mean & $std"
+        ;;
+      *)
+        echo -n -e "!$min!$mean!$std"
+        ;;
+    esac
   done
-  echo
-done | column -t -s"\t"
+  case $mode in
+    one|two)
+      echo ' \\ \hline'
+      ;;
+    *)
+      echo
+      ;;
+  esac
+done | column -t -s'!'

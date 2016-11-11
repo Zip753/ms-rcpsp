@@ -13,13 +13,13 @@ class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
   TabuSearchAlgorithm(size_t iters_, size_t neighbours_, size_t list_size_,
                       double p_mut) :
       iters_(iters_), neighbours_(neighbours_), list_size_(list_size_),
-      mutator(std::make_unique<SimpleMutator<T>>(p_mut)) {}
+      mutator_(std::make_unique<SimpleMutator<T>>(p_mut)) {}
 
  private:
   size_t iters_;
   size_t neighbours_;
   size_t list_size_;
-  std::shared_ptr<EvolutionaryAlgorithm::Mutator<T>> mutator;
+  std::shared_ptr<EvolutionaryAlgorithm::Mutator<T>> mutator_;
 
   std::unique_ptr<T> GenerateNeigbour(const T& start);
 };
