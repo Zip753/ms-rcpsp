@@ -1,9 +1,89 @@
 #include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <regex>
 #include <string>
 #include <utility>
 #include <vector>
+
+struct assignment {
+  int task_id;
+  int start_time;
+  bool critical;
+};
+
+typedef std::map<int, std::vector<assignment>> assignments_map;
+typedef std::multimap<int, assignment*> schedule_map;
+
+bool CheckCriticalPath(assignment *assignment, schedule_map* schedule) {
+  if (assignment->critical || assignment->start_time <= 1) {
+    return assignment->critical = true;
+  }
+  auto range = schedule->equal_range(assignment->start_time - 1);
+  for (auto& a = range.first; a != range.second; ++a) {
+    if (CheckCriticalPath(a->second, schedule)) {
+      assignment->critical = true;
+    }
+  }
+  schedule->erase(range.first, range.second);
+  return assignment->critical;
+}
+
+void BuildCriticalPaths(assignments_map* assignments,
+                        const std::map<int, int>& duration) {
+  // Map finish time to references to assignments
+  std::multimap<int, assignment*> schedule;
+
+  int max_finish = 0;
+  for (auto& res : *assignments) {
+    for (auto& a : res.second) {
+      int finish = a.start_time + duration.at(a.task_id);
+      schedule.insert({finish, &a});
+      if (max_finish < finish)
+        max_finish = finish;
+    }
+  }
+
+  auto range = schedule.equal_range(max_finish);
+  for (auto& a = range.first; a != range.second; ++a) {
+    CheckCriticalPath(a->second, &schedule);
+  }
+}
+
+std::string GetColor(size_t idx, size_t size) {
+  size_t rounds = (size - 1) / 3 + 1;
+  size_t round = idx / 3;
+  size_t main_color = 255;
+  if (round * 2 > rounds) {
+    main_color = 255 * 2 * (rounds - round) / rounds;
+  }
+  size_t support_color = 255;
+  if (round * 2 < rounds) {
+    support_color = 255 * 2 * round / rounds;
+  }
+  size_t zero_color = 0;
+  std::ostringstream color("'#", std::ostringstream::ate);
+  color << std::hex << std::setfill('0');
+  if (idx % 3 == 0) {  // main - red, support - green
+    color
+        << std::setw(2) << main_color
+        << std::setw(2) << support_color
+        << std::setw(2) << zero_color;
+  } else if (idx % 3 == 1) {  // main - green, support - blue
+    color
+        << std::setw(2) << zero_color
+        << std::setw(2) << main_color
+        << std::setw(2) << support_color;
+  } else {  // main - blue, support - red
+    color
+        << std::setw(2) << support_color
+        << std::setw(2) << zero_color
+        << std::setw(2) << main_color;
+  }
+  color << "'";
+  return color.str();
+}
 
 std::pair<bool, std::string> Visualize(std::ifstream& def,
                                        std::ifstream& sol,
@@ -27,10 +107,6 @@ std::pair<bool, std::string> Visualize(std::ifstream& def,
   // Read first line with headers
   if (!std::getline(sol, line)) return {false, "Missing .sol header"};
   // Read task assignments
-  struct assignment {
-    int task_id;
-    int start_time;
-  };
   std::map<int, std::vector<assignment>> assignments;
   while (std::getline(sol, line)) {
     // Read start time
@@ -45,20 +121,32 @@ std::pair<bool, std::string> Visualize(std::ifstream& def,
     while (std::regex_search(line, match, pattern)) {
       int resource_id = stoi(match[1]);
       int task_id = stoi(match[2]);
-      assignments[resource_id].push_back({task_id, start_time});
+      assignments[resource_id].push_back({task_id, start_time, false});
       line = match.suffix();
     }
   }
 
+  BuildCriticalPaths(&assignments, duration);
+
   // Convert to Google Timeline definition
   std::ostringstream data;
+  std::ostringstream colors;
+  size_t idx = 0;
   for (auto& res : assignments) {
+    std::string res_color = GetColor(idx++, assignments.size());
     for (auto& a : res.second) {
       int finish_time = a.start_time + duration[a.task_id];
       data << "[ 'Resource " << res.first << "', '" << a.task_id
            << "', '[Task " << a.task_id << "] " << a.start_time << " - "
            << finish_time << "', new Date(2010, 0, " << a.start_time
            << "), new Date(2010, 0, " << (finish_time + 1) << ") ],\n";
+
+      if (a.critical) {
+        colors << "'#000000'";
+      } else {
+        colors << res_color;
+      }
+      colors << ",";
     }
   }
 
@@ -90,10 +178,11 @@ std::pair<bool, std::string> Visualize(std::ifstream& def,
 
           var options = {
             height: height
-            , timeline: {colorByRowLabel: true}
+            // , timeline: {colorByRowLabel: true}
             // , timeline: {singleColor: '#8d8'}
             , avoidOverlappingGridLines: false
             , hAxis: {textPosition: 'none'}
+            , colors: [)HTML" << colors.str() << R"HTML(]
           };
 
           chart.draw(dataTable, options);
