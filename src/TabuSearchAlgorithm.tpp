@@ -34,10 +34,12 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
     bool first = true;
     double mean = 0;
     int worst_val = 0;
+    size_t hits = 0;
     for (size_t j = 0; j < neighbours_; ++j) {
       std::unique_ptr<T> neigbour = GenerateNeigbour(start);
-      if (!TabuHit(*neigbour, tabu) &&
-          (first || neigbour->fitness() < iter_best.fitness())) {
+      if (TabuHit(*neigbour, tabu)) {
+        ++hits;
+      } else if (first || neigbour->fitness() < iter_best.fitness()) {
         iter_best = *neigbour;
         first = false;
       }
@@ -48,7 +50,8 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
     }
     mean /= neighbours_;
     if (stream != nullptr) {
-      fprintf(stream, "%d %.4lf %d\n", iter_best.fitness(), mean, worst_val);
+      fprintf(stream, "%d %.4lf %d %.2lf\n", iter_best.fitness(), mean,
+              worst_val, static_cast<double>(hits) / neighbours_);
     }
     start = iter_best;
     std::cout << "iter: " << iter << ", fitness: " << start.fitness() << "\n";

@@ -59,11 +59,11 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
 //                                            std::move(mut),
 //                                            FLAGS_iters,
 //                                            false);
-      std::make_unique<SimulatedAnnealingAlgorithm<T>>(FLAGS_iters,
-                                                       FLAGS_temp,
-                                                       FLAGS_mutation,
-                                                       FLAGS_eps);
-//      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
+//      std::make_unique<SimulatedAnnealingAlgorithm<T>>(FLAGS_iters,
+//                                                       FLAGS_temp,
+//                                                       FLAGS_mutation,
+//                                                       FLAGS_eps);
+      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     FILE* stat_file = fopen(stat_file_name.c_str(), "w");
