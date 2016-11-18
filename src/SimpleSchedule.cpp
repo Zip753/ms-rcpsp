@@ -67,7 +67,7 @@ void SimpleSchedule::reschedule() {
 void SimpleSchedule::fix_all() {
   reschedule();
 
-  bool* used = new bool[n];
+  std::array<bool, n> used;
   std::fill_n(used, n, false);
 
   for (size_t i = 0; i < n; i++) {
@@ -95,8 +95,6 @@ void SimpleSchedule::fix_all() {
     if (is_conflict)
       reschedule();
   }
-
-  delete[] used;
 }
 
 int SimpleSchedule::compute_fitness() {

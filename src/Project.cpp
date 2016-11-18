@@ -1,5 +1,6 @@
 #include "../include/Project.h"
 
+#include <array>
 #include <memory>
 #include <vector>
 
@@ -16,7 +17,7 @@ void Project::create(size_t _n,
       new Project(_n, _tasks, _res_count, _res_id, _res_sal));
 
   /* Create list of inverse dependency_. */
-  std::vector<size_t> *next = new std::vector<size_t>[_n];
+  std::array<std::vector<size_t>, _n> next;
 
   for (size_t i = 0; i < _n; ++i) {
     for (size_t j = 0; j < _tasks[i].num_dependencies(); ++j) {
@@ -28,8 +29,6 @@ void Project::create(size_t _n,
   for (size_t i = 0; i < _n; ++i) {
     task(i).next = next[i];
   }
-
-  delete[] next;
 }
 
 };  // namespace SchedulingProblem
