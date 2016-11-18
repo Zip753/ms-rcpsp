@@ -8,15 +8,17 @@ namespace Util {
 /** @brief Helper class used to generate random values. */
 class Random {
  public:
-  /** Generates random integer number. */
-  static int randint();
+  /** Generates random integer number.
+   * @return random integer value. */
+  static int randint() { return rand_int(gen); }
 
   /**
-   * Checks whether the randomly generated number satisfied the given
+   * Checks whether the randomly generated number satisfies the given
    * probability.
-   * @param prob Probability value from 0 to 1.
+   * @param prob probability value from 0 to 1.
+   * @return true if probability is satisfied.
    */
-  static bool rand(double prob);
+  static bool rand(double prob) { return rand_real(gen) < prob; }
 
  private:
   static std::random_device rd;
