@@ -22,7 +22,7 @@ class Mutator {
   Mutator(double _p_mut) : p_mut(_p_mut) {};
 
   /** Performs mutation on the given sample. Returns new sample instance. */
-  virtual std::unique_ptr<T> mutate(const T& sample) const = 0;
+  virtual std::unique_ptr<T> Mutate(const T &sample) const = 0;
 
   /**
    * Mutates given sample without creating a new one.
@@ -30,7 +30,7 @@ class Mutator {
    */
   void force_mutate(T* sample) const {
     size_t idx = Random::randint() % sample->size();
-    mutate_gene(sample, idx);
+    MutateGene(sample, idx);
   }
 
   virtual ~Mutator() = 0;
@@ -44,7 +44,7 @@ class Mutator {
    * @param sample Specimen to operate on.
    * @param idx Index of the gene to be mutated.
    */
-  virtual void mutate_gene(T* sample, size_t idx) const = 0;
+  virtual void MutateGene(T* sample, size_t idx) const = 0;
 };
 
 template <class T>

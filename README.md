@@ -67,7 +67,7 @@ std::shared_ptr<Selector<SimpleSchedule>> sel =
 std::shared_ptr<Crossover<SimpleSchedule>> cross =
     std::make_shared<OnePointCrossover<SimpleSchedule>>(crossover_prob);
 std::shared_ptr<Mutator<SimpleSchedule>> mut =
-    std::make_shared<SimpleMutator<SimpleSchedule>>(mutation_prob);
+    std::make_shared<UniformMutator<SimpleSchedule>>(mutation_prob);
 // Initialize GA.
 GeneticAlgorithm<SimpleSchedule> algo(pop_size, /* population size */
                                       sel,      /* selection operator */

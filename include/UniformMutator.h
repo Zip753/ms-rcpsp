@@ -7,14 +7,14 @@ namespace EvolutionaryAlgorithm {
 
 /** @brief Implementation of simple mutation operator. */
 template <class T>
-class SimpleMutator : public Mutator<T> {
+class UniformMutator : public Mutator<T> {
  public:
-  SimpleMutator(double _p_mut) : Mutator<T>(_p_mut) {}
+  UniformMutator(double _p_mut) : Mutator<T>(_p_mut) {}
 
-  std::unique_ptr<T> mutate(const T& sample) const override;
+  std::unique_ptr<T> Mutate(const T &sample) const override;
 
  private:
-  void mutate_gene(T* sample, size_t idx) const override;
+  void MutateGene(T* sample, size_t idx) const override;
 };
 
 };  // namespace EvolutionaryAlgorithm

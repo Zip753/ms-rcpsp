@@ -29,5 +29,5 @@ std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(
 template <class T>
 std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::GenerateNeigbour(
     const T &start) {
-  return std::move(mutator_->mutate(start));
+  return std::move(mutator_->Mutate(start));
 }

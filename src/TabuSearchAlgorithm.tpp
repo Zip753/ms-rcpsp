@@ -62,5 +62,5 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(std::ostream &stream) {
 
 template <class T>
 std::unique_ptr<T> TabuSearchAlgorithm<T>::GenerateNeigbour(const T &start) {
-  return std::move(mutator_->mutate(start));
+  return std::move(mutator_->Mutate(start));
 }

@@ -3,10 +3,10 @@
 
 #include "Algorithm.h"
 #include "Mutator.h"
-#include "SimpleMutator.h"
+#include "UniformMutator.h"
 
 using EvolutionaryAlgorithm::Mutator;
-using EvolutionaryAlgorithm::SimpleMutator;
+using EvolutionaryAlgorithm::UniformMutator;
 
 template <class T>
 class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
@@ -15,7 +15,7 @@ class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
   SimulatedAnnealingAlgorithm(size_t iters_, double start_temp_, double p_mut,
                               double eps_ = 1e-7) :
       iters_(iters_), start_temp_(start_temp_),
-      mutator_(std::make_unique<SimpleMutator<T>>(p_mut)), eps_(eps_) {}
+      mutator_(std::make_unique<UniformMutator<T>>(p_mut)), eps_(eps_) {}
 
  private:
   const size_t iters_;

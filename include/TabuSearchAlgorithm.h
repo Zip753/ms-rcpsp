@@ -4,7 +4,7 @@
 #include "Algorithm.h"
 #include "Mutator.h"
 
-using EvolutionaryAlgorithm::SimpleMutator;
+using EvolutionaryAlgorithm::UniformMutator;
 
 template <class T>
 class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
@@ -13,7 +13,7 @@ class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
   TabuSearchAlgorithm(size_t iters_, size_t neighbours_, size_t list_size_,
                       double p_mut) :
       iters_(iters_), neighbours_(neighbours_), list_size_(list_size_),
-      mutator_(std::make_unique<SimpleMutator<T>>(p_mut)) {}
+      mutator_(std::make_unique<UniformMutator<T>>(p_mut)) {}
 
  private:
   size_t iters_;

@@ -18,7 +18,7 @@
 #include "include/Project.h"
 #include "include/ProjectReader.h"
 #include "include/Schedule.h"
-#include "include/SimpleMutator.h"
+#include "include/UniformMutator.h"
 #include "include/SimpleSchedule.h"
 #include "include/TabuSearchAlgorithm.h"
 #include "include/TournamentSelector.h"
@@ -52,7 +52,7 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
     cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
   }
   std::unique_ptr<Mutator<T>> mut =
-      std::make_unique<SimpleMutator<T>>(FLAGS_mutation);
+      std::make_unique<UniformMutator<T>>(FLAGS_mutation);
   std::unique_ptr<Algorithm<T>> algo =
       std::make_unique<GeneticAlgorithm<T>>(FLAGS_pop_size,
                                             std::move(sel),
