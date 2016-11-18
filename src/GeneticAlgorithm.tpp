@@ -13,14 +13,11 @@ namespace EvolutionaryAlgorithm {
 
 template <class T>
 std::unique_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
-  if (steps == -1) {
-    return 0;
-  }
-  for (int step = 0; step < steps; step++) {
+  for (size_t step = 0; step < steps; step++) {
     // Evaluate population.
     update_best();
     // Output intermediate results.
-    printf("step == %d\n", step);
+    printf("step == %lu\n", step);
     printf("best: ");
     best->printState(true);
     if (stat != nullptr) {
@@ -30,7 +27,7 @@ std::unique_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
     size_t n = population->size();
     std::vector<std::unique_ptr<T>> next_pop;
     next_pop.reserve(n);
-    for (int iter = 0; iter < n;) {
+    for (size_t iter = 0; iter < n;) {
       T* a = selector->select(*population);
       T* b;
       do { b = selector->select(*population); } while (b == a);

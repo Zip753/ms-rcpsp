@@ -18,7 +18,7 @@ void Population<T>::showStat(FILE* stream) {
   int best_val = best()->fitness(),
       worst_val = 0;
   double mean = 0;
-  for (int i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
     mean += genotype[i]->fitness();
     if (worst_val < genotype[i]->fitness())
       worst_val = genotype[i]->fitness();
