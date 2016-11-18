@@ -12,10 +12,11 @@ namespace EvolutionaryAlgorithm {
 template <class T>
 class Algorithm {
  public:
-  virtual std::unique_ptr<T> optimize(FILE* stream) = 0;
+  virtual std::unique_ptr<T> optimize(std::ostream &stream) = 0;
 
   std::unique_ptr<T> optimize() {
-    return std::move(optimize(nullptr));
+    std::ostream vain(0);
+    return std::move(optimize(vain));
   }
 };
 

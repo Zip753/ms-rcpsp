@@ -1,5 +1,7 @@
 #include "../include/Schedule.h"
 
+#include <fstream>
+#include <iostream>
 #include <list>
 #include <map>
 #include <vector>
@@ -16,17 +18,18 @@ int Schedule::fitness() {
   return _fitness;
 }
 
-void Schedule::printState(bool is_short) {
+void Schedule::PrintState(bool is_short) {
   if (!is_short) {
     for (size_t i = 0; i < n; i++)
-      printf("Task ID: %d, Resource ID: %lu, start time: %d\n",
-             task(i).id(), resource(i), start[i]);
+      std::cout << "Task ID: " << task(i).id()
+                << ", Resource ID: " << resource(i)
+                << ", start time: " << start[i] << "\n";
   }
-  printf("fitness (finish): %d\n", fitness());
+  std::cout << "fitness (finish): " << fitness() << "\n";
 }
 
-void Schedule::writeToFile(FILE* stream) {
-  fprintf(stream, "Hour 	 Resource assignments (resource ID - task ID) \n");
+void Schedule::Write(std::ostream &stream) {
+  stream << "Hour \t Resource assignments (resource ID - task ID) \n";
   std::map<int, std::list<std::pair<int, int> > > timeline;
   for (size_t i = 0; i < n; i++) {
     int st = start[i] + 1;
@@ -39,11 +42,11 @@ void Schedule::writeToFile(FILE* stream) {
     timeline[st].push_back(std::make_pair(res, task_id));
   }
   for (auto it = timeline.begin(); it != timeline.end(); it++) {
-    fprintf(stream, "%d ", it->first);
+    stream << it->first << " ";
     for (auto lit = it->second.begin(); lit != it->second.end(); lit++) {
-      fprintf(stream, "%d-%d ", lit->first, lit->second);
+      stream << lit->first << "-" << lit->second;
     }
-    fprintf(stream, "\n");
+    stream << std::endl;
   }
 }
 

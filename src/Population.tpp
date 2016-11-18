@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <iomanip>
+#include <iostream>
+
 #include "../include/Population.h"
 
 namespace EvolutionaryAlgorithm {
@@ -14,7 +17,7 @@ T* Population<T>::best() {
 }
 
 template <class T>
-void Population<T>::showStat(FILE* stream) {
+void Population<T>::ShowStat(std::ostream &stream) {
   int best_val = best()->fitness(),
       worst_val = 0;
   double mean = 0;
@@ -25,7 +28,7 @@ void Population<T>::showStat(FILE* stream) {
   }
   mean /= n;
 
-  fprintf(stream, "%d %.4lf %d\n", best_val, mean, worst_val);
+  stream << best_val << " " << mean << " " << worst_val;
 }
 
 template <class T>

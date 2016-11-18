@@ -25,10 +25,10 @@ class Validator;
 class Schedule {
  public:
   /** Prints current state to stdout. */
-  void printState(bool short_output);
+  void PrintState(bool short_output);
 
   /** Outputs solution to file stream in compatible format. */
-  void writeToFile(FILE* stream);
+  void Write(std::ostream &stream);
 
   virtual ~Schedule() = 0;
 

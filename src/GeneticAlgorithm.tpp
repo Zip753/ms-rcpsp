@@ -1,5 +1,6 @@
 #include "../include/GeneticAlgorithm.h"
 
+#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -12,17 +13,15 @@
 namespace EvolutionaryAlgorithm {
 
 template <class T>
-std::unique_ptr<T> GeneticAlgorithm<T>::optimize(FILE* stat) {
+std::unique_ptr<T> GeneticAlgorithm<T>::optimize(std::ostream &stat) {
   for (size_t step = 0; step < steps; step++) {
     // Evaluate population.
     update_best();
     // Output intermediate results.
-    printf("step == %lu\n", step);
-    printf("best: ");
-    best->printState(true);
-    if (stat != nullptr) {
-      population->showStat(stat);
-    }
+    std::cout << "step == " << step << "\n";
+    std::cout << "best: ";
+    best->PrintState(true);
+    population->ShowStat(stat);
     // Move on to next generation.
     size_t n = population->size();
     std::vector<std::unique_ptr<T>> next_pop;

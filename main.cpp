@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <fstream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -26,7 +27,7 @@
 #include "include/SimulatedAnnealingAlgorithm.h"
 
 const int FLAGS_pop_size = 100;
-const int FLAGS_iters = 70000;
+const int FLAGS_iters = 50000;
 const double FLAGS_temp = 1000;
 const double FLAGS_eps = 1e-3;
 const double FLAGS_crossover = 0.3;
@@ -35,7 +36,7 @@ int FLAGS_tournament_size = -1;
 std::string FLAGS_suffix = "";
 const bool FLAGS_lax = false;
 const bool FLAGS_output_stat = true;
-bool FLAGS_simple = false;
+bool FLAGS_simple = true;
 
 using namespace EvolutionaryAlgorithm;
 using namespace SchedulingProblem;
@@ -59,16 +60,15 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
 //                                            std::move(mut),
 //                                            FLAGS_iters,
 //                                            false);
-//      std::make_unique<SimulatedAnnealingAlgorithm<T>>(FLAGS_iters,
-//                                                       FLAGS_temp,
-//                                                       FLAGS_mutation,
-//                                                       FLAGS_eps);
-      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
+      std::make_unique<SimulatedAnnealingAlgorithm<T>>(FLAGS_iters,
+                                                       FLAGS_temp,
+                                                       FLAGS_mutation,
+                                                       FLAGS_eps);
+//      std::make_unique<TabuSearchAlgorithm<T>>(500, 100, 100, 0.01);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
-    FILE* stat_file = fopen(stat_file_name.c_str(), "w");
+    std::ofstream stat_file(stat_file_name);
     sch = std::move(algo->optimize(stat_file));
-    fclose(stat_file);
   } else {
     sch = std::move(algo->optimize());
   }
@@ -76,34 +76,34 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name) {
   sch->fitness();
   auto valid = Validator::Validate(*sch);
   if (!valid.first) {
-    printf("The solution is invalid!\n%s\n", valid.second.c_str());
+    std::cout << "The solution is invalid!\n" << valid.second.c_str() << "\n";
   } else {
-    printf("The solution is valid.\n");
+    std::cout << "The solution is valid.\n";
   }
   return sch;
 }
 
 template <class T>
 void SolveAndOutput(const std::string& stat_file_name,
-                    FILE* output_file,
-                    FILE* best_file) {
+                    std::ofstream& output_file,
+                    std::ofstream& best_file) {
   std::unique_ptr<Schedule> sch(InitAndSolve<T>(stat_file_name));
 
   /* Output solution to stdout. */
-  printf("SOLUTION: ");
-  sch->printState(true);
+  std::cout << "SOLUTION: ";
+  sch->PrintState(true);
 
   /* Output solution to file. */
-  sch->writeToFile(output_file);
+  sch->Write(output_file);
 
   /* Output best fitness value to file. */
-  fprintf(best_file, "%d", sch->fitness());
+  best_file << sch->fitness();
 }
 
 int main(int argc, char* argv[]) {
   if (argc < 4 || argc > 5) {
-    fprintf(stderr, "Invalid number of arguments.\n"
-        "Usage: %s input_file output_dir suffix [--simple]\n", argv[0]);
+    std::cerr << "Invalid number of arguments.\nUsage: " << argv[0]
+              << "%s input_file output_dir suffix [--simple]\n";
     return 1;
   }
 
@@ -115,8 +115,8 @@ int main(int argc, char* argv[]) {
     if (strcmp(argv[4], "--simple") == 0) {
       FLAGS_simple = true;
     } else {
-      fprintf(stderr, "Invalid flags.\n"
-          "Usage: %s input_file output_dir suffix [--simple]\n", argv[0]);
+      std::cerr << "Invalid flags.\nUsage: " << argv[0]
+                << " input_file output_dir suffix [--simple]\n";
       return 1;
     }
   }
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
   if (FLAGS_tournament_size == -1) {
     FLAGS_tournament_size = FLAGS_pop_size / 20;
   }
-  printf("Tournament size: %d\n", FLAGS_tournament_size);
+  std::cout << "Tournament size: " << FLAGS_tournament_size << "\n";
 
   /* Parse filename. */
   std::string input_base_name =
@@ -135,10 +135,10 @@ int main(int argc, char* argv[]) {
 
   /* Read project data from file. */
   if (!ProjectReader::read(input_full_name)) {
-    fprintf(stderr, "Invalid input file format.\n");
+    std::cerr << "Invalid input file format.\n";
     return 1;
   }
-  printf("Tasks: %lu\n", Project::size());
+  std::cout << "Tasks: " << Project::size() << "\n";
 
   /* Project solution output: */
   std::string output_file_name = base_name;
@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
     output_file_name += "." + FLAGS_suffix;
   }
   output_file_name += ".sol";
-  FILE* output_file = fopen(output_file_name.c_str(), "w");
+  std::ofstream output_file(output_file_name);
 
   /* Population statistics output: */
   std::string stat_file_name = base_name;
@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
     best_file_name += "." + FLAGS_suffix;
   }
   best_file_name += ".best";
-  FILE* best_file = fopen(best_file_name.c_str(), "w");
+  std::ofstream best_file(best_file_name);
 
   /* Run the algorithm. */
   if (FLAGS_simple) {
@@ -169,9 +169,6 @@ int main(int argc, char* argv[]) {
   } else {
     SolveAndOutput<PrioSchedule>(stat_file_name, output_file, best_file);
   }
-
-  fclose(output_file);
-  fclose(best_file);
 
   return 0;
 }

@@ -11,7 +11,7 @@ using EvolutionaryAlgorithm::SimpleMutator;
 template <class T>
 class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
  public:
-  std::unique_ptr<T> optimize(FILE* stream) override;
+  std::unique_ptr<T> optimize(std::ostream &stream) override;
   SimulatedAnnealingAlgorithm(size_t iters_, double start_temp_, double p_mut,
                               double eps_ = 1e-7) :
       iters_(iters_), start_temp_(start_temp_),

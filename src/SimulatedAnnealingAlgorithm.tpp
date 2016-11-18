@@ -9,7 +9,8 @@ bool can_accept(T &next, T &prev, double temp) {
 }
 
 template <class T>
-std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(FILE* stream) {
+std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(
+    std::ostream &stream) {
   T start = T();
   double a = (log(start_temp_) - log(eps_)) / iters_;
   for (size_t iter = 0; iter < iters_; ++iter) {
@@ -18,7 +19,7 @@ std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(FILE* stream) {
     if (next->fitness() < start.fitness() || can_accept(*next, start, temp)) {
       start = *next;
     }
-    fprintf(stream, "%d %lf\n", start.fitness(), temp);
+    stream << start.fitness() << " " << temp << "\n";
     std::cout << "iter: " << iter << ", fitness: " << start.fitness()
         << ", temp: " << temp << "\n";
   }

@@ -33,7 +33,7 @@ class Population {
    * specimen.
    * @param stream Destination file stream.
    */
-  void showStat(FILE* stream);
+  void ShowStat(std::ostream &stream);
 
  private:
   /** Size of the population. */

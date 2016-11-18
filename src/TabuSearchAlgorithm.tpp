@@ -21,7 +21,7 @@ bool TabuHit(const T& x, const std::deque<T>& tabu) {
 }
 
 template <class T>
-std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
+std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(std::ostream &stream) {
   T start = T();;
   T global_best = start;
   std::deque<T> tabu;
@@ -49,10 +49,8 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(FILE* stream) {
       }
     }
     mean /= neighbours_;
-    if (stream != nullptr) {
-      fprintf(stream, "%d %.4lf %d %.2lf\n", iter_best.fitness(), mean,
-              worst_val, static_cast<double>(hits) / neighbours_);
-    }
+    stream << iter_best.fitness() << " " << mean << " " << worst_val << " "
+           << static_cast<double>(hits) / neighbours_ << "\n";
     start = iter_best;
     std::cout << "iter: " << iter << ", fitness: " << start.fitness() << "\n";
     if (global_best.fitness() > iter_best.fitness()) {
