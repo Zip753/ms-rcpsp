@@ -11,7 +11,7 @@ using SchedulingProblem::PrioSchedule;
 using SchedulingProblem::Project;
 
 template<>
-std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::cross(
+std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::Cross(
     const PrioSchedule& a, const PrioSchedule& b) const {
   size_t n = a.size();
   std::vector<size_t> ires = std::vector<size_t>(n);
@@ -45,7 +45,7 @@ std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::cross(
 using SchedulingProblem::SimpleSchedule;
 
 template<>
-std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::cross(
+std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::Cross(
     const SimpleSchedule& a, const SimpleSchedule& b) const {
   size_t n = a.size();
   std::vector<size_t> ires = std::vector<size_t>(n);

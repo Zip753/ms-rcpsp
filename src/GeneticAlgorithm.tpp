@@ -31,7 +31,7 @@ std::unique_ptr<T> GeneticAlgorithm<T>::optimize(std::ostream &stat) {
       T* b;
       do { b = selector->select(*population); } while (b == a);
       if (iter == n - 1 || crossover->should_cross()) {
-        std::unique_ptr<T> a_cross(crossover->cross(*a, *b));
+        std::unique_ptr<T> a_cross(crossover->Cross(*a, *b));
         std::unique_ptr<T> a_mut = mutator->Mutate(*a_cross);
         TryRemoveClones(next_pop, iter++, a_mut.get());
         next_pop.push_back(std::move(a_mut));

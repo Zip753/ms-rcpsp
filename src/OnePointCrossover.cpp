@@ -9,7 +9,7 @@ namespace EvolutionaryAlgorithm {
 using SchedulingProblem::SimpleSchedule;
 
 template<>
-std::unique_ptr<SimpleSchedule> OnePointCrossover<SimpleSchedule>::cross(
+std::unique_ptr<SimpleSchedule> OnePointCrossover<SimpleSchedule>::Cross(
     const SimpleSchedule& a, const SimpleSchedule& b) const {
   std::unique_ptr<SimpleSchedule> s = std::make_unique<SimpleSchedule>(a);
 
@@ -25,7 +25,7 @@ std::unique_ptr<SimpleSchedule> OnePointCrossover<SimpleSchedule>::cross(
 using SchedulingProblem::PrioSchedule;
 
 template<>
-std::unique_ptr<PrioSchedule> OnePointCrossover<PrioSchedule>::cross(
+std::unique_ptr<PrioSchedule> OnePointCrossover<PrioSchedule>::Cross(
     const PrioSchedule& a, const PrioSchedule& b) const {
   std::unique_ptr<PrioSchedule> s = std::make_unique<PrioSchedule>(a);
 

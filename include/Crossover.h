@@ -12,7 +12,7 @@ namespace EvolutionaryAlgorithm {
  * @brief Abstract base class for crossover implementations.
  *
  * If you want to create a new crossover operator, you should create a new
- * subclass of Crossover and implement Crossover#cross function for all
+ * subclass of Crossover and implement Crossover#Cross function for all
  * specimen representations that you're using. For implementation example see
  * src/UniformCrossover.cpp.
  *
@@ -20,27 +20,33 @@ namespace EvolutionaryAlgorithm {
  */
 template <class T>
 class Crossover {
- private:
-  /** Crossover probability. */
-  double p_cross;
-
  protected:
   /**
    * Creates crossover operator with supplied probability.
    * @param _p_cross Probability of crossover.
    */
-  Crossover(double _p_cross) : p_cross(_p_cross) {}
+  Crossover(double p_cross_) : p_cross_(p_cross_) {}
 
  public:
-  virtual ~Crossover() = 0;
-
   /**
    * Takes two specimen and performs crossover on them. Results in a new object.
+   * @param a first parent specimen.
+   * @param b second parent specimen.
+   * @return owning pointer to new specimen.
    */
-  virtual std::unique_ptr<T> cross(const T &a, const T &b) const = 0;
+  virtual std::unique_ptr<T> Cross(const T &a, const T &b) const = 0;
 
-  /** Checks whether the crossover should take place. */
-  inline bool should_cross() const { return Random::rand(p_cross); }
+  /**
+   * Checks whether the crossover should take place.
+   * @return true if crossover should take place.
+   */
+  inline bool should_cross() const { return Random::rand(p_cross_); }
+
+  virtual ~Crossover() = 0;
+
+ private:
+  /** Crossover probability. */
+  double p_cross_;
 };
 
 template <class T>
