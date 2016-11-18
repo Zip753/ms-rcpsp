@@ -5,9 +5,9 @@
 namespace EvolutionaryAlgorithm {
 
 template <class T>
-T* TournamentSelector<T>::select(const Population<T>& p) const {
+T* TournamentSelector<T>::Select(const Population <T> &p) const {
   size_t p_size = p.size();
-  size_t tourn_size = n;
+  size_t tourn_size = tournament_size_;
   if (p_size < tourn_size)
     tourn_size = p_size;
 

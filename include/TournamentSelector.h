@@ -10,14 +10,14 @@ namespace EvolutionaryAlgorithm {
 template <class T>
 class TournamentSelector : public Selector<T> {
  public:
-  /** @param _n Tournament size. */
-  TournamentSelector(size_t _n) : n(_n) {}
+  /** @param tourn_size_ tournament size. */
+  TournamentSelector(size_t tourn_size_) : tournament_size_(tourn_size_) {}
 
-  T* select(const Population<T>& p) const override;
+  T* Select(const Population<T> &p) const override;
 
  private:
   /** Size of the tournament. */
-  const size_t n;
+  const size_t tournament_size_;
 };
 
 };  // namespace EvolutionaryAlgorithm

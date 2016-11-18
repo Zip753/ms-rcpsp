@@ -27,9 +27,9 @@ std::unique_ptr<T> GeneticAlgorithm<T>::optimize(std::ostream &stat) {
     std::vector<std::unique_ptr<T>> next_pop;
     next_pop.reserve(n);
     for (size_t iter = 0; iter < n;) {
-      T* a = selector->select(*population);
+      T* a = selector->Select(*population);
       T* b;
-      do { b = selector->select(*population); } while (b == a);
+      do { b = selector->Select(*population); } while (b == a);
       if (iter == n - 1 || crossover->should_cross()) {
         std::unique_ptr<T> a_cross(crossover->Cross(*a, *b));
         std::unique_ptr<T> a_mut = mutator->Mutate(*a_cross);

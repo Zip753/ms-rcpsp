@@ -9,13 +9,13 @@ namespace EvolutionaryAlgorithm {
 /** @brief Base abstract class for selection operators.
  *
  * If you want to implement your own selection operator, create a subclass of
- * Selector and override Selector#select function.
+ * Selector and override Selector#Select function.
  */
 template <class T>
 class Selector {
  public:
   /** Selects the candidate specimen from the population. */
-  virtual T* select(const Population<T>& p) const = 0;
+  virtual T* Select(const Population<T> &p) const = 0;
 
   virtual ~Selector() = 0;
 };
