@@ -19,14 +19,16 @@ class Population {
    */
   Population(std::vector<std::unique_ptr<T>>* spec);
 
-  /** Returns size of the population. */
-  size_t size() const { return n; }
+  /** @return size of the population. */
+  size_t size() const { return specimen_.size(); }
 
-  /** Returns specimen with the smallest fitness function in the population. */
+  /** @return specimen with the smallest fitness function in the population. */
   T* best();
 
-  /** List of specimen. */
-  std::vector<std::unique_ptr<T>> genotype;
+  /** Returns specimen at given index.
+   * @param i index od specimen.
+   * @return pointer to the specimen. */
+  T* specimen(size_t i) const { return specimen_[i].get(); }
 
   /**
    * Shows statistical information of the population: best, average and worst
@@ -36,8 +38,8 @@ class Population {
   void ShowStat(std::ostream &stream);
 
  private:
-  /** Size of the population. */
-  size_t n;
+  /** List of specimen. */
+  std::vector<std::unique_ptr<T>> specimen_;
 };
 
 };  // namespace EvolutionaryAlgorithm

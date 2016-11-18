@@ -15,13 +15,13 @@ T* TournamentSelector<T>::select(const Population<T>& p) const {
   size_t best_id = 0;
   for (size_t i = 0; i < tourn_size; i++) {
     size_t idx = Util::Random::randint() % p_size;
-    if (i == 0 || best_fitness > p.genotype[idx]->fitness()) {
+    if (i == 0 || best_fitness > p.specimen(idx)->fitness()) {
       best_id = idx;
-      best_fitness = p.genotype[idx]->fitness();
+      best_fitness = p.specimen(idx)->fitness();
     }
   }
 
-  return p.genotype[best_id].get();
+  return p.specimen(best_id);
 }
 
 };  // namespace EvolutionaryAlgorithm

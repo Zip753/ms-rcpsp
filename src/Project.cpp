@@ -17,7 +17,8 @@ void Project::create(size_t _n,
       new Project(_n, _tasks, _res_count, _res_id, _res_sal));
 
   /* Create list of inverse dependency_. */
-  std::array<std::vector<size_t>, _n> next;
+  std::vector<std::vector<size_t>> next(_n);
+  for (auto& el : next) { el = std::vector<size_t>(); }
 
   for (size_t i = 0; i < _n; ++i) {
     for (size_t j = 0; j < _tasks[i].num_dependencies(); ++j) {

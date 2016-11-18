@@ -1,6 +1,7 @@
 #include "../include/SimpleSchedule.h"
 
 #include <algorithm>
+#include <vector>
 
 #include "../include/Project.h"
 #include "../include/Random.h"
@@ -67,8 +68,7 @@ void SimpleSchedule::reschedule() {
 void SimpleSchedule::fix_all() {
   reschedule();
 
-  std::array<bool, n> used;
-  std::fill_n(used, n, false);
+  std::vector<bool> used(n, false);
 
   for (size_t i = 0; i < n; i++) {
     // select task with earliest start
