@@ -11,7 +11,7 @@ bool can_accept(T &next, T &prev, double temp) {
 template <class T>
 std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(
     std::ostream &stream) {
-  T start = T();
+  T start = start_;
   double a = (log(start_temp_) - log(eps_)) / iters_;
   for (size_t iter = 0; iter < iters_; ++iter) {
     double temp = start_temp_ * exp(-(iter * a));

@@ -1,7 +1,10 @@
 #ifndef MS_RCPSP_PROJECTREADER_H
 #define MS_RCPSP_PROJECTREADER_H
 
+#include <memory>
 #include <string>
+
+#include "Project.h"
 
 namespace SchedulingProblem {
 
@@ -11,7 +14,7 @@ class ProjectReader {
   /** Reads project from source file. Initializes Project singleton.
    * @return If false, input file has wrong format.
    */
-  static bool read(const std::string &filename);
+  static std::unique_ptr<Project> Read(const std::string &filename);
 };
 
 };  // namespace SchedulingProblem

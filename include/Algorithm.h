@@ -4,6 +4,8 @@
 #include <memory>
 #include <utility>
 
+#include "Project.h"
+
 namespace EvolutionaryAlgorithm {
 
 /** @brief Base abstract class for all optimization algorithms.

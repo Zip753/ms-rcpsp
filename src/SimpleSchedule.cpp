@@ -24,24 +24,20 @@ void SimpleSchedule::init(bool create_ires) {
 
   visited = std::vector<bool>(n);
 
-  size_t rcount = Project::get_res_count();
+  size_t rcount = project_->num_resources();
   business = std::vector<int>(rcount);
 }
 
-SimpleSchedule::SimpleSchedule() : Schedule() {
+SimpleSchedule::SimpleSchedule(Project* project_) : Schedule(project_) {
   init(true);
 }
 
-SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule() {
+SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule(s.project_) {
   init(false);
   ires = std::vector<size_t>(n, 0);
   for (size_t i = 0; i < n; i++) {
     ires[i] = s.ires[i];
   }
-}
-
-SimpleSchedule::SimpleSchedule(std::vector<size_t> _ires) : Schedule(_ires) {
-  init(false);
 }
 
 void SimpleSchedule::update_start(size_t i) {
@@ -117,7 +113,7 @@ int SimpleSchedule::compute_fitness() {
 
 void SimpleSchedule::reset() {
   for (size_t i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::task(i).num_resources();
+    ires[i] = Util::Random::randint() % project_->task(i).num_resources();
   }
 }
 

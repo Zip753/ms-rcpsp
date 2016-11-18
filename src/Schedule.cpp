@@ -33,7 +33,7 @@ void Schedule::Write(std::ostream &stream) {
   std::map<int, std::list<std::pair<int, int> > > timeline;
   for (size_t i = 0; i < n; i++) {
     int st = start[i] + 1;
-    int res = Project::get_res_id(resource(i));
+    int res = project_->resource_id(resource(i));
     int task_id = task(i).id();
 
     if (timeline.count(st) == 0) {
@@ -49,9 +49,6 @@ void Schedule::Write(std::ostream &stream) {
     stream << std::endl;
   }
 }
-
-Schedule::Schedule() : start(std::vector<int>(Project::size(), 0)),
-                       n(Project::size()) {}
 
 Schedule::~Schedule() {}
 

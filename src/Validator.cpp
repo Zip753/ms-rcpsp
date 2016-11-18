@@ -14,7 +14,7 @@ namespace SchedulingProblem {
 
 std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
-  for (size_t i = 0; i < Project::size(); ++i) {
+  for (size_t i = 0; i < s.size(); ++i) {
     // Check resource indices.
     if (s.ires[i] < 0 || s.ires[i] >= s.max_res_count(i)) {
       stream << "Resource index out of boundaries (task ID: ";
@@ -46,8 +46,8 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
 
   // Check resource assignment conflicts.
   std::map<int, std::vector<size_t>> res_tasks;
-  for (size_t i = 0; i < Project::size(); ++i) {
-    int res_id = Project::get_res_id(s.resource(i));
+  for (size_t i = 0; i < s.size(); ++i) {
+    int res_id = s.resource_id(s.resource(i));
     res_tasks[res_id].push_back(i);
   }
 

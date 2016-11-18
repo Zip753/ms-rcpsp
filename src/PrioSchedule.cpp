@@ -25,14 +25,14 @@ void PrioSchedule::init(bool initialize) {
     reset();
   }
 
-  business = std::vector<int>(Project::get_res_count());
+  business = std::vector<int>(project_->num_resources());
 }
 
-PrioSchedule::PrioSchedule() : Schedule() {
+PrioSchedule::PrioSchedule(Project* project_) : Schedule(project_) {
   init(true);
 }
 
-PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule() {
+PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
   init(false);
   ires = std::vector<size_t>(n, 0);
   prio = std::vector<int>(n, 0);
@@ -40,11 +40,6 @@ PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule() {
     ires[i] = s.ires[i];
     prio[i] = s.prio[i];
   }
-}
-
-PrioSchedule::PrioSchedule(std::vector<size_t> _ires, std::vector<int> _prio)
-    : Schedule(_ires), prio(_prio) {
-  init(false);
 }
 
 void PrioSchedule::fix_all() {
@@ -64,7 +59,7 @@ void PrioSchedule::fix_all() {
       queue.push(std::make_pair(i, prio[i]));
     }
   }
-  size_t res_count = Project::get_res_count();
+  size_t res_count = project_->num_resources();
 
   // availability time for resource_
   std::vector<int> time(res_count);
@@ -123,7 +118,7 @@ int PrioSchedule::compute_fitness() {
 
 void PrioSchedule::reset() {
   for (size_t i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % Project::task(i).num_resources();
+    ires[i] = Util::Random::randint() % project_->task(i).num_resources();
     prio[i] = (int)i;
   }
   std::random_shuffle(prio.begin(), prio.end());

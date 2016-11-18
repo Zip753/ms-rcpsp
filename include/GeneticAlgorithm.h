@@ -32,12 +32,14 @@ class GeneticAlgorithm : public Algorithm<T> {
    * @param c Crossover operator.
    * @param m Mutation operator.
    */
-  GeneticAlgorithm(size_t pop_size,
+  GeneticAlgorithm(std::unique_ptr<Population<T>> p,
                    std::unique_ptr<Selector<T>> s,
                    std::unique_ptr<Crossover<T>> c,
                    std::unique_ptr<Mutator<T>> m,
                    size_t _steps,
-                   bool _rem_clones = true);
+                   bool _rem_clones = true) :
+      population(std::move(p)), selector(std::move(s)), crossover(std::move(c)),
+      mutator(std::move(m)), steps(_steps), remove_clones(_rem_clones) {}
   ~GeneticAlgorithm() {}
 
   /**

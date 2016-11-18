@@ -7,12 +7,13 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 #include "../include/Project.h"
 
 namespace SchedulingProblem {
 
-bool ProjectReader::read(const std::string &filename) {
+std::unique_ptr<Project> ProjectReader::Read(const std::string &filename) {
   size_t n;
   int id, dur;
   size_t res_count;
@@ -22,15 +23,15 @@ bool ProjectReader::read(const std::string &filename) {
   std::regex pattern("Tasks:\\s+(\\d+)");
   while (std::getline(infile, line) &&
          !std::regex_search(line, match, pattern)) {}
-  if (match.empty()) return false;
+  if (match.empty()) return nullptr;
   n = stoul(match[1]);
   pattern = "Resources:\\s+(\\d+)";
   if (!std::getline(infile, line) ||
-      !std::regex_search(line, match, pattern)) return false;
+      !std::regex_search(line, match, pattern)) return nullptr;
   res_count = stoull(match[1]);
 
   for (size_t i = 0; i < 4; ++i) {
-    if (!std::getline(infile, line)) return false;
+    if (!std::getline(infile, line)) return nullptr;
   }
 
   std::vector<Task> tasks;
@@ -43,7 +44,7 @@ bool ProjectReader::read(const std::string &filename) {
   std::regex skill_pattern("Q(\\d+)\\:\\s*(\\d+)");
   for (size_t i = 0; i < res_count; i++) {
     if (!std::getline(infile, line) ||
-        !std::regex_search(line, match, pattern)) return false;
+        !std::regex_search(line, match, pattern)) return nullptr;
     res_id[i] = stoi(match[1]);
     res_sal[i] = stof(match[2]);
     line = match.suffix();
@@ -54,7 +55,7 @@ bool ProjectReader::read(const std::string &filename) {
   }
 
   for (size_t i = 0; i < 2; ++i) {
-    if (!std::getline(infile, line)) return false;
+    if (!std::getline(infile, line)) return nullptr;
   }
 
   pattern = "(\\d+)\\s+(\\d+)\\s+Q(\\d+)\\:\\s+(\\d+)";
@@ -63,7 +64,7 @@ bool ProjectReader::read(const std::string &filename) {
   std::map<int, size_t> inv_task_id;
   for (size_t i = 0; i < n; i++) {
     if (!std::getline(infile, line) ||
-        !std::regex_search(line, match, pattern)) return false;
+        !std::regex_search(line, match, pattern)) return nullptr;
     id = stoi(match[1]);
     inv_task_id[id] = i;
     dur = stoi(match[2]);
@@ -83,11 +84,14 @@ bool ProjectReader::read(const std::string &filename) {
       line = match.suffix();
     }
 
+    if (i == 17) std::cout << resources.size() << std::endl;
+
     // increment duration_ to match solutions
     tasks.emplace_back(id, dur + 1, dependencies, resources);
   }
-  Project::create(n, tasks, res_count, res_id, res_sal);
-  return true;
+  std::unique_ptr<Project> project =
+      std::make_unique<Project>(tasks, res_id, res_sal);
+  return std::move(project);
 }
 
 };  // namespace SchedulingProblem

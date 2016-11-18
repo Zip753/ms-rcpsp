@@ -14,55 +14,37 @@ namespace SchedulingProblem {
 class Project {
 
  public:
-  /** Creates singleton instance. */
-  static void create(size_t _n,
-                     const std::vector<Task> &_tasks,
-                     size_t _res_count,
-                     const std::vector<int> &_res_id,
-                     const std::vector<double> &_res_sal);
+  Project(const std::vector<Task> &tasks_,
+          const std::vector<int> &res_id_,
+          const std::vector<double> &res_salary_);
 
   /** Returns the number of tasks in the project. */
-  inline static size_t size() { return project_->n; }
+  inline size_t size() const { return tasks_.size(); }
 
   /** Returns number of resources. */
-  inline static size_t get_res_count() { return project_->res_count; }
+  inline size_t num_resources() const { return res_id_.size(); }
 
   /**
    * Returns resource ID of the resource at the given index.
    * @param res index of the resource
    */
-  inline static int get_res_id(size_t res) {
-    return project_->res_id[res];
-  }
+  inline int resource_id(size_t res) const { return res_id_[res]; }
 
   /**
    * Returns the hourly salary of the resource at the given index.
    * @param res index of the resource
    */
-  inline static double get_salary(size_t res) {
-    return project_->res_salary[res];
-  }
+  inline double resource_salary(size_t res) const { return res_salary_[res]; }
 
-  static Task& task(size_t i) { return project_->tasks_[i]; }
+  Task& task(size_t i) { return tasks_[i]; }
 
  private:
   /** List of project tasks. */
   std::vector<Task> tasks_;
-  /** Number of tasks. */
-  size_t n;
   /** IDs of resources. */
-  std::vector<int> res_id;
+  std::vector<int> res_id_;
   /** Salaries of resources. */
-  std::vector<double> res_salary;
-  /** Number of resources. */
-  size_t res_count;
-  /** Shortcut to Project. */
-  static std::unique_ptr<Project> project_;
-  /** @see ProjectReader::read() */
-  Project(size_t _n, const std::vector<Task> &_tasks, size_t _res_count,
-          const std::vector<int> &_res_id, const std::vector<double> &_res_sal)
-      : tasks_(_tasks), n(_n), res_id(_res_id), res_salary(_res_sal),
-        res_count(_res_count) {}
+  std::vector<double> res_salary_;
 };
 
 };  // namespace SchedulingProblem

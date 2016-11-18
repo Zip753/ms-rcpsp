@@ -12,12 +12,14 @@ template <class T>
 class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
  public:
   std::unique_ptr<T> optimize(std::ostream &stream) override;
-  SimulatedAnnealingAlgorithm(size_t iters_, double start_temp_, double p_mut,
+  SimulatedAnnealingAlgorithm(const T &&start_, size_t iters_,
+                              double start_temp_, double p_mut,
                               double eps_ = 1e-7) :
-      iters_(iters_), start_temp_(start_temp_),
+      start_(start_), iters_(iters_), start_temp_(start_temp_),
       mutator_(std::make_unique<UniformMutator<T>>(p_mut)), eps_(eps_) {}
 
  private:
+  T start_;
   const size_t iters_;
   const double start_temp_;
   std::shared_ptr<EvolutionaryAlgorithm::Mutator<T>> mutator_;

@@ -23,6 +23,10 @@ class Validator;
  * for clone removal to work.
  */
 class Schedule {
+ protected:
+  /** Pointer to project for which the schedule is designated. */
+  Project* project_;
+
  public:
   /** Prints current state to stdout. */
   void PrintState(bool short_output);
@@ -47,7 +51,7 @@ class Schedule {
    * */
   int fitness();
 
-  Task& task(size_t i) const { return Project::task(i); }
+  Task& task(size_t i) const { return project_->task(i); }
 
   /**
    * Returns index of resource assigned to the task at index i.
@@ -64,9 +68,20 @@ class Schedule {
   /** Reset schedule representation to random state. */
   virtual void reset() = 0;
 
+  inline double resource_salary(size_t res) const {
+    return project_->resource_salary(res);
+  }
+
+  inline int resource_id(size_t res) const {
+    return project_->resource_id(res);
+  }
+
  protected:
-  Schedule();
-  Schedule(std::vector<size_t> _ires) : Schedule() { ires = _ires; }
+  Schedule(Project* project_)
+      : project_(project_), start(std::vector<int>(project_->size(), 0)),
+        n(project_->size()) {}
+  Schedule(Project* project_, std::vector<size_t> _ires)
+      : Schedule(project_) { ires = _ires; }
 
   /** Number of tasks. */
   size_t n;

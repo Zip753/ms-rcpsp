@@ -14,8 +14,7 @@ namespace SchedulingProblem {
  */
 class SimpleSchedule : public Schedule {
  public:
-  SimpleSchedule();
-  SimpleSchedule(std::vector<size_t> _ires);
+  SimpleSchedule(Project* project_);
   SimpleSchedule(const SimpleSchedule& s);
   ~SimpleSchedule() override {}
 

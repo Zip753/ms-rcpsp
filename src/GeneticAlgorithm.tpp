@@ -80,21 +80,4 @@ void GeneticAlgorithm<T>::TryRemoveClones(
   }
 }
 
-template <class T>
-GeneticAlgorithm<T>::GeneticAlgorithm(size_t pop_size,
-                                      std::unique_ptr<Selector<T>> s,
-                                      std::unique_ptr<Crossover<T>> c,
-                                      std::unique_ptr<Mutator<T>> m,
-                                      size_t _steps,
-                                      bool _rem_clones) :
-    selector(std::move(s)), crossover(std::move(c)), mutator(std::move(m)),
-    steps(_steps), remove_clones(_rem_clones) {
-  std::vector<std::unique_ptr<T>> specimen;
-  specimen.reserve(pop_size);
-  for (size_t i = 0; i < pop_size; ++i) {
-    specimen.push_back(std::move(std::make_unique<T>()));
-  }
-  population = std::make_unique<Population<T>>(&specimen);
-}
-
 };  // namespace EvolutionaryAlgorithm
