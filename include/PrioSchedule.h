@@ -24,7 +24,7 @@ class PrioSchedule : public Schedule {
   PrioSchedule(const PrioSchedule& s);
   ~PrioSchedule() override {}
 
-  int compute_fitness() override;
+  int ComputeFitness() override;
 
   /** Task priorities. */
   std::vector<int> prio;

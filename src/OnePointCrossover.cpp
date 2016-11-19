@@ -17,7 +17,7 @@ std::unique_ptr<SimpleSchedule> OnePointCrossover<SimpleSchedule>::Cross(
   size_t n = s->size();
   size_t idx = Random::randint() % n;
   for (size_t i = idx; i < n; i++) {
-    s->ires[i] = b.ires[i];
+    s->set_resource_idx(i, b.resource_idx(i));
   }
 
   return std::move(s);
@@ -33,7 +33,7 @@ std::unique_ptr<PrioSchedule> OnePointCrossover<PrioSchedule>::Cross(
   size_t n = s->size();
   size_t idx = Random::randint() % n;
   for (size_t i = idx; i < n; i++)
-    s->ires[i] = b.ires[i];
+    s->set_resource_idx(i, b.resource_idx(i));
 
   return std::move(s);
 }

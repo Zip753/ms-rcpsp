@@ -11,17 +11,17 @@
 namespace SchedulingProblem {
 
 bool PrioSchedule::operator==(PrioSchedule s) const {
-  if (n != s.size()) return false;
-  for (size_t i = 0; i < n; i++)
-    if (ires[i] != s.ires[i] || prio[i] != s.prio[i])
+  if (size_ != s.size()) return false;
+  for (size_t i = 0; i < size_; i++)
+    if (resource_idx_[i] != s.resource_idx_[i] || prio[i] != s.prio[i])
       return false;
   return true;
 }
 
 void PrioSchedule::init(bool initialize) {
   if (initialize) {
-    ires = std::vector<size_t>(n, 0);
-    prio = std::vector<int>(n, 0);
+    resource_idx_ = std::vector<size_t>(size_, 0);
+    prio = std::vector<int>(size_, 0);
     reset();
   }
 
@@ -34,10 +34,10 @@ PrioSchedule::PrioSchedule(Project* project_) : Schedule(project_) {
 
 PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
   init(false);
-  ires = std::vector<size_t>(n, 0);
-  prio = std::vector<int>(n, 0);
-  for (size_t i = 0; i < n; i++) {
-    ires[i] = s.ires[i];
+  resource_idx_ = std::vector<size_t>(size_, 0);
+  prio = std::vector<int>(size_, 0);
+  for (size_t i = 0; i < size_; i++) {
+    resource_idx_[i] = s.resource_idx_[i];
     prio[i] = s.prio[i];
   }
 }
@@ -51,10 +51,10 @@ void PrioSchedule::fix_all() {
   };
 
   /* Create list of inverse dependencies. */
-  std::vector<std::vector<size_t>> next(n);
+  std::vector<std::vector<size_t>> next(size_);
   for (auto& el : next) { el = std::vector<size_t>(); }
 
-  for (size_t i = 0; i < n; ++i) {
+  for (size_t i = 0; i < size_; ++i) {
     for (size_t j = 0; j < project_->task(i).num_dependencies(); ++j) {
       size_t idep = task(i).dependency(j);
       next[idep].push_back(i);
@@ -65,7 +65,7 @@ void PrioSchedule::fix_all() {
   std::priority_queue<std::pair<size_t, int>,
                       std::vector<std::pair<size_t, int>>,
                       PriorityComp> queue;
-  for (size_t i = 0; i < n; ++i) {
+  for (size_t i = 0; i < size_; ++i) {
     if (task(i).num_dependencies() == 0) {
       queue.push(std::make_pair(i, prio[i]));
     }
@@ -76,7 +76,7 @@ void PrioSchedule::fix_all() {
   std::vector<int> time(res_count);
 
   // number of complete dependency_ for tasks
-  std::vector<size_t> dep_count(n);
+  std::vector<size_t> dep_count(size_);
 
   while (!queue.empty()) {
     // take next task
@@ -94,7 +94,7 @@ void PrioSchedule::fix_all() {
     }
 
     // update start time for the task
-    start[itask] = std::max(min_start, time[res_idx]);
+    start_[itask] = std::max(min_start, time[res_idx]);
     // update availability time for resource
     time[res_idx] = finish_time(itask);
 
@@ -109,27 +109,28 @@ void PrioSchedule::fix_all() {
   }
 }
 
-int PrioSchedule::compute_fitness() {
+int PrioSchedule::ComputeFitness() {
   fix_all();
 
-  for (size_t i = 0; i < n; i++) {
+  for (size_t i = 0; i < size_; i++) {
     int finish = finish_time(i);
-    if (_fitness < finish)
-      _fitness = finish;
+    if (fitness_ < finish)
+      fitness_ = finish;
   }
 
   std::fill(business.begin(), business.end(), 0);
-  for (size_t i = 0; i < n; i++) {
+  for (size_t i = 0; i < size_; i++) {
     size_t res = resource(i);
     business[res] += task(i).duration();
   }
 
-  return _fitness;
+  return fitness_;
 }
 
 void PrioSchedule::reset() {
-  for (size_t i = 0; i < n; i++) {
-    ires[i] = Util::Random::randint() % project_->task(i).num_resources();
+  for (size_t i = 0; i < size_; i++) {
+    resource_idx_[i] =
+        Util::Random::randint() % project_->task(i).num_resources();
     prio[i] = (int)i;
   }
   std::random_shuffle(prio.begin(), prio.end());

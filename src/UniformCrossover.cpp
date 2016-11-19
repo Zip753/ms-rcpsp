@@ -17,7 +17,7 @@ std::unique_ptr<PrioSchedule> UniformCrossover<PrioSchedule>::Cross(
   size_t n = s->size();
   for (size_t i = 0; i < n; i++) {
     if (Random::randint() % 2 == 1) {
-      s->ires[i] = b.ires[i];
+      s->set_resource_idx(i, b.resource_idx(i));
     }
 
     if (Random::randint() % 2 == 1) {
@@ -38,7 +38,7 @@ std::unique_ptr<SimpleSchedule> UniformCrossover<SimpleSchedule>::Cross(
   size_t n = s->size();
   for (size_t i = 0; i < n; i++) {
     if (Random::randint() % 2 == 1) {
-      s->ires[i] = b.ires[i];
+      s->set_resource_idx(i, b.resource_idx(i));
     }
   }
 

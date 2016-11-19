@@ -11,21 +11,21 @@
 
 namespace SchedulingProblem {
 
-int Schedule::fitness() {
-  if (_fitness == -1) {
-    _fitness = compute_fitness();
+int Schedule::Fitness() {
+  if (fitness_ == -1) {
+    fitness_ = ComputeFitness();
   }
-  return _fitness;
+  return fitness_;
 }
 
 void Schedule::PrintState(bool is_short) {
   if (!is_short) {
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < size_; i++)
       std::cout << "Task ID: " << task(i).id()
                 << ", Resource ID: " << resource(i)
-                << ", start time: " << start[i] << "\n";
+                << ", start time: " << start_[i] << "\n";
   }
-  std::cout << "fitness (finish): " << fitness() << "\n";
+  std::cout << "Fitness (finish): " << Fitness() << "\n";
 }
 
 Schedule::~Schedule() {}

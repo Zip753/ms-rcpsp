@@ -16,9 +16,9 @@ T* TournamentSelector<T>::Select(const Population <T> &p) const {
   size_t best_id = 0;
   for (size_t i = 0; i < tourn_size; i++) {
     size_t idx = Util::Random::randint() % p_size;
-    if (i == 0 || best_fitness > p.specimen(idx)->fitness()) {
+    if (i == 0 || best_fitness > p.specimen(idx)->Fitness()) {
       best_id = idx;
-      best_fitness = p.specimen(idx)->fitness();
+      best_fitness = p.specimen(idx)->Fitness();
     }
   }
 

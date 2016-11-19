@@ -29,7 +29,7 @@
 #include "include/Validator.h"
 
 const int FLAGS_pop_size = 100;
-const int FLAGS_iters = 50000;
+const int FLAGS_iters = 1000;
 const double FLAGS_temp = 1000;
 const double FLAGS_eps = 1e-3;
 const int FLAGS_list_size = 100;
@@ -96,7 +96,7 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
     sch = std::move(algo->optimize());
   }
   // Force fitness computation to set start dates properly.
-  sch->fitness();
+  sch->Fitness();
   auto valid = Validator::Validate(*sch);
   if (!valid.first) {
     std::cout << "The solution is invalid!\n" << valid.second.c_str() << "\n";
@@ -122,7 +122,7 @@ void SolveAndOutput(const std::string& stat_file_name,
   ScheduleWriter::Write(output_file, *sch);
 
   /* Output best fitness value to file. */
-  best_file << sch->fitness();
+  best_file << sch->Fitness();
 }
 
 int main(int argc, char* argv[]) {

@@ -7,7 +7,7 @@ namespace Solutions {
 
 template <class T>
 bool can_accept(T &next, T &prev, double temp) {
-  return Random::rand(1 / (1 + exp((next.fitness() - prev.fitness()) / temp)));
+  return Random::rand(1 / (1 + exp((next.Fitness() - prev.Fitness()) / temp)));
 }
 
 template <class T>
@@ -18,11 +18,11 @@ std::unique_ptr<T> SimulatedAnnealing<T>::optimize(
   for (size_t iter = 0; iter < iters_; ++iter) {
     double temp = start_temp_ * exp(-(iter * a));
     std::unique_ptr<T> next = GenerateNeigbour(start);
-    if (next->fitness() < start.fitness() || can_accept(*next, start, temp)) {
+    if (next->Fitness() < start.Fitness() || can_accept(*next, start, temp)) {
       start = *next;
     }
-    stream << start.fitness() << " " << temp << "\n";
-    std::cout << "iter: " << iter << ", fitness: " << start.fitness()
+    stream << start.Fitness() << " " << temp << "\n";
+    std::cout << "iter: " << iter << ", fitness: " << start.Fitness()
         << ", temp: " << temp << "\n";
   }
   return std::make_unique<T>(start);

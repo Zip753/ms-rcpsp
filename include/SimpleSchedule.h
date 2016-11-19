@@ -51,7 +51,7 @@ class SimpleSchedule : public Schedule {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void fix_all();
 
-  int compute_fitness() override;
+  int ComputeFitness() override;
 };
 
 };  // namespace SchedulingProblem

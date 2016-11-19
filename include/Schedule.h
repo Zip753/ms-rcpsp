@@ -23,47 +23,52 @@ class Validator;
  * for clone removal to work.
  */
 class Schedule {
- protected:
-  /** Pointer to project for which the schedule is designated. */
-  Project* project_;
-
  public:
-  /** Prints current state to stdout. */
-  void PrintState(bool short_output);
-
   virtual ~Schedule() = 0;
-
-  /** List of resources assigned to corresponding tasks. */
-  std::vector<size_t> ires;
-
-  /** List of task start times. */
-  std::vector<int> start;
-
-  /** Returns number of tasks. */
-  size_t size() const { return n; }
 
   /**
    * Calculates fitness function. Caches result in _fitness.
+   * @return fitness value.
    * @see Schedule#compute_fitness
    * */
-  int fitness();
+  int Fitness();
+
+  /** Returns number of tasks. */
+  size_t size() const { return size_; }
 
   Task& task(size_t i) const { return project_->task(i); }
+
+  inline size_t resource_idx(size_t i) const { return resource_idx_[i]; }
+
+  inline void set_resource_idx(size_t i, size_t new_idx) {
+    resource_idx_[i] = new_idx;
+  }
+
+  inline int start(size_t i) const { return start_[i]; }
+
+  inline void set_start(size_t i, int new_start) { start_[i] = new_start; }
 
   /**
    * Returns index of resource assigned to the task at index i.
    * @param i Index of the task.
    */
-  inline size_t resource(size_t i) const { return task(i).resource(ires[i]); }
+  inline size_t resource(size_t i) const {
+    return task(i).resource(resource_idx_[i]);
+  }
 
   /**
    * Returns number of resources capable of performing task at index i.
    * @param i Index of the task.
    */
-  size_t max_res_count(size_t i) const { return task(i).num_resources(); }
+  size_t num_capable_resources(size_t i) const {
+    return task(i).num_resources();
+  }
 
   /** Reset schedule representation to random state. */
   virtual void reset() = 0;
+
+  /** Prints current state to stdout. */
+  void PrintState(bool short_output);
 
   inline double resource_salary(size_t res) const {
     return project_->resource_salary(res);
@@ -73,36 +78,43 @@ class Schedule {
     return project_->resource_id(res);
   }
 
- protected:
-  Schedule(Project* project_)
-      : project_(project_), start(std::vector<int>(project_->size(), 0)),
-        n(project_->size()) {}
-  Schedule(Project* project_, std::vector<size_t> _ires)
-      : Schedule(project_) { ires = _ires; }
-
-  /** Number of tasks. */
-  size_t n;
-
-  /**
-   * Cached fitness value for this specimen.
-   * @see Schedule#fitness
-   */
-  int _fitness = -1;
-
   /**
    * Returns finish time of the task at index i.
    * @param i Index of the task.
    */
   inline int finish_time(size_t i) const {
-    return start[i] + task(i).duration();
+    return start_[i] + task(i).duration();
   }
+
+ protected:
+  Schedule(Project* project_)
+      : project_(project_), start_(std::vector<int>(project_->size(), 0)),
+        size_(project_->size()) {}
+  Schedule(Project* project_, std::vector<size_t> _ires)
+      : Schedule(project_) { resource_idx_ = _ires; }
 
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
    */
-  virtual int compute_fitness() = 0;
+  virtual int ComputeFitness() = 0;
 
-  friend class Validator;
+  /** Pointer to project for which the schedule is designated. */
+  Project* project_;
+
+  /** List of resources assigned to corresponding tasks. */
+  std::vector<size_t> resource_idx_;
+
+  /** List of task start times. */
+  std::vector<int> start_;
+
+  /** Number of tasks. */
+  size_t size_;
+
+  /**
+   * Cached fitness value for this specimen.
+   * @see Schedule#fitness
+   */
+  int fitness_ = -1;
 };
 
 };  // namespace SchedulingProblem

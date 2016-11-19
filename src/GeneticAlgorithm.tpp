@@ -57,7 +57,7 @@ void GeneticAlgorithm<T>::MutateAndAddToPopulation(
 template <class T>
 void GeneticAlgorithm<T>::UpdateBest() {
   best_ = std::make_unique<T>(*population_->best());
-  if (global_best_ == nullptr || global_best_->fitness() > best_->fitness()) {
+  if (global_best_ == nullptr || global_best_->Fitness() > best_->Fitness()) {
     global_best_ = std::make_unique<T>(*best_);
   }
 }

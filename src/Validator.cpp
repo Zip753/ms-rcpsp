@@ -16,24 +16,25 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
   for (size_t i = 0; i < s.size(); ++i) {
     // Check resource indices.
-    if (s.ires[i] < 0 || s.ires[i] >= s.max_res_count(i)) {
+    if (s.resource_idx(i) < 0 || s.resource_idx(i) >= s.num_capable_resources
+        (i)) {
       stream << "Resource index out of boundaries (task ID: ";
       stream << s.task(i).id();
       stream << ", resource index: ";
-      stream << s.ires[i];
+      stream << s.resource_idx(i);
       stream << ", capable resource_: ";
-      stream << s.max_res_count(i);
+      stream << s.num_capable_resources(i);
       stream << ").";
       return std::make_pair(false, stream.str());
     }
     // Check task dependencies.
     for (size_t j = 0; j < s.task(i).num_dependencies(); ++j) {
       size_t dep_idx = s.task(i).dependency(j);
-      if (s.finish_time(dep_idx) > s.start[i]) {
+      if (s.finish_time(dep_idx) > s.start(i)) {
         stream << "Task dependency not met (task #";
         stream << s.task(i).id();
         stream << " start time: ";
-        stream << s.start[i];
+        stream << s.start(i);
         stream << ", task #";
         stream << s.task(dep_idx).id();
         stream << " finish time: ";
@@ -55,12 +56,12 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
     int res_id = res.first;
     std::vector<size_t>& tasks = res.second;
     std::sort(tasks.begin(), tasks.end(), [&](size_t a, size_t b) {
-      return s.start[a] < s.start[b] ||
-          (s.start[a] == s.start[b] && s.finish_time(a) < s.finish_time(b));
+      return s.start(a) < s.start(b) ||
+          (s.start(a) == s.start(b) && s.finish_time(a) < s.finish_time(b));
     });
 
     for (size_t i = 0; i < tasks.size() - 1; ++i) {
-      if (s.finish_time(tasks[i]) > s.start[tasks[i + 1]]) {
+      if (s.finish_time(tasks[i]) > s.start(tasks[i + 1])) {
         stream << "Resource #";
         stream << res_id;
         stream << " has conflicting assignments (task #";
@@ -70,7 +71,7 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
         stream << ", task #";
         stream << s.task(tasks[i + 1]).id();
         stream << " start time: ";
-        stream << s.start[tasks[i + 1]];
+        stream << s.start(tasks[i + 1]);
         stream << ").";
         return std::make_pair(false, stream.str());
       }

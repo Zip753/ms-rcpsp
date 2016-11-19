@@ -40,24 +40,24 @@ std::unique_ptr<T> TabuSearch<T>::optimize(std::ostream &stream) {
     size_t hits = 0;
     for (size_t j = 0; j < neighbours_; ++j) {
       std::unique_ptr<T> neigbour = GenerateNeigbour(start);
-      mean += neigbour->fitness();
-      if (worst_val < neigbour->fitness()) {
-        worst_val = neigbour->fitness();
+      mean += neigbour->Fitness();
+      if (worst_val < neigbour->Fitness()) {
+        worst_val = neigbour->Fitness();
       }
       if (TabuHit(*neigbour, tabu)) {
         ++hits;
-      } else if (first || neigbour->fitness() < iter_best->fitness()) {
+      } else if (first || neigbour->Fitness() < iter_best->Fitness()) {
         iter_best = std::move(neigbour);
         first = false;
       }
     }
     assert(iter_best != nullptr);
     mean /= neighbours_;
-    stream << iter_best->fitness() << " " << mean << " " << worst_val << " "
+    stream << iter_best->Fitness() << " " << mean << " " << worst_val << " "
            << static_cast<double>(hits) / neighbours_ << "\n";
     start = *iter_best;
-    std::cout << "iter: " << iter << ", fitness: " << start.fitness() << "\n";
-    if (global_best.fitness() > iter_best->fitness()) {
+    std::cout << "iter: " << iter << ", fitness: " << start.Fitness() << "\n";
+    if (global_best.Fitness() > iter_best->Fitness()) {
       global_best = *iter_best;
     }
   }
