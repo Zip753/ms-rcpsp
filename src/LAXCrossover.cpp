@@ -52,9 +52,9 @@ std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::Cross(
   for (size_t i = 0; i < s->size(); i++) {
     size_t a_res = a.resource(i);
     size_t b_res = b.resource(i);
-    if (a.business[a_res] < b.business[b_res]) {
+    if (a.business(a_res) < b.business(b_res)) {
       s->set_resource_idx(i, a.resource_idx(i));
-    } else if (a.business[a_res] > b.business[b_res]) {
+    } else if (a.business(a_res) > b.business(b_res)) {
       s->set_resource_idx(i, b.resource_idx(i));
     } else {
       double a_sal = a.resource_salary(a_res);

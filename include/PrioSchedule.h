@@ -24,8 +24,6 @@ class PrioSchedule : public Schedule {
   PrioSchedule(const PrioSchedule& s);
   ~PrioSchedule() override {}
 
-  int ComputeFitness() override;
-
   void Reset() override;
 
   /** Checks schedule equality in terms of representation. */
@@ -59,6 +57,8 @@ class PrioSchedule : public Schedule {
 
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();
+
+  int ComputeFitness() override;
 };
 
 };  // namespace SchedulingProblem

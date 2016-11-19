@@ -18,38 +18,39 @@ class SimpleSchedule : public Schedule {
   SimpleSchedule(const SimpleSchedule& s);
   ~SimpleSchedule() override {}
 
-  /**
-   * List of relative business for each resource. Used to implement
-   * LAXCrossover.
-   */
-  std::vector<int> business;
+  void Reset() override;
 
   /** Checks schedule equality in terms of representation. */
   bool operator==(const SimpleSchedule& s) const;
 
-  void Reset() override;
+  inline int business(size_t i) const { return business_[i]; }
 
-  /** Helper list, used in SimpleSchedule#update_start. */
-  std::vector<bool> visited;
+  inline void set_business(size_t i, int new_business) {
+    business_[i] = new_business;
+  }
 
  private:
+  /** Businesses of resources. Used to implement LAXCrossover. */
+  std::vector<int> business_;
+
   /**
    * Contructor helper.
    * @param initialize If true, allocate and initialize resources.
    */
-  void init(bool create_ires);
+  void Init(bool create_ires);
 
   /**
    * Update start time of a task recursively.
-   * @param i Index of the task.
+   * @param i index of the task.
+   * @param visited list of tasks visited by this function earlier.
    */
-  void update_start(size_t i);
+  void UpdateStart(size_t i, std::vector<bool> &visited);
 
   /** Critical path fix procedure. */
-  void reschedule();
+  void Reschedule();
 
   /** Schedule builder. Builds feasible schedule with no conflicts. */
-  void fix_all();
+  void FixAll();
 
   int ComputeFitness() override;
 };

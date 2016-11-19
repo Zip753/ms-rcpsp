@@ -16,36 +16,34 @@ bool SimpleSchedule::operator==(const SimpleSchedule& s) const {
   return true;
 }
 
-void SimpleSchedule::init(bool create_ires) {
+void SimpleSchedule::Init(bool create_ires) {
   if (create_ires) {
     resource_idx_ = std::vector<size_t>(size_, 0);
     Reset();
   }
 
-  visited = std::vector<bool>(size_);
-
   size_t rcount = project_->num_resources();
-  business = std::vector<int>(rcount);
+  business_ = std::vector<int>(rcount);
 }
 
 SimpleSchedule::SimpleSchedule(Project* project_) : Schedule(project_) {
-  init(true);
+  Init(true);
 }
 
 SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule(s.project_) {
-  init(false);
+  Init(false);
   resource_idx_ = std::vector<size_t>(size_, 0);
   for (size_t i = 0; i < size_; i++) {
     resource_idx_[i] = s.resource_idx_[i];
   }
 }
 
-void SimpleSchedule::update_start(size_t i) {
+void SimpleSchedule::UpdateStart(size_t i, std::vector<bool> &visited) {
   if (!visited[i]) {
     visited[i] = true;
     for (size_t j = 0; j < task(i).num_dependencies(); j++) {
       size_t prev = task(i).dependency(j);
-      update_start(prev);
+      UpdateStart(prev, visited);
       int finish = finish_time(prev);
       if (start_[i] < finish)
         start_[i] = finish;
@@ -53,16 +51,16 @@ void SimpleSchedule::update_start(size_t i) {
   }
 }
 
-void SimpleSchedule::reschedule() {
+void SimpleSchedule::Reschedule() {
   // first, set earliest start (from fin)
-  visited = std::vector<bool>(size_, false);
+  std::vector<bool> visited(size_, false);
   for (size_t i = 0; i < size_; ++i) {
-    update_start(i);
+    UpdateStart(i, visited);
   }
 }
 
-void SimpleSchedule::fix_all() {
-  reschedule();
+void SimpleSchedule::FixAll() {
+  Reschedule();
 
   std::vector<bool> used(size_, false);
 
@@ -89,12 +87,12 @@ void SimpleSchedule::fix_all() {
       }
     // reschedule if anything changed
     if (is_conflict)
-      reschedule();
+      Reschedule();
   }
 }
 
 int SimpleSchedule::ComputeFitness() {
-  fix_all();
+  FixAll();
 
   for (size_t i = 0; i < size_; i++) {
     int finish = finish_time(i);
@@ -102,10 +100,10 @@ int SimpleSchedule::ComputeFitness() {
       fitness_ = finish;
   }
 
-  std::fill(business.begin(), business.end(), 0);
+  std::fill(business_.begin(), business_.end(), 0);
   for (size_t i = 0; i < size_; i++) {
     size_t res = resource(i);
-    business[res] += task(i).duration();
+    business_[res] += task(i).duration();
   }
 
   return fitness_;
