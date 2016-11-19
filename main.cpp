@@ -19,13 +19,14 @@
 #include "include/Project.h"
 #include "include/ProjectReader.h"
 #include "include/Schedule.h"
-#include "include/UniformMutator.h"
+#include "include/ScheduleWriter.h"
 #include "include/SimpleSchedule.h"
+#include "include/SimulatedAnnealing.h"
 #include "include/TabuSearch.h"
 #include "include/TournamentSelector.h"
 #include "include/UniformCrossover.h"
+#include "include/UniformMutator.h"
 #include "include/Validator.h"
-#include "include/SimulatedAnnealing.h"
 
 const int FLAGS_pop_size = 100;
 const int FLAGS_iters = 50000;
@@ -118,7 +119,7 @@ void SolveAndOutput(const std::string& stat_file_name,
   sch->PrintState(true);
 
   /* Output solution to file. */
-  sch->Write(output_file);
+  ScheduleWriter::Write(output_file, *sch);
 
   /* Output best fitness value to file. */
   best_file << sch->fitness();

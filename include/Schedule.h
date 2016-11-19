@@ -31,9 +31,6 @@ class Schedule {
   /** Prints current state to stdout. */
   void PrintState(bool short_output);
 
-  /** Outputs solution to file stream in compatible format. */
-  void Write(std::ostream &stream);
-
   virtual ~Schedule() = 0;
 
   /** List of resources assigned to corresponding tasks. */
