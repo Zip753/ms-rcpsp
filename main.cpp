@@ -70,22 +70,22 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
   std::unique_ptr<Population<T>> pop =
       std::move(BuildPopulation<T>(FLAGS_pop_size, project));
   std::unique_ptr<Algorithm<T>> algo =
-//      std::make_unique<GeneticAlgorithm<T>>(std::move(pop),
-//                                            std::move(sel),
-//                                            std::move(cross),
-//                                            std::move(mut),
-//                                            FLAGS_iters,
-//                                            false);
+      std::make_unique<GeneticAlgorithm<T>>(std::move(pop),
+                                            std::move(sel),
+                                            std::move(cross),
+                                            std::move(mut),
+                                            FLAGS_iters,
+                                            false);
 //      std::make_unique<SimulatedAnnealingAlgorithm<T>>(T(project),
 //                                                       FLAGS_iters,
 //                                                       FLAGS_temp,
 //                                                       FLAGS_mutation,
 //                                                       FLAGS_eps);
-      std::make_unique<TabuSearchAlgorithm<T>>(T(project),
-                                               FLAGS_iters,
-                                               FLAGS_pop_size,
-                                               FLAGS_list_size,
-                                               FLAGS_mutation);
+//      std::make_unique<TabuSearchAlgorithm<T>>(T(project),
+//                                               FLAGS_iters,
+//                                               FLAGS_pop_size,
+//                                               FLAGS_list_size,
+//                                               FLAGS_mutation);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     std::ofstream stat_file(stat_file_name);

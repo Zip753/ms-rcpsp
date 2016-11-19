@@ -50,6 +50,17 @@ void PrioSchedule::fix_all() {
     }
   };
 
+  /* Create list of inverse dependencies. */
+  std::vector<std::vector<size_t>> next(n);
+  for (auto& el : next) { el = std::vector<size_t>(); }
+
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < project_->task(i).num_dependencies(); ++j) {
+      size_t idep = task(i).dependency(j);
+      next[idep].push_back(i);
+    }
+  }
+
   // heap of pairs (task_id, priority)
   std::priority_queue<std::pair<size_t, int>,
                       std::vector<std::pair<size_t, int>>,
@@ -88,8 +99,8 @@ void PrioSchedule::fix_all() {
     time[res_idx] = finish_time(itask);
 
     // add all unblocked dependent tasks to the queue
-    for (size_t i = 0; i < task(itask).next.size(); ++i) {
-      size_t inext = task(itask).next[i];
+    for (size_t i = 0; i < next[itask].size(); ++i) {
+      size_t inext = next[itask][i];
       dep_count[inext]++;
       if (dep_count[inext] == task(inext).num_dependencies()) {
         queue.push(std::make_pair(inext, prio[inext]));

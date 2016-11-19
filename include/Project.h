@@ -16,7 +16,8 @@ class Project {
  public:
   Project(const std::vector<Task> &tasks_,
           const std::vector<int> &res_id_,
-          const std::vector<double> &res_salary_);
+          const std::vector<double> &res_salary_) :
+      tasks_(tasks_), res_id_(res_id_), res_salary_(res_salary_) {}
 
   /** Returns the number of tasks in the project. */
   inline size_t size() const { return tasks_.size(); }

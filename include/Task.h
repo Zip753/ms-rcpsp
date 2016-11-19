@@ -10,15 +10,15 @@ namespace SchedulingProblem {
 class Task {
  public:
   /**
-   * @param _id ID of the task.
-   * @param _dur Duration of the task.
-   * @param _ndep Number of dependencies.
-   * @param _dep List of dependencies.
-   * @param _nres Number of capable resources.
-   * @param _res List of capable resources.
+   * @param id_ ID of the task.
+   * @param duration_ Duration of the task.
+   * @param dependencies_ List of dependencies.
+   * @param resources_ List of capable resources.
    */
-  Task(int _id, int _dur, std::vector<size_t> _dep, std::vector<size_t> _res)
-      : id_(_id), duration_(_dur), dependency_(_dep), resource_(_res) {}
+  Task(int id_, int duration_, std::vector<size_t> dependencies_,
+       std::vector<size_t> resources_) : id_(id_), duration_(duration_),
+                                         dependency_(dependencies_),
+                                         resource_(resources_) {}
   ~Task();
 
   inline int id() const { return id_; }
@@ -35,10 +35,6 @@ class Task {
   /** Returns number of dependencies, i.e. tasks that have to be completed
    * before this task. */
   inline size_t num_dependencies() const { return dependency_.size(); }
-
-  // TODO: make next private.
-  /** List of inverse dependencies. */
-  std::vector<size_t> next;
 
  private:
   /** Task ID, as specified in input file. */
