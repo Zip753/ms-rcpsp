@@ -78,7 +78,7 @@ GeneticAlgorithm<SimpleSchedule> algo(pop_size, /* population size */
 // Run GA.
 std::shared_ptr<SimpleSchedule> schedule = algo.optimize();
 // Output result.
-std::cout << "Result fitness value: " << schedule->fitness() << std::endl;
+std::cout << "Result fitness value: " << schedule->Fitness() << std::endl;
 ```
 Validate your solution:
 ```c++

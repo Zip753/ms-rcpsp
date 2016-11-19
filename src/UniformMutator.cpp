@@ -41,9 +41,9 @@ std::unique_ptr<PrioSchedule> UniformMutator<PrioSchedule>::Mutate(
 
     if (Random::rand(p_mut)) {
       if (Random::rand(0.5)) {
-        ++s->prio[i];
+        s->set_priority(i, s->priority(i) + 1);
       } else {
-        --s->prio[i];
+        s->set_priority(i, s->priority(i) - 1);
       }
     }
   }

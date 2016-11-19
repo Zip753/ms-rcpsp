@@ -26,27 +26,39 @@ class PrioSchedule : public Schedule {
 
   int ComputeFitness() override;
 
-  /** Task priorities. */
-  std::vector<int> prio;
+  void Reset() override;
 
   /** Checks schedule equality in terms of representation. */
   bool operator==(PrioSchedule s) const;
 
-  void reset() override;
+  inline int priority(size_t i) const { return priority_[i]; }
 
-  /** Businesses of resources. Used to implement LAXCrossover. */
-  std::vector<int> business;
+  inline void set_priority(size_t i, int new_priority) {
+    priority_[i] = new_priority;
+  }
+
+  inline int business(size_t i) const { return business_[i]; }
+
+  inline void set_business(size_t i, int new_business) {
+    business_[i] = new_business;
+  }
 
  private:
+  /** Task priorities. */
+  std::vector<int> priority_;
+
+  /** Businesses of resources. Used to implement LAXCrossover. */
+  std::vector<int> business_;
+
   /**
    * Contructor helper.
    * @param initialize If true, allocate and initialize resources and
    * priorities.
    */
-  void init(bool initialize);
+  void Init(bool initialize);
 
   /** Schedule builder. Builds feasible schedule with no conflicts. */
-  void fix_all();
+  void FixAll();
 };
 
 };  // namespace SchedulingProblem

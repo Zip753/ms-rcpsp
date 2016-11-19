@@ -19,7 +19,7 @@ bool SimpleSchedule::operator==(const SimpleSchedule& s) const {
 void SimpleSchedule::init(bool create_ires) {
   if (create_ires) {
     resource_idx_ = std::vector<size_t>(size_, 0);
-    reset();
+    Reset();
   }
 
   visited = std::vector<bool>(size_);
@@ -111,7 +111,7 @@ int SimpleSchedule::ComputeFitness() {
   return fitness_;
 }
 
-void SimpleSchedule::reset() {
+void SimpleSchedule::Reset() {
   for (size_t i = 0; i < size_; i++) {
     resource_idx_[i] =
         Util::Random::randint() % project_->task(i).num_resources();

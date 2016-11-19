@@ -79,7 +79,7 @@ void GeneticAlgorithm<T>::TryRemoveClones(
         return;
       }
     }
-    sample->reset();
+    sample->Reset();
   }
 }
 

@@ -27,7 +27,7 @@ class SimpleSchedule : public Schedule {
   /** Checks schedule equality in terms of representation. */
   bool operator==(const SimpleSchedule& s) const;
 
-  void reset() override;
+  void Reset() override;
 
   /** Helper list, used in SimpleSchedule#update_start. */
   std::vector<bool> visited;

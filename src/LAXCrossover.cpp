@@ -19,9 +19,9 @@ std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::Cross(
   for (size_t i = 0; i < s->size(); i++) {
     size_t a_res = a.resource(i);
     size_t b_res = b.resource(i);
-    if (a.business[a_res] < b.business[b_res]) {
+    if (a.business(a_res) < b.business(b_res)) {
       s->set_resource_idx(i, a.resource_idx(i));
-    } else if (a.business[a_res] > b.business[b_res]) {
+    } else if (a.business(a_res) > b.business(b_res)) {
       s->set_resource_idx(i, b.resource_idx(i));
     } else {
       double a_sal = a.resource_salary(a_res);
@@ -33,9 +33,9 @@ std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::Cross(
     }
 
     if (Random::randint() & 1) {
-      s->prio[i] = a.prio[i];
+      s->set_priority(i, a.priority(i));
     } else {
-      s->prio[i] = b.prio[i];
+      s->set_priority(i, b.priority(i));
     }
   }
 

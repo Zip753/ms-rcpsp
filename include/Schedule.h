@@ -65,7 +65,7 @@ class Schedule {
   }
 
   /** Reset schedule representation to random state. */
-  virtual void reset() = 0;
+  virtual void Reset() = 0;
 
   /** Prints current state to stdout. */
   void PrintState(bool short_output);

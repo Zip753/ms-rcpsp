@@ -21,7 +21,7 @@ std::unique_ptr<PrioSchedule> UniformCrossover<PrioSchedule>::Cross(
     }
 
     if (Random::randint() % 2 == 1) {
-      s->prio[i] = b.prio[i];
+      s->set_priority(i, b.priority(i));
     }
   }
 

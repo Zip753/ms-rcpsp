@@ -13,36 +13,36 @@ namespace SchedulingProblem {
 bool PrioSchedule::operator==(PrioSchedule s) const {
   if (size_ != s.size()) return false;
   for (size_t i = 0; i < size_; i++)
-    if (resource_idx_[i] != s.resource_idx_[i] || prio[i] != s.prio[i])
+    if (resource_idx_[i] != s.resource_idx_[i] || priority_[i] != s.priority_[i])
       return false;
   return true;
 }
 
-void PrioSchedule::init(bool initialize) {
+void PrioSchedule::Init(bool initialize) {
   if (initialize) {
     resource_idx_ = std::vector<size_t>(size_, 0);
-    prio = std::vector<int>(size_, 0);
-    reset();
+    priority_ = std::vector<int>(size_, 0);
+    Reset();
   }
 
-  business = std::vector<int>(project_->num_resources());
+  business_ = std::vector<int>(project_->num_resources());
 }
 
 PrioSchedule::PrioSchedule(Project* project_) : Schedule(project_) {
-  init(true);
+  Init(true);
 }
 
 PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
-  init(false);
+  Init(false);
   resource_idx_ = std::vector<size_t>(size_, 0);
-  prio = std::vector<int>(size_, 0);
+  priority_ = std::vector<int>(size_, 0);
   for (size_t i = 0; i < size_; i++) {
     resource_idx_[i] = s.resource_idx_[i];
-    prio[i] = s.prio[i];
+    priority_[i] = s.priority_[i];
   }
 }
 
-void PrioSchedule::fix_all() {
+void PrioSchedule::FixAll() {
   struct PriorityComp {
     bool operator()(const std::pair<int, int> a,
                     const std::pair<int, int> b) const {
@@ -67,7 +67,7 @@ void PrioSchedule::fix_all() {
                       PriorityComp> queue;
   for (size_t i = 0; i < size_; ++i) {
     if (task(i).num_dependencies() == 0) {
-      queue.push(std::make_pair(i, prio[i]));
+      queue.push(std::make_pair(i, priority_[i]));
     }
   }
   size_t res_count = project_->num_resources();
@@ -103,14 +103,14 @@ void PrioSchedule::fix_all() {
       size_t inext = next[itask][i];
       dep_count[inext]++;
       if (dep_count[inext] == task(inext).num_dependencies()) {
-        queue.push(std::make_pair(inext, prio[inext]));
+        queue.push(std::make_pair(inext, priority_[inext]));
       }
     }
   }
 }
 
 int PrioSchedule::ComputeFitness() {
-  fix_all();
+  FixAll();
 
   for (size_t i = 0; i < size_; i++) {
     int finish = finish_time(i);
@@ -118,22 +118,22 @@ int PrioSchedule::ComputeFitness() {
       fitness_ = finish;
   }
 
-  std::fill(business.begin(), business.end(), 0);
+  std::fill(business_.begin(), business_.end(), 0);
   for (size_t i = 0; i < size_; i++) {
     size_t res = resource(i);
-    business[res] += task(i).duration();
+    business_[res] += task(i).duration();
   }
 
   return fitness_;
 }
 
-void PrioSchedule::reset() {
+void PrioSchedule::Reset() {
   for (size_t i = 0; i < size_; i++) {
     resource_idx_[i] =
         Util::Random::randint() % project_->task(i).num_resources();
-    prio[i] = (int)i;
+    priority_[i] = (int)i;
   }
-  std::random_shuffle(prio.begin(), prio.end());
+  std::random_shuffle(priority_.begin(), priority_.end());
 }
 
 };  // namespace SchedulingProblem
