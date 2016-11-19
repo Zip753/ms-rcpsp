@@ -6,6 +6,7 @@
 
 using Util::Random;
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /**
@@ -52,6 +53,7 @@ class Crossover {
 template <class T>
 Crossover<T>::~Crossover() {}
 
-} //  namespace EvolutionaryAlgorithm
+};  //  namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif  // MS_RCPSP_CROSSOVER_H

@@ -1,7 +1,9 @@
-#include "../include/SimulatedAnnealingAlgorithm.h"
+#include "../include/SimulatedAnnealing.h"
 
 #include <cmath>
 #include <iostream>
+
+namespace Solutions {
 
 template <class T>
 bool can_accept(T &next, T &prev, double temp) {
@@ -9,7 +11,7 @@ bool can_accept(T &next, T &prev, double temp) {
 }
 
 template <class T>
-std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(
+std::unique_ptr<T> SimulatedAnnealing<T>::optimize(
     std::ostream &stream) {
   T start = start_;
   double a = (log(start_temp_) - log(eps_)) / iters_;
@@ -27,7 +29,9 @@ std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::optimize(
 }
 
 template <class T>
-std::unique_ptr<T> SimulatedAnnealingAlgorithm<T>::GenerateNeigbour(
+std::unique_ptr<T> SimulatedAnnealing<T>::GenerateNeigbour(
     const T &start) {
   return std::move(mutator_->Mutate(start));
 }
+
+};  // namespace Solutions

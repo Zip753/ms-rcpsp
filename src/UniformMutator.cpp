@@ -6,6 +6,7 @@
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /************************************
@@ -87,3 +88,4 @@ std::unique_ptr<SimpleSchedule> UniformMutator<SimpleSchedule>::Mutate(
 template class UniformMutator<SimpleSchedule>;
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions

@@ -4,6 +4,7 @@
 #include "Population.h"
 #include "Selector.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @brief Implementation of tournament selection operator. */
@@ -21,6 +22,7 @@ class TournamentSelector : public Selector<T> {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #include "../src/TournamentSelector.tpp"
 

@@ -6,6 +6,7 @@
 
 #include "Schedule.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @brief Representation of population, i.e. set of specimen (schedules). */
@@ -43,6 +44,7 @@ class Population {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #include "../src/Population.tpp"
 

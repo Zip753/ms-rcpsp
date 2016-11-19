@@ -4,6 +4,7 @@
 
 #include "../include/Population.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 template <class T>
@@ -41,3 +42,4 @@ Population<T>::Population(std::vector<std::unique_ptr<T>>* spec) {
 }
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions

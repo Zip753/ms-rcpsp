@@ -11,6 +11,7 @@
 #include "Schedule.h"
 #include "Selector.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @mainpage
@@ -75,6 +76,7 @@ class GeneticAlgorithm : public Algorithm<T> {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #include "../src/GeneticAlgorithm.tpp"
 

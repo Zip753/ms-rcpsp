@@ -1,9 +1,11 @@
-#include "../include/TabuSearchAlgorithm.h"
+#include "../include/TabuSearch.h"
 
 #include <cassert>
 #include <deque>
 #include <iostream>
 #include <set>
+
+namespace Solutions {
 
 template <class T>
 bool TabuEquals(const T &a, const T &b) {
@@ -22,7 +24,7 @@ bool TabuHit(const T& x, const std::deque<T>& tabu) {
 }
 
 template <class T>
-std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(std::ostream &stream) {
+std::unique_ptr<T> TabuSearch<T>::optimize(std::ostream &stream) {
   T start = start_;
   T global_best = start;
   std::deque<T> tabu;
@@ -63,6 +65,8 @@ std::unique_ptr<T> TabuSearchAlgorithm<T>::optimize(std::ostream &stream) {
 }
 
 template <class T>
-std::unique_ptr<T> TabuSearchAlgorithm<T>::GenerateNeigbour(const T &start) {
+std::unique_ptr<T> TabuSearch<T>::GenerateNeigbour(const T &start) {
   return std::move(mutator_->Mutate(start));
 }
+
+};  // namespace Solutions

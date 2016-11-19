@@ -5,14 +5,16 @@
 #include "Mutator.h"
 #include "UniformMutator.h"
 
-using EvolutionaryAlgorithm::Mutator;
-using EvolutionaryAlgorithm::UniformMutator;
+using Solutions::EvolutionaryAlgorithm::Mutator;
+using Solutions::EvolutionaryAlgorithm::UniformMutator;
+
+namespace Solutions {
 
 template <class T>
-class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
+class SimulatedAnnealing : public Algorithm<T> {
  public:
   std::unique_ptr<T> optimize(std::ostream &stream) override;
-  SimulatedAnnealingAlgorithm(const T &&start_, size_t iters_,
+  SimulatedAnnealing(const T &&start_, size_t iters_,
                               double start_temp_, double p_mut,
                               double eps_ = 1e-7) :
       start_(start_), iters_(iters_), start_temp_(start_temp_),
@@ -22,12 +24,14 @@ class SimulatedAnnealingAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
   T start_;
   const size_t iters_;
   const double start_temp_;
-  std::shared_ptr<EvolutionaryAlgorithm::Mutator<T>> mutator_;
+  std::shared_ptr<Mutator<T>> mutator_;
   const double eps_;
 
   std::unique_ptr<T> GenerateNeigbour(const T &start);
 };
 
-#include "../src/SimulatedAnnealingAlgorithm.tpp"
+};  // namespace Solutions
+
+#include "../src/SimulatedAnnealing.tpp"
 
 #endif  // MS_RCPSP_SIMULATEDANNEALINGALGORITHM_H_

@@ -4,6 +4,7 @@
 #include "../include/Random.h"
 #include "../include/SimpleSchedule.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 using SchedulingProblem::SimpleSchedule;
@@ -38,3 +39,4 @@ std::unique_ptr<PrioSchedule> OnePointCrossover<PrioSchedule>::Cross(
 }
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions

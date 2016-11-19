@@ -21,11 +21,11 @@
 #include "include/Schedule.h"
 #include "include/UniformMutator.h"
 #include "include/SimpleSchedule.h"
-#include "include/TabuSearchAlgorithm.h"
+#include "include/TabuSearch.h"
 #include "include/TournamentSelector.h"
 #include "include/UniformCrossover.h"
 #include "include/Validator.h"
-#include "include/SimulatedAnnealingAlgorithm.h"
+#include "include/SimulatedAnnealing.h"
 
 const int FLAGS_pop_size = 100;
 const int FLAGS_iters = 50000;
@@ -40,8 +40,9 @@ const bool FLAGS_lax = false;
 const bool FLAGS_output_stat = true;
 bool FLAGS_simple = false;
 
-using namespace EvolutionaryAlgorithm;
 using namespace SchedulingProblem;
+using namespace Solutions;
+using namespace Solutions::EvolutionaryAlgorithm;
 
 template <class T>
 std::unique_ptr<Population<T>> BuildPopulation(size_t pop_size,
@@ -76,12 +77,12 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
                                             std::move(mut),
                                             FLAGS_iters,
                                             false);
-//      std::make_unique<SimulatedAnnealingAlgorithm<T>>(T(project),
+//      std::make_unique<SimulatedAnnealing<T>>(T(project),
 //                                                       FLAGS_iters,
 //                                                       FLAGS_temp,
 //                                                       FLAGS_mutation,
 //                                                       FLAGS_eps);
-//      std::make_unique<TabuSearchAlgorithm<T>>(T(project),
+//      std::make_unique<TabuSearch<T>>(T(project),
 //                                               FLAGS_iters,
 //                                               FLAGS_pop_size,
 //                                               FLAGS_list_size,

@@ -8,6 +8,7 @@
 using SchedulingProblem::Project;
 using Util::Random;
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @brief Base class for mutation operators.
@@ -51,5 +52,6 @@ template <class T>
 Mutator<T>::~Mutator() {}
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif  // MS_RCPSP_MUTATOR_H

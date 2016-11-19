@@ -10,6 +10,7 @@
 #include "../include/Selector.h"
 #include "../include/SimpleSchedule.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 template <class T>
@@ -83,3 +84,4 @@ void GeneticAlgorithm<T>::TryRemoveClones(
 }
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions

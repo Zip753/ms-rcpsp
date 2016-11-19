@@ -3,6 +3,7 @@
 
 #include "Crossover.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /**
@@ -19,5 +20,6 @@ class LAXCrossover : public Crossover<T> {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif // MS_RCPSP_LAXCROSSOVER_H

@@ -4,13 +4,16 @@
 #include "Algorithm.h"
 #include "Mutator.h"
 
-using EvolutionaryAlgorithm::UniformMutator;
+using Solutions::EvolutionaryAlgorithm::Mutator;
+using Solutions::EvolutionaryAlgorithm::UniformMutator;
+
+namespace Solutions {
 
 template <class T>
-class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
+class TabuSearch : public Algorithm<T> {
  public:
   std::unique_ptr<T> optimize(std::ostream &stream) override;
-  TabuSearchAlgorithm(const T &&start_, size_t iters_, size_t neighbours_,
+  TabuSearch(const T &&start_, size_t iters_, size_t neighbours_,
                       size_t list_size_, double p_mut) :
       start_(start_), iters_(iters_), neighbours_(neighbours_),
       list_size_(list_size_),
@@ -21,11 +24,13 @@ class TabuSearchAlgorithm : public EvolutionaryAlgorithm::Algorithm<T> {
   size_t iters_;
   size_t neighbours_;
   size_t list_size_;
-  std::shared_ptr<EvolutionaryAlgorithm::Mutator<T>> mutator_;
+  std::shared_ptr<Mutator<T>> mutator_;
 
   std::unique_ptr<T> GenerateNeigbour(const T& start);
 };
 
-#include "../src/TabuSearchAlgorithm.tpp"
+};  // namespace Solutions
+
+#include "../src/TabuSearch.tpp"
 
 #endif  // MS_RCPSP_TABUSEARCHALGORITHM_H_

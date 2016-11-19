@@ -3,6 +3,7 @@
 
 #include "Crossover.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @brief Implementation of one-point crossover. */
@@ -14,5 +15,6 @@ class OnePointCrossover : public Crossover<T> {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif  // MS_RCPSP_ONEPOINTCROSSOVER_H

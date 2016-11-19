@@ -3,6 +3,7 @@
 
 #include "Mutator.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 /** @brief Implementation of simple mutation operator. */
@@ -18,5 +19,6 @@ class UniformMutator : public Mutator<T> {
 };
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif  // MS_RCPSP_SIMPLEMUTATOR_H

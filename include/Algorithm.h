@@ -6,7 +6,7 @@
 
 #include "Project.h"
 
-namespace EvolutionaryAlgorithm {
+namespace Solutions {
 
 /** @brief Base abstract class for all optimization algorithms.
  * @param T Class of optimized parameter.
@@ -22,6 +22,6 @@ class Algorithm {
   }
 };
 
-};  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
 
 #endif  // MS_RCPSP_ALGORITHM_H

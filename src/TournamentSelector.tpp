@@ -2,6 +2,7 @@
 
 #include "../include/Random.h"
 
+namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 template <class T>
@@ -25,3 +26,4 @@ T* TournamentSelector<T>::Select(const Population <T> &p) const {
 }
 
 };  // namespace EvolutionaryAlgorithm
+};  // namespace Solutions
