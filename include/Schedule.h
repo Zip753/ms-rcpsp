@@ -65,7 +65,7 @@ class Schedule {
   }
 
   /** Reset schedule representation to random state. */
-  virtual void Reset() = 0;
+  virtual void Reset();
 
   /** Prints current state to stdout. */
   void PrintState(bool short_output);
@@ -115,6 +115,8 @@ class Schedule {
    * @see Schedule#fitness
    */
   int fitness_ = -1;
+
+  bool operator==(const Schedule& other) const;
 };
 
 };  // namespace SchedulingProblem

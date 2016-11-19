@@ -10,10 +10,10 @@
 
 namespace SchedulingProblem {
 
-bool PrioSchedule::operator==(PrioSchedule s) const {
-  if (size_ != s.size()) return false;
+bool PrioSchedule::operator==(const PrioSchedule &other) const {
+  if (!Schedule::operator==(other)) return false;
   for (size_t i = 0; i < size_; i++)
-    if (resource_idx_[i] != s.resource_idx_[i] || priority_[i] != s.priority_[i])
+    if (priority_[i] != other.priority_[i])
       return false;
   return true;
 }
@@ -128,12 +128,10 @@ int PrioSchedule::ComputeFitness() {
 }
 
 void PrioSchedule::Reset() {
+  Schedule::Reset();
   for (size_t i = 0; i < size_; i++) {
-    resource_idx_[i] =
-        Util::Random::randint() % project_->task(i).num_resources();
-    priority_[i] = (int)i;
+    priority_[i] = Util::Random::randint() % static_cast<int>(size_);
   }
-  std::random_shuffle(priority_.begin(), priority_.end());
 }
 
 };  // namespace SchedulingProblem

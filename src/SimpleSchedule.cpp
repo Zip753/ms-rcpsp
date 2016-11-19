@@ -4,16 +4,11 @@
 #include <vector>
 
 #include "../include/Project.h"
-#include "../include/Random.h"
 
 namespace SchedulingProblem {
 
-bool SimpleSchedule::operator==(const SimpleSchedule& s) const {
-  if (size_ != s.size()) return false;
-  for (size_t i = 0; i < size_; i++)
-    if (resource_idx_[i] != s.resource_idx_[i])
-      return false;
-  return true;
+bool SimpleSchedule::operator==(const SimpleSchedule &other) const {
+  return Schedule::operator==(other);
 }
 
 void SimpleSchedule::Init(bool create_ires) {
@@ -107,13 +102,6 @@ int SimpleSchedule::ComputeFitness() {
   }
 
   return fitness_;
-}
-
-void SimpleSchedule::Reset() {
-  for (size_t i = 0; i < size_; i++) {
-    resource_idx_[i] =
-        Util::Random::randint() % project_->task(i).num_resources();
-  }
 }
 
 };  // namespace SchedulingProblem

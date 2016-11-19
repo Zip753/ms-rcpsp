@@ -18,10 +18,8 @@ class SimpleSchedule : public Schedule {
   SimpleSchedule(const SimpleSchedule& s);
   ~SimpleSchedule() override {}
 
-  void Reset() override;
-
   /** Checks schedule equality in terms of representation. */
-  bool operator==(const SimpleSchedule& s) const;
+  bool operator==(const SimpleSchedule &other) const;
 
   inline int business(size_t i) const { return business_[i]; }
 

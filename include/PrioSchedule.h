@@ -27,7 +27,7 @@ class PrioSchedule : public Schedule {
   void Reset() override;
 
   /** Checks schedule equality in terms of representation. */
-  bool operator==(PrioSchedule s) const;
+  bool operator==(const PrioSchedule &other) const;
 
   inline int priority(size_t i) const { return priority_[i]; }
 
