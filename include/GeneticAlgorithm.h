@@ -27,47 +27,51 @@ template <class T>
 class GeneticAlgorithm : public Algorithm<T> {
  public:
   /**
-   * @param pop_size Size of the population.
-   * @param s Selection operator.
-   * @param c Crossover operator.
-   * @param m Mutation operator.
+   * @param population_ initial population.
+   * @param selector_ selection operator.
+   * @param crossover_ crossover operator.
+   * @param mutator_ mutation operator.
    */
-  GeneticAlgorithm(std::unique_ptr<Population<T>> p,
-                   std::unique_ptr<Selector<T>> s,
-                   std::unique_ptr<Crossover<T>> c,
-                   std::unique_ptr<Mutator<T>> m,
-                   size_t _steps,
-                   bool _rem_clones = true) :
-      population(std::move(p)), selector(std::move(s)), crossover(std::move(c)),
-      mutator(std::move(m)), steps(_steps), remove_clones(_rem_clones) {}
+  GeneticAlgorithm(std::unique_ptr<Population<T>> population_,
+                   std::unique_ptr<Selector<T>> selector_,
+                   std::unique_ptr<Crossover<T>> crossover_,
+                   std::unique_ptr<Mutator<T>> mutator_,
+                   size_t steps_,
+                   bool remove_clones_ = true) :
+      population_(std::move(population_)), selector_(std::move(selector_)),
+      crossover_(std::move(crossover_)), mutator_(std::move(mutator_)),
+      steps_(steps_), remove_clones_(remove_clones_) {}
   ~GeneticAlgorithm() {}
 
   /**
    * Executes the genetic algorithm.
-   * @param stream File stream for statistics output.
-   * @return The most adapted specimen in all populations (best solution found).
+   * @param stream stream for statistics output.
+   * @return the most adapted specimen in all populations (best found solution).
    */
   std::unique_ptr<T> optimize(std::ostream &stream) override;
 
  private:
-  std::unique_ptr<Population<T>> population;
-  std::unique_ptr<Selector<T>> selector;
-  std::unique_ptr<Crossover<T>> crossover;
-  std::unique_ptr<Mutator<T>> mutator;
+  std::unique_ptr<Population<T>> population_;
+  std::unique_ptr<Selector<T>> selector_;
+  std::unique_ptr<Crossover<T>> crossover_;
+  std::unique_ptr<Mutator<T>> mutator_;
   /** Number of generations. */
-  size_t steps;
+  size_t steps_;
   /** If true, removes clones from the population. */
-  bool remove_clones;
+  bool remove_clones_;
   /** Copy of the best solution for the current population. */
-  std::unique_ptr<T> best = nullptr;
+  std::unique_ptr<T> best_ = nullptr;
   /** Copy of the best solution for the whole run. */
-  std::unique_ptr<T> global_best = nullptr;
+  std::unique_ptr<T> global_best_ = nullptr;
 
   void TryRemoveClones(const std::vector<std::unique_ptr<T>> &pop, size_t idx,
                        T* sample);
 
   /** Updates best result for the current generation and the global best. */
-  void update_best();
+  void UpdateBest();
+
+  void MutateAndAddToPopulation(std::vector<std::unique_ptr<T>>* next_pop,
+                                size_t* iter, const T &a);
 };
 
 };  // namespace EvolutionaryAlgorithm
