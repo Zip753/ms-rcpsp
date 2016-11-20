@@ -12,13 +12,13 @@ void ScheduleWriter::Write(std::ostream &stream, const Schedule& s) {
   std::map<int, std::list<std::pair<int, int> > > timeline;
   for (size_t i = 0; i < s.size(); i++) {
     int st = s.start(i) + 1;
-    int res = s.resource_id(s.resource(i));
+    int res_id = s.resource(i).id();
     int task_id = s.task(i).id();
 
     if (timeline.count(st) == 0) {
       timeline[st] = std::list<std::pair<int, int> >();
     }
-    timeline[st].push_back(std::make_pair(res, task_id));
+    timeline[st].push_back(std::make_pair(res_id, task_id));
   }
   for (auto it = timeline.begin(); it != timeline.end(); it++) {
     stream << it->first << " ";

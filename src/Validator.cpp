@@ -16,14 +16,14 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
   for (size_t i = 0; i < s.size(); ++i) {
     // Check resource indices.
-    if (s.resource_idx(i) < 0 || s.resource_idx(i) >= s.num_capable_resources
-        (i)) {
+    if (s.capable_resource_idx(i) < 0 ||
+        s.capable_resource_idx(i) >= s.task(i).num_capable_resources()) {
       stream << "Resource index out of boundaries (task ID: ";
       stream << s.task(i).id();
       stream << ", resource index: ";
-      stream << s.resource_idx(i);
-      stream << ", capable resource_: ";
-      stream << s.num_capable_resources(i);
+      stream << s.capable_resource_idx(i);
+      stream << ", capable resources: ";
+      stream << s.task(i).num_capable_resources();
       stream << ").";
       return std::make_pair(false, stream.str());
     }
@@ -48,7 +48,7 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   // Check resource assignment conflicts.
   std::map<int, std::vector<size_t>> res_tasks;
   for (size_t i = 0; i < s.size(); ++i) {
-    int res_id = s.resource_id(s.resource(i));
+    int res_id = s.resource(i).id();
     res_tasks[res_id].push_back(i);
   }
 

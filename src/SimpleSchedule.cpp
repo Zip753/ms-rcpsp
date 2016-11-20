@@ -13,7 +13,7 @@ bool SimpleSchedule::operator==(const SimpleSchedule &other) const {
 
 void SimpleSchedule::Init(bool create_ires) {
   if (create_ires) {
-    resource_idx_ = std::vector<size_t>(size_, 0);
+    capable_resource_idx_ = std::vector<size_t>(size_, 0);
     Reset();
   }
 
@@ -27,9 +27,9 @@ SimpleSchedule::SimpleSchedule(Project* project_) : Schedule(project_) {
 
 SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule(s.project_) {
   Init(false);
-  resource_idx_ = std::vector<size_t>(size_, 0);
+  capable_resource_idx_ = std::vector<size_t>(size_, 0);
   for (size_t i = 0; i < size_; i++) {
-    resource_idx_[i] = s.resource_idx_[i];
+    capable_resource_idx_[i] = s.capable_resource_idx_[i];
   }
 }
 
@@ -62,21 +62,21 @@ void SimpleSchedule::FixAll() {
   for (size_t i = 0; i < size_; i++) {
     // select task with earliest start
     bool first = true;
-    size_t min_start_idx = 0;
+    size_t min_start_task_idx = 0;
     for (size_t j = 0; j < size_; j++)
       if (!used[j]) {
-        if (first || start_[j] < start_[min_start_idx]) {
+        if (first || start_[j] < start_[min_start_task_idx]) {
           first = false;
-          min_start_idx = j;
+          min_start_task_idx = j;
         }
       }
-    used[min_start_idx] = true;
+    used[min_start_task_idx] = true;
     // select all tasks with same resource and shift them
-    size_t res = resource(min_start_idx);
+    size_t res_idx = resource_idx(min_start_task_idx);
     bool is_conflict = false;
-    int finish = finish_time(min_start_idx);
+    int finish = finish_time(min_start_task_idx);
     for (size_t j = 0; j < size_; j++)
-      if (!used[j] && resource(j) == res && start_[j] < finish) {
+      if (!used[j] && resource_idx(j) == res_idx && start_[j] < finish) {
         start_[j] = finish;
         is_conflict = true;
       }
@@ -97,8 +97,8 @@ int SimpleSchedule::ComputeFitness() {
 
   std::fill(business_.begin(), business_.end(), 0);
   for (size_t i = 0; i < size_; i++) {
-    size_t res = resource(i);
-    business_[res] += task(i).duration();
+    size_t res_idx = resource_idx(i);
+    business_[res_idx] += task(i).duration();
   }
 
   return fitness_;

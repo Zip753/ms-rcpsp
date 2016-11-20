@@ -33,15 +33,17 @@ class Schedule {
    * */
   int Fitness();
 
-  /** Returns number of tasks. */
+  /** @return number of tasks. */
   size_t size() const { return size_; }
 
-  Task& task(size_t i) const { return project_->task(i); }
+  inline Task& task(size_t i) const { return project_->task(i); }
 
-  inline size_t resource_idx(size_t i) const { return resource_idx_[i]; }
+  inline size_t capable_resource_idx(size_t i) const {
+    return capable_resource_idx_[i];
+  }
 
-  inline void set_resource_idx(size_t i, size_t new_idx) {
-    resource_idx_[i] = new_idx;
+  inline void set_capable_resource_idx(size_t i, size_t new_idx) {
+    capable_resource_idx_[i] = new_idx;
   }
 
   inline int start(size_t i) const { return start_[i]; }
@@ -49,19 +51,20 @@ class Schedule {
   inline void set_start(size_t i, int new_start) { start_[i] = new_start; }
 
   /**
-   * Returns index of resource assigned to the task at index i.
-   * @param i Index of the task.
+   * Returns index of resource assigned to i-th task.
+   * @param i index of task.
+   * @return index of resource assigned to the task.
    */
-  inline size_t resource(size_t i) const {
-    return task(i).resource(resource_idx_[i]);
+  inline size_t resource_idx(size_t i) const {
+    return task(i).resource_idx(capable_resource_idx_[i]);
   }
 
   /**
-   * Returns number of resources capable of performing task at index i.
-   * @param i Index of the task.
+   * Returns resource assigned to the task at index i.
+   * @param i index of the task.
    */
-  size_t num_capable_resources(size_t i) const {
-    return task(i).num_resources();
+  inline Resource& resource(size_t i) const {
+    return project_->resource(resource_idx(i));
   }
 
   /** Reset schedule representation to random state. */
@@ -69,14 +72,6 @@ class Schedule {
 
   /** Prints current state to stdout. */
   void PrintState(bool short_output);
-
-  inline double resource_salary(size_t res) const {
-    return project_->resource_salary(res);
-  }
-
-  inline int resource_id(size_t res) const {
-    return project_->resource_id(res);
-  }
 
   /**
    * Returns finish time of the task at index i.
@@ -91,7 +86,7 @@ class Schedule {
       : project_(project_), start_(std::vector<int>(project_->size(), 0)),
         size_(project_->size()) {}
   Schedule(Project* project_, std::vector<size_t> _ires)
-      : Schedule(project_) { resource_idx_ = _ires; }
+      : Schedule(project_) { capable_resource_idx_ = _ires; }
 
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
@@ -102,7 +97,7 @@ class Schedule {
   Project* project_;
 
   /** List of resources assigned to corresponding tasks. */
-  std::vector<size_t> resource_idx_;
+  std::vector<size_t> capable_resource_idx_;
 
   /** List of task start times. */
   std::vector<int> start_;

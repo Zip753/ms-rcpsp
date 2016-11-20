@@ -17,19 +17,19 @@ std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::Cross(
   std::unique_ptr<PrioSchedule> s = std::make_unique<PrioSchedule>(a);
 
   for (size_t i = 0; i < s->size(); i++) {
-    size_t a_res = a.resource(i);
-    size_t b_res = b.resource(i);
+    size_t a_res = a.capable_resource_idx(i);
+    size_t b_res = b.capable_resource_idx(i);
     if (a.business(a_res) < b.business(b_res)) {
-      s->set_resource_idx(i, a.resource_idx(i));
+      s->set_capable_resource_idx(i, a.capable_resource_idx(i));
     } else if (a.business(a_res) > b.business(b_res)) {
-      s->set_resource_idx(i, b.resource_idx(i));
+      s->set_capable_resource_idx(i, b.capable_resource_idx(i));
     } else {
-      double a_sal = a.resource_salary(a_res);
-      double b_sal = b.resource_salary(b_res);
+      double a_sal = a.resource(i).salary();
+      double b_sal = b.resource(i).salary();
       if (a_sal < b_sal)
-        s->set_resource_idx(i, a.resource_idx(i));
+        s->set_capable_resource_idx(i, a.capable_resource_idx(i));
       else
-        s->set_resource_idx(i, b.resource_idx(i));
+        s->set_capable_resource_idx(i, b.capable_resource_idx(i));
     }
 
     if (Random::randint() & 1) {
@@ -50,19 +50,19 @@ std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::Cross(
   std::unique_ptr<SimpleSchedule> s = std::make_unique<SimpleSchedule>(a);
 
   for (size_t i = 0; i < s->size(); i++) {
-    size_t a_res = a.resource(i);
-    size_t b_res = b.resource(i);
-    if (a.business(a_res) < b.business(b_res)) {
-      s->set_resource_idx(i, a.resource_idx(i));
-    } else if (a.business(a_res) > b.business(b_res)) {
-      s->set_resource_idx(i, b.resource_idx(i));
+    size_t a_res_idx = a.resource_idx(i);
+    size_t b_res_idx = b.resource_idx(i);
+    if (a.business(a_res_idx) < b.business(b_res_idx)) {
+      s->set_capable_resource_idx(i, a.capable_resource_idx(i));
+    } else if (a.business(a_res_idx) > b.business(b_res_idx)) {
+      s->set_capable_resource_idx(i, b.capable_resource_idx(i));
     } else {
-      double a_sal = a.resource_salary(a_res);
-      double b_sal = b.resource_salary(b_res);
+      double a_sal = a.resource(i).salary();
+      double b_sal = b.resource(i).salary();
       if (a_sal < b_sal)
-        s->set_resource_idx(i, a.resource_idx(i));
+        s->set_capable_resource_idx(i, a.capable_resource_idx(i));
       else
-        s->set_resource_idx(i, b.resource_idx(i));
+        s->set_capable_resource_idx(i, b.capable_resource_idx(i));
     }
   }
   return std::move(s);

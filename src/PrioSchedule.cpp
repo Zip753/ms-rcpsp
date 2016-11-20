@@ -20,7 +20,7 @@ bool PrioSchedule::operator==(const PrioSchedule &other) const {
 
 void PrioSchedule::Init(bool initialize) {
   if (initialize) {
-    resource_idx_ = std::vector<size_t>(size_, 0);
+    capable_resource_idx_ = std::vector<size_t>(size_, 0);
     priority_ = std::vector<int>(size_, 0);
     Reset();
   }
@@ -34,10 +34,10 @@ PrioSchedule::PrioSchedule(Project* project_) : Schedule(project_) {
 
 PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
   Init(false);
-  resource_idx_ = std::vector<size_t>(size_, 0);
+  capable_resource_idx_ = std::vector<size_t>(size_, 0);
   priority_ = std::vector<int>(size_, 0);
   for (size_t i = 0; i < size_; i++) {
-    resource_idx_[i] = s.resource_idx_[i];
+    capable_resource_idx_[i] = s.capable_resource_idx_[i];
     priority_[i] = s.priority_[i];
   }
 }
@@ -84,7 +84,7 @@ void PrioSchedule::FixAll() {
     queue.pop();
 
     // find max finish time of all dependency_
-    size_t res_idx = resource(itask);
+    size_t res_idx = resource_idx(itask);
     int min_start = 0;
     for (size_t i = 0; i < task(itask).num_dependencies(); ++i) {
       size_t idep = task(itask).dependency(i);
@@ -120,8 +120,8 @@ int PrioSchedule::ComputeFitness() {
 
   std::fill(business_.begin(), business_.end(), 0);
   for (size_t i = 0; i < size_; i++) {
-    size_t res = resource(i);
-    business_[res] += task(i).duration();
+    size_t res_idx = resource_idx(i);
+    business_[res_idx] += task(i).duration();
   }
 
   return fitness_;

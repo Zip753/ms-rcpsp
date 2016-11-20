@@ -18,13 +18,13 @@ using SchedulingProblem::PrioSchedule;
 template<>
 void UniformMutator<PrioSchedule>::MutateGene(PrioSchedule* sample, size_t i)
     const {
-  size_t max_ires = sample->num_capable_resources(i);
+  size_t max_ires = sample->task(i).num_capable_resources();
   if (max_ires > 1) {
     size_t new_res = Random::randint() % (max_ires - 1);
-    if (new_res < sample->resource_idx(i))
-      sample->set_resource_idx(i, new_res);
+    if (new_res < sample->capable_resource_idx(i))
+      sample->set_capable_resource_idx(i, new_res);
     else
-      sample->set_resource_idx(i, new_res + 1);
+      sample->set_capable_resource_idx(i, new_res + 1);
   }
 }
 
@@ -61,13 +61,13 @@ using SchedulingProblem::SimpleSchedule;
 template<>
 void UniformMutator<SimpleSchedule>::MutateGene(SimpleSchedule* sample,
                                                 size_t i) const {
-  size_t max_ires = sample->num_capable_resources(i);
+  size_t max_ires = sample->task(i).num_capable_resources();
   if (max_ires > 1) {
     size_t new_res = Random::randint() % (max_ires - 1);
-    if (new_res < sample->resource_idx(i))
-      sample->set_resource_idx(i, new_res);
+    if (new_res < sample->capable_resource_idx(i))
+      sample->set_capable_resource_idx(i, new_res);
     else
-      sample->set_resource_idx(i, new_res + 1);
+      sample->set_capable_resource_idx(i, new_res + 1);
   }
 }
 

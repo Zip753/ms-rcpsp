@@ -13,22 +13,26 @@ class Task {
    * @param id_ ID of the task.
    * @param duration_ Duration of the task.
    * @param dependencies_ List of dependencies.
-   * @param resources_ List of capable resources.
+   * @param resources_idx_ List of capable resources indices.
    */
   Task(int id_, int duration_, std::vector<size_t> dependencies_,
-       std::vector<size_t> resources_) : id_(id_), duration_(duration_),
-                                         dependency_(dependencies_),
-                                         resource_(resources_) {}
+       std::vector<size_t> resources_idx_) :
+      id_(id_), duration_(duration_), dependency_(dependencies_),
+      resource_idx_(resources_idx_) {}
   ~Task();
 
   inline int id() const { return id_; }
 
   inline int duration() const { return duration_; }
 
-  inline size_t resource(size_t i) const { return resource_[i]; }
+  inline size_t resource_idx(size_t i) const {
+    return resource_idx_[i];
+  }
 
-  /** Returns number of resources capable of completing the task. */
-  inline size_t num_resources() const { return resource_.size(); }
+  /** @return number of resources capable of completing the task. */
+  inline size_t num_capable_resources() const {
+    return resource_idx_.size();
+  }
 
   inline size_t dependency(size_t i) const { return dependency_[i]; }
 
@@ -45,7 +49,7 @@ class Task {
    * task. */
   std::vector<size_t> dependency_;
   /** List of resources capable of completing the task. */
-  std::vector<size_t> resource_;
+  std::vector<size_t> resource_idx_;
 };
 
 };  // namespace SchedulingProblem
