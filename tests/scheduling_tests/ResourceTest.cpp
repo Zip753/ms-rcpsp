@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "../include/Resource.h"
+#include "../../include/Resource.h"
 
 using SchedulingProblem::Resource;
 
