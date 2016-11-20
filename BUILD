@@ -16,6 +16,7 @@ cc_library(
     srcs = [":sources"],
     hdrs = [":headers"],
     copts = ["-std=c++14"],
+    visibility = ["//visibility:public"],
 )
 
 cc_binary(
