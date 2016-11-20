@@ -19,3 +19,5 @@ set_target_properties(ga_lib_static ga_lib_shared ga_bin
 )
 
 add_definitions(-std=c++14)
+
+add_subdirectory(tests)
