@@ -86,13 +86,14 @@ void SimpleSchedule::FixAll() {
   }
 }
 
-int SimpleSchedule::ComputeFitness() {
+int SimpleSchedule::ComputeDuration() {
   FixAll();
 
+  int duration = -1;
   for (size_t i = 0; i < size_; i++) {
     int finish = finish_time(i);
-    if (fitness_ < finish)
-      fitness_ = finish;
+    if (duration < finish)
+      duration = finish;
   }
 
   std::fill(business_.begin(), business_.end(), 0);
@@ -101,7 +102,7 @@ int SimpleSchedule::ComputeFitness() {
     business_[res_idx] += task(i).duration();
   }
 
-  return fitness_;
+  return duration;
 }
 
 };  // namespace SchedulingProblem

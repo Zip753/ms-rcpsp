@@ -19,17 +19,17 @@ T* Population<T>::best() {
 
 template <class T>
 void Population<T>::ShowStat(std::ostream &stream) {
-  int best_val = best()->Fitness(),
-      worst_val = 0;
+  int best_val = best()->Fitness();
+  size_t worst_idx = 0;
   double mean = 0;
   for (size_t i = 0; i < size(); i++) {
     mean += specimen(i)->Fitness();
-    if (worst_val < specimen(i)->Fitness())
-      worst_val = specimen(i)->Fitness();
+    if (specimen(worst_idx)->Fitness() < specimen(i)->Fitness())
+      worst_idx = i;
   }
   mean /= size();
 
-  stream << best_val << " " << mean << " " << worst_val;
+  stream << best_val << " " << mean << " " << specimen(worst_idx)->Fitness();
 }
 
 template <class T>

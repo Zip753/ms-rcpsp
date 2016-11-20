@@ -15,7 +15,7 @@ namespace SchedulingProblem {
 
 int Schedule::Fitness() {
   if (fitness_ == -1) {
-    fitness_ = ComputeFitness();
+    fitness_ = ComputeDuration();
   }
   return fitness_;
 }
@@ -27,7 +27,8 @@ void Schedule::PrintState(bool is_short) {
                 << ", Resource ID: " << resource(i).id()
                 << ", start time: " << start_[i] << "\n";
   }
-  std::cout << "Fitness (finish): " << Fitness() << "\n";
+  std::cout << "Fitness (time): " << Fitness()
+            << ", cost: " << TotalCost() << "\n";
 }
 
 Schedule::~Schedule() {}
@@ -45,6 +46,14 @@ void Schedule::Reset() {
     capable_resource_idx_[i] =
         Util::Random::randint() % project_->task(i).num_capable_resources();
   }
+}
+
+double Schedule::TotalCost() const {
+  double total = 0;
+  for (size_t i = 0; i < size_; ++i) {
+    total += resource(i).salary() * task(i).duration();
+  }
+  return total;
 }
 
 };  // namespace SchedulingProblem

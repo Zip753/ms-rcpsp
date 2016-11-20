@@ -50,7 +50,7 @@ class PrioSchedule : public Schedule, public Businessable {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();
 
-  int ComputeFitness() override;
+  int ComputeDuration() override;
 };
 
 };  // namespace SchedulingProblem

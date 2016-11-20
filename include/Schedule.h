@@ -27,11 +27,13 @@ class Schedule {
   virtual ~Schedule() = 0;
 
   /**
-   * Calculates fitness function. Caches result in _fitness.
+   * Calculates fitness function. Caches result in fitness_.
    * @return fitness value.
    * @see Schedule#compute_fitness
    * */
   int Fitness();
+
+  double TotalCost() const;
 
   /** @return number of tasks. */
   size_t size() const { return size_; }
@@ -91,7 +93,7 @@ class Schedule {
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
    */
-  virtual int ComputeFitness() = 0;
+  virtual int ComputeDuration() = 0;
 
   /** Pointer to project for which the schedule is designated. */
   Project* project_;
