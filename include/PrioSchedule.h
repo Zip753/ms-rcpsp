@@ -5,6 +5,7 @@
 #include <set>
 #include <utility>
 
+#include "Businessable.h"
 #include "Task.h"
 #include "Schedule.h"
 
@@ -18,7 +19,7 @@ namespace SchedulingProblem {
  * task with the biggest priority, as opposed to executing random task as in
  * SimpleSchedule.
  */
-class PrioSchedule : public Schedule {
+class PrioSchedule : public Schedule, public Businessable {
  public:
   PrioSchedule(Project* project_);
   PrioSchedule(const PrioSchedule& s);
@@ -35,18 +36,9 @@ class PrioSchedule : public Schedule {
     priority_[i] = new_priority;
   }
 
-  inline int business(size_t i) const { return business_[i]; }
-
-  inline void set_business(size_t i, int new_business) {
-    business_[i] = new_business;
-  }
-
  private:
   /** Task priorities. */
   std::vector<int> priority_;
-
-  /** Businesses of resources. Used to implement LAXCrossover. */
-  std::vector<int> business_;
 
   /**
    * Contructor helper.

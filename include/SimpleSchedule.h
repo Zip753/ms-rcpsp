@@ -1,6 +1,7 @@
 #ifndef MS_RCPSP_SIMPLESCHEDULE_H
 #define MS_RCPSP_SIMPLESCHEDULE_H
 
+#include "Businessable.h"
 #include "Schedule.h"
 
 namespace SchedulingProblem {
@@ -12,7 +13,7 @@ namespace SchedulingProblem {
  * schedule given the resource assignment and then calculate the fitness
  * function (project execution time) based on the found schedule.
  */
-class SimpleSchedule : public Schedule {
+class SimpleSchedule : public Schedule, public Businessable {
  public:
   SimpleSchedule(Project* project_);
   SimpleSchedule(const SimpleSchedule& s);
@@ -21,16 +22,7 @@ class SimpleSchedule : public Schedule {
   /** Checks schedule equality in terms of representation. */
   bool operator==(const SimpleSchedule &other) const;
 
-  inline int business(size_t i) const { return business_[i]; }
-
-  inline void set_business(size_t i, int new_business) {
-    business_[i] = new_business;
-  }
-
  private:
-  /** Businesses of resources. Used to implement LAXCrossover. */
-  std::vector<int> business_;
-
   /**
    * Contructor helper.
    * @param initialize If true, allocate and initialize resources.
