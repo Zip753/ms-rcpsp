@@ -15,3 +15,12 @@ cc_test(
         "//:ga_lib",
     ],
 )
+
+cc_test(
+    name = "project_test",
+    srcs = ["ProjectTest.cpp"],
+    deps = [
+        "@googletest//:gtest_main",
+        "//:ga_lib",
+    ],
+)

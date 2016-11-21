@@ -29,9 +29,9 @@ class Project {
    * Returns resource at the given index.
    * @param i index of the resource.
    */
-  inline Resource& resource(size_t i) { return resource_[i]; }
+  inline Resource& resource(size_t i) { return resource_.at(i); }
 
-  Task& task(size_t i) { return tasks_[i]; }
+  Task& task(size_t i) { return tasks_.at(i); }
 
  private:
   /** List of project tasks. */
