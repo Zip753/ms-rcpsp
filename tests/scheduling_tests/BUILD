@@ -6,3 +6,12 @@ cc_test(
         "//:ga_lib",
     ],
 )
+
+cc_test(
+    name = "task_test",
+    srcs = ["TaskTest.cpp"],
+    deps = [
+        "@googletest//:gtest_main",
+        "//:ga_lib",
+    ],
+)

@@ -26,7 +26,7 @@ class Task {
   inline int duration() const { return duration_; }
 
   inline size_t resource_idx(size_t i) const {
-    return resource_idx_[i];
+    return resource_idx_.at(i);
   }
 
   /** @return number of resources capable of completing the task. */
@@ -34,7 +34,7 @@ class Task {
     return resource_idx_.size();
   }
 
-  inline size_t dependency(size_t i) const { return dependency_[i]; }
+  inline size_t dependency(size_t i) const { return dependency_.at(i); }
 
   /** Returns number of dependencies, i.e. tasks that have to be completed
    * before this task. */
