@@ -15,6 +15,12 @@ namespace SchedulingProblem {
 std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
   for (size_t i = 0; i < s.size(); ++i) {
+    // Check start time
+    if (s.start(i) < 0) {
+      stream << "Negative start time (task ID: " << s.task(i).id()
+             << ", start time: " << s.start(i) << ").";
+      return {false, stream.str()};
+    }
     // Check resource indices.
     if (s.capable_resource_idx(i) < 0 ||
         s.capable_resource_idx(i) >= s.task(i).num_capable_resources()) {
