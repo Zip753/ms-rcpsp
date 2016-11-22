@@ -9,11 +9,10 @@ std::string Renderer::GetColor() {
   size_t red   = static_cast<size_t>(floor(r * 255));
   size_t green = static_cast<size_t>(floor(g * 255));
   size_t blue  = static_cast<size_t>(floor(b * 255));
-  std::ostringstream color("'#", std::ostringstream::ate);
+  std::ostringstream color;
   color << std::hex << std::setfill('0')
         << std::setw(2) << red
         << std::setw(2) << green
-        << std::setw(2) << blue
-        << "'";
+        << std::setw(2) << blue;
   return color.str();
 }

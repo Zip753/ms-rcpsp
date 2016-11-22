@@ -7,7 +7,7 @@ std::string GoogleTimeline::GetHTML(Visualizer::assignments_map &assignments) {
   std::ostringstream data;
   std::ostringstream colors;
   for (auto& res : assignments) {
-    std::string res_color = GetColor();
+    std::string res_color = "'#" + GetColor() + "'";
     for (auto& a : res.second) {
       data << "[ 'Resource " << res.first << "', '" << a.task_id
            << "', '[Task " << a.task_id << "] " << a.start_time << " - "
