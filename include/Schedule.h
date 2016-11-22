@@ -45,7 +45,7 @@ class Schedule {
   }
 
   inline void set_capable_resource_idx(size_t i, size_t new_idx) {
-    capable_resource_idx_[i] = new_idx;
+    capable_resource_idx_.at(i) = new_idx;
   }
 
   inline int start(size_t i) const { return start_[i]; }

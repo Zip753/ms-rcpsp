@@ -88,7 +88,7 @@ void PrioSchedule::FixAll() {
     int min_start = 0;
     for (size_t i = 0; i < task(itask).num_dependencies(); ++i) {
       size_t idep = task(itask).dependency(i);
-      int fin = finish_time(idep);
+      int fin = finish_time(idep) + 1;
       if (min_start < fin)
         min_start = fin;
     }
@@ -96,7 +96,7 @@ void PrioSchedule::FixAll() {
     // update start time for the task
     start_[itask] = std::max(min_start, time[res_idx]);
     // update availability time for resource
-    time[res_idx] = finish_time(itask);
+    time[res_idx] = finish_time(itask) + 1;
 
     // add all unblocked dependent tasks to the queue
     for (size_t i = 0; i < next[itask].size(); ++i) {

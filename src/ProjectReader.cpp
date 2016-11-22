@@ -86,7 +86,7 @@ std::unique_ptr<Project> ProjectReader::Read(const std::string &filename) {
     }
 
     // increment duration_ to match solutions
-    tasks.emplace_back(id, dur + 1, dependencies, resources);
+    tasks.emplace_back(id, dur, dependencies, resources);
   }
   std::unique_ptr<Project> project = std::make_unique<Project>(tasks, res);
   return std::move(project);

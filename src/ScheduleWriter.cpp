@@ -11,7 +11,7 @@ void ScheduleWriter::Write(std::ostream &stream, const Schedule& s) {
   stream << "Hour \t Resource assignments (resource ID - task ID) \n";
   std::map<int, std::list<std::pair<int, int> > > timeline;
   for (size_t i = 0; i < s.size(); i++) {
-    int st = s.start(i) + 1;
+    int st = s.start(i);
     int res_id = s.resource(i).id();
     int task_id = s.task(i).id();
 

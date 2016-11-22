@@ -30,7 +30,7 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
     // Check task dependencies.
     for (size_t j = 0; j < s.task(i).num_dependencies(); ++j) {
       size_t dep_idx = s.task(i).dependency(j);
-      if (s.finish_time(dep_idx) > s.start(i)) {
+      if (s.finish_time(dep_idx) >= s.start(i)) {
         stream << "Task dependency not met (task #";
         stream << s.task(i).id();
         stream << " start time: ";
@@ -61,7 +61,7 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
     });
 
     for (size_t i = 0; i < tasks.size() - 1; ++i) {
-      if (s.finish_time(tasks[i]) > s.start(tasks[i + 1])) {
+      if (s.finish_time(tasks[i]) >= s.start(tasks[i + 1])) {
         stream << "Resource #";
         stream << res_id;
         stream << " has conflicting assignments (task #";
