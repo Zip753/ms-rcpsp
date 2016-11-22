@@ -53,8 +53,9 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   for (auto& res : res_tasks) {
     int res_id = res.first;
     std::vector<size_t>& tasks = res.second;
-    std::sort(tasks.begin(), tasks.end(), [=](size_t a, size_t b) {
-      return {s.start(a), s.finish_time(a)} < {s.start(b), s.finish_time(b)};
+    std::sort(tasks.begin(), tasks.end(), [&](size_t a, size_t b) {
+      return std::make_pair(s.start(a), s.finish_time(a)) <
+             std::make_pair(s.start(b), s.finish_time(b));
     });
 
     for (size_t i = 0; i < tasks.size() - 1; ++i) {

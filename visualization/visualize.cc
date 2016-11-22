@@ -17,7 +17,7 @@ typedef std::map<int, std::vector<assignment>> assignments_map;
 typedef std::multimap<int, assignment*> schedule_map;
 
 bool CheckCriticalPath(assignment *assignment, schedule_map* schedule) {
-  if (assignment->critical || assignment->start_time == 0) {
+  if (assignment->critical || assignment->start_time == 1) {
     return assignment->critical = true;
   }
   auto range = schedule->equal_range(assignment->start_time - 1);
