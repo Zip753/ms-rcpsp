@@ -19,7 +19,6 @@ class Task {
        std::vector<size_t> resources_idx_) :
       id_(id_), duration_(duration_), dependency_(dependencies_),
       resource_idx_(resources_idx_) {}
-  ~Task();
 
   inline int id() const { return id_; }
 
