@@ -44,8 +44,8 @@ PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
 
 void PrioSchedule::FixAll() {
   struct PriorityComp {
-    bool operator()(const std::pair<int, int> a,
-                    const std::pair<int, int> b) const {
+    bool operator()(const std::pair<size_t, int> a,
+                    const std::pair<size_t, int> b) const {
       return a.second < b.second;
     }
   };
