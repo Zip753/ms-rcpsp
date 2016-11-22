@@ -29,16 +29,6 @@ class SimpleSchedule : public Schedule, public Businessable {
    */
   void Init(bool create_ires);
 
-  /**
-   * Update start time of a task recursively.
-   * @param i index of the task.
-   * @param visited list of tasks visited by this function earlier.
-   */
-  void UpdateStart(size_t i, std::vector<bool> &visited);
-
-  /** Critical path fix procedure. */
-  void Reschedule();
-
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();
 

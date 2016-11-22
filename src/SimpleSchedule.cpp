@@ -1,6 +1,7 @@
 #include "../include/SimpleSchedule.h"
 
 #include <algorithm>
+#include <queue>
 #include <vector>
 
 #include "../include/Project.h"
@@ -33,56 +34,61 @@ SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule(s.project_) {
   }
 }
 
-void SimpleSchedule::UpdateStart(size_t i, std::vector<bool> &visited) {
-  if (!visited[i]) {
-    visited[i] = true;
-    for (size_t j = 0; j < task(i).num_dependencies(); j++) {
-      size_t prev = task(i).dependency(j);
-      UpdateStart(prev, visited);
-      int finish = finish_time(prev);
-      if (start_[i] < finish)
-        start_[i] = finish;
+void SimpleSchedule::FixAll() {
+  /* Create list of inverse dependencies. */
+  std::vector<std::vector<size_t>> next(size_);
+  for (auto& el : next) { el = std::vector<size_t>(); }
+
+  for (size_t i = 0; i < size_; ++i) {
+    for (size_t j = 0; j < project_->task(i).num_dependencies(); ++j) {
+      size_t idep = task(i).dependency(j);
+      next[idep].push_back(i);
     }
   }
-}
 
-void SimpleSchedule::Reschedule() {
-  // first, set earliest start (from fin)
-  std::vector<bool> visited(size_, false);
+  // heap of pairs (task_id, priority)
+  std::queue<size_t> queue;
   for (size_t i = 0; i < size_; ++i) {
-    UpdateStart(i, visited);
+    if (task(i).num_dependencies() == 0) {
+      queue.push(i);
+    }
   }
-}
+  size_t res_count = project_->num_resources();
 
-void SimpleSchedule::FixAll() {
-  Reschedule();
+  // availability time for resource_
+  std::vector<int> time(res_count);
 
-  std::vector<bool> used(size_, false);
+  // number of complete dependency_ for tasks
+  std::vector<size_t> dep_count(size_);
 
-  for (size_t i = 0; i < size_; i++) {
-    // select task with earliest start
-    bool first = true;
-    size_t min_start_task_idx = 0;
-    for (size_t j = 0; j < size_; j++)
-      if (!used[j]) {
-        if (first || start_[j] < start_[min_start_task_idx]) {
-          first = false;
-          min_start_task_idx = j;
-        }
+  while (!queue.empty()) {
+    // take next task
+    size_t itask = queue.front();
+    queue.pop();
+
+    // find max finish time of all dependency_
+    size_t res_idx = resource_idx(itask);
+    int min_start = 0;
+    for (size_t i = 0; i < task(itask).num_dependencies(); ++i) {
+      size_t idep = task(itask).dependency(i);
+      int fin = finish_time(idep);
+      if (min_start < fin)
+        min_start = fin;
+    }
+
+    // update start time for the task
+    start_[itask] = std::max(min_start, time[res_idx]);
+    // update availability time for resource
+    time[res_idx] = finish_time(itask);
+
+    // add all unblocked dependent tasks to the queue
+    for (size_t i = 0; i < next[itask].size(); ++i) {
+      size_t inext = next[itask][i];
+      dep_count[inext]++;
+      if (dep_count[inext] == task(inext).num_dependencies()) {
+        queue.push(inext);
       }
-    used[min_start_task_idx] = true;
-    // select all tasks with same resource and shift them
-    size_t res_idx = resource_idx(min_start_task_idx);
-    bool is_conflict = false;
-    int finish = finish_time(min_start_task_idx);
-    for (size_t j = 0; j < size_; j++)
-      if (!used[j] && resource_idx(j) == res_idx && start_[j] < finish) {
-        start_[j] = finish;
-        is_conflict = true;
-      }
-    // reschedule if anything changed
-    if (is_conflict)
-      Reschedule();
+    }
   }
 }
 
