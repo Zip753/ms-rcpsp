@@ -107,13 +107,14 @@ class Schedule {
   /** Number of tasks. */
   size_t size_;
 
+  bool operator==(const Schedule& other) const;
+
+ private:
   /**
    * Cached fitness value for this specimen.
    * @see Schedule#fitness
    */
   int fitness_ = -1;
-
-  bool operator==(const Schedule& other) const;
 };
 
 };  // namespace SchedulingProblem
