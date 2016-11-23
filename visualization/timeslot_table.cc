@@ -1,38 +1,47 @@
 #include "timeslot_table.h"
 
+#include <algorithm>
 #include <sstream>
 
-std::string TimeslotTable::GetHTML(Visualizer::assignments_map &assignments) {
+std::string TimeslotTable::GetHTML(
+    const Visualizer::assignments_map &assignments) {
   std::ostringstream styles;
   std::ostringstream table;
 
-  table << "<tr><td class=\"first\"></td>";
+  table << "<tr><td class=\"first text\"></td>";
   int max_fin = GetMaxFinishTime(assignments);
   for (int i = 0; i <= max_fin; ++i) {
     table << "<td class=\"cell\">" << i << "</td>";
   }
   table << "</tr>\n";
 
-  int cell_width = max_fin >= 100 ? 23 : 16;
+  int cell_width = max_fin >= 100 ? 17 : 12;
 
   styles << "table { width: " << 90 + cell_width * (max_fin + 1) << "px; }\n";
 
-  std::vector<int> color_set(static_cast<size_t>(max_fin) + 1);
   for (auto& res : assignments) {
-    std::fill(color_set.begin(), color_set.end(), -1);
-    for (auto& a : res.second) {
-      styles << ".color" << a.task_id
-             << " { background-color: #" << GetColor() << "; }\n";
-      for (int i = a.start_time; i <= a.finish_time; ++i)
-        color_set[i] = a.task_id;
-    }
-    table << "<tr><td class=\"first\">Resource " << res.first << "</td>\n";
+    int resource_id = res.first;
+    styles << ".color" << resource_id
+           << " { background-color: #" << GetColor() << "; }\n";
+    std::vector<Visualizer::assignment> tasks(res.second);
+    std::sort(tasks.begin(), tasks.end(), [=](auto &a, auto &b) {
+      return a.start_time > b.start_time;
+    });
+    table << "<tr><td class=\"first text\">Resource " << resource_id
+          << "</td>\n";
     for (int i = 0; i <= max_fin; ++i) {
       table << "<td class=\"cell";
-      if (color_set[i] != -1) {
-        table << " color" << color_set[i];
+      if (!tasks.empty() && tasks.back().start_time == i) {
+        auto task = tasks.back();
+        tasks.pop_back();
+        table << " text color" << resource_id << "\""
+              << " colspan=\"" << task.finish_time - task.start_time + 1;
+        i = task.finish_time;
+        table << "\">Task " << task.task_id
+              << " [" << task.finish_time - task.start_time << "]</td>";
+      } else {
+        table << "\"></td>";
       }
-      table << "\"></td>";
     }
     table << "</tr>\n";
   }
@@ -45,15 +54,18 @@ std::string TimeslotTable::GetHTML(Visualizer::assignments_map &assignments) {
       .cell {
         width: )HTML" << cell_width << R"HTML(px;
         text-align: center;
+        font-size: 11px;
       }
       .first {
         width: 90px;
+      }
+      .text {
         text-align: center;
+        font-size: 16px;
       }
       table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
-        font-size: 16px;
       }
       table {
         table-layout: fixed;
@@ -72,7 +84,8 @@ std::string TimeslotTable::GetHTML(Visualizer::assignments_map &assignments) {
   return html.str();
 }
 
-int TimeslotTable::GetMaxFinishTime(Visualizer::assignments_map &assignments) {
+int TimeslotTable::GetMaxFinishTime(
+    const Visualizer::assignments_map &assignments) {
   int max = -1;
   for (auto& res : assignments) {
     for (auto& a : res.second) {

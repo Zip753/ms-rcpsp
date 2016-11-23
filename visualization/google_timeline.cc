@@ -2,7 +2,8 @@
 
 #include <sstream>
 
-std::string GoogleTimeline::GetHTML(Visualizer::assignments_map &assignments) {
+std::string GoogleTimeline::GetHTML(
+    const Visualizer::assignments_map &assignments) {
   // Convert to Google Timeline definition
   std::ostringstream data;
   std::ostringstream colors;

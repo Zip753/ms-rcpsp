@@ -9,7 +9,7 @@ class GoogleTimeline final : public Renderer {
  public:
   GoogleTimeline(Palletizer* palletizer_) : Renderer(palletizer_) {}
 
-  std::string GetHTML(Visualizer::assignments_map &assignments) override;
+  std::string GetHTML(const Visualizer::assignments_map &assignments) override;
 };
 
 #endif  // MS_RCPSP_VISUALIZATION_GOOGLE_TIMELINE_H_

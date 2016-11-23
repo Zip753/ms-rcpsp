@@ -8,7 +8,8 @@ class Renderer {
  public:
   Renderer(Palletizer *palletizer_) : palletizer_(palletizer_) {}
 
-  virtual std::string GetHTML(Visualizer::assignments_map &assignments) = 0;
+  virtual std::string GetHTML(
+      const Visualizer::assignments_map &assignments) = 0;
 
  private:
   Palletizer* palletizer_;
