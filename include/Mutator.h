@@ -40,6 +40,7 @@ class Mutator {
   /** Mutation probability. */
   double p_mut;
 
+ private:
   /**
    * Mutates single gene in the specimen.
    * @param sample Specimen to operate on.

@@ -90,11 +90,6 @@ class Schedule {
   Schedule(Project* project_, std::vector<size_t> _ires)
       : Schedule(project_) { capable_resource_idx_ = _ires; }
 
-  /**
-   * Computes fitness and writes it to Schedule#_fitness cache variable.
-   */
-  virtual int ComputeDuration() = 0;
-
   /** Pointer to project for which the schedule is designated. */
   Project* project_;
 
@@ -110,6 +105,11 @@ class Schedule {
   bool operator==(const Schedule& other) const;
 
  private:
+  /**
+   * Computes fitness and writes it to Schedule#_fitness cache variable.
+   */
+  virtual int ComputeDuration() = 0;
+
   /**
    * Cached fitness value for this specimen.
    * @see Schedule#fitness

@@ -91,9 +91,9 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     std::ofstream stat_file(stat_file_name);
-    sch = std::move(algo->optimize(stat_file));
+    sch = std::move(algo->Optimize(stat_file));
   } else {
-    sch = std::move(algo->optimize());
+    sch = std::move(algo->Optimize());
   }
   // Force fitness computation to set start dates properly.
   sch->Fitness();

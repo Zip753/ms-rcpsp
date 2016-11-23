@@ -14,7 +14,7 @@ namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 template <class T>
-std::unique_ptr<T> GeneticAlgorithm<T>::optimize(std::ostream &stat) {
+std::unique_ptr<T> GeneticAlgorithm<T>::Optimize(std::ostream &stat) {
   for (size_t step = 0; step < steps_; step++) {
     // Evaluate population.
     UpdateBest();
@@ -56,7 +56,7 @@ void GeneticAlgorithm<T>::MutateAndAddToPopulation(
 
 template <class T>
 void GeneticAlgorithm<T>::UpdateBest() {
-  best_ = std::make_unique<T>(*population_->best());
+  best_ = std::make_unique<T>(*population_->Best());
   if (global_best_ == nullptr || global_best_->Fitness() > best_->Fitness()) {
     global_best_ = std::make_unique<T>(*best_);
   }

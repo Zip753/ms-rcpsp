@@ -8,7 +8,7 @@ namespace Solutions {
 namespace EvolutionaryAlgorithm {
 
 template <class T>
-T* Population<T>::best() {
+T* Population<T>::Best() {
   size_t best_idx = 0;
   for (size_t i = 1; i < size(); i++) {
     if (specimen(i)->Fitness() < specimen(best_idx)->Fitness())
@@ -19,7 +19,7 @@ T* Population<T>::best() {
 
 template <class T>
 void Population<T>::ShowStat(std::ostream &stream) {
-  int best_val = best()->Fitness();
+  int best_val = Best()->Fitness();
   size_t worst_idx = 0;
   double mean = 0;
   for (size_t i = 0; i < size(); i++) {

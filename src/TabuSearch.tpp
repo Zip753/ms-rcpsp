@@ -24,7 +24,7 @@ bool TabuHit(const T& x, const std::deque<T>& tabu) {
 }
 
 template <class T>
-std::unique_ptr<T> TabuSearch<T>::optimize(std::ostream &stream) {
+std::unique_ptr<T> TabuSearch<T>::Optimize(std::ostream &stream) {
   T start = start_;
   T global_best = start;
   std::deque<T> tabu;

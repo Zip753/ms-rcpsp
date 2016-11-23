@@ -32,7 +32,6 @@ class SimpleSchedule : public Schedule, public Businessable {
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();
 
- protected:
   int ComputeDuration() override;
 };
 

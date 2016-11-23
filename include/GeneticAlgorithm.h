@@ -49,7 +49,7 @@ class GeneticAlgorithm : public Algorithm<T> {
    * @param stream stream for statistics output.
    * @return the most adapted specimen in all populations (best found solution).
    */
-  std::unique_ptr<T> optimize(std::ostream &stream) override;
+  std::unique_ptr<T> Optimize(std::ostream &stream) override;
 
  private:
   std::unique_ptr<Population<T>> population_;

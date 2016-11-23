@@ -13,7 +13,7 @@ namespace Solutions {
 template <class T>
 class SimulatedAnnealing : public Algorithm<T> {
  public:
-  std::unique_ptr<T> optimize(std::ostream &stream) override;
+  std::unique_ptr<T> Optimize(std::ostream &stream) override;
   SimulatedAnnealing(const T &&start_, size_t iters_,
                               double start_temp_, double p_mut,
                               double eps_ = 1e-7) :

@@ -24,7 +24,7 @@ class Population {
   size_t size() const { return specimen_.size(); }
 
   /** @return specimen with the smallest fitness function in the population. */
-  T* best();
+  T* Best();
 
   /** Returns specimen at given index.
    * @param i index od specimen.

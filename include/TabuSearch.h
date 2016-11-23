@@ -1,5 +1,5 @@
-#ifndef MS_RCPSP_TABUSEARCHALGORITHM_H_
-#define MS_RCPSP_TABUSEARCHALGORITHM_H_
+#ifndef MS_RCPSP_TABUSEARCH_H_
+#define MS_RCPSP_TABUSEARCH_H_
 
 #include "Algorithm.h"
 #include "Mutator.h"
@@ -12,7 +12,7 @@ namespace Solutions {
 template <class T>
 class TabuSearch : public Algorithm<T> {
  public:
-  std::unique_ptr<T> optimize(std::ostream &stream) override;
+  std::unique_ptr<T> Optimize(std::ostream &stream) override;
   TabuSearch(const T &&start_, size_t iters_, size_t neighbours_,
                       size_t list_size_, double p_mut) :
       start_(start_), iters_(iters_), neighbours_(neighbours_),
@@ -33,4 +33,4 @@ class TabuSearch : public Algorithm<T> {
 
 #include "../src/TabuSearch.tpp"
 
-#endif  // MS_RCPSP_TABUSEARCHALGORITHM_H_
+#endif  // MS_RCPSP_TABUSEARCH_H_
