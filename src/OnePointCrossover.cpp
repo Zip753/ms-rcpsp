@@ -20,7 +20,7 @@ std::unique_ptr<SimpleSchedule> OnePointCrossover<SimpleSchedule>::Cross(
     s->set_capable_resource_idx(i, b.capable_resource_idx(i));
   }
 
-  return std::move(s);
+  return s;
 }
 
 using SchedulingProblem::PrioSchedule;
@@ -35,7 +35,7 @@ std::unique_ptr<PrioSchedule> OnePointCrossover<PrioSchedule>::Cross(
   for (size_t i = idx; i < n; i++)
     s->set_capable_resource_idx(i, b.capable_resource_idx(i));
 
-  return std::move(s);
+  return s;
 }
 
 };  // namespace EvolutionaryAlgorithm

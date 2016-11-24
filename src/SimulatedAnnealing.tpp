@@ -31,7 +31,7 @@ std::unique_ptr<T> SimulatedAnnealing<T>::Optimize(
 template <class T>
 std::unique_ptr<T> SimulatedAnnealing<T>::GenerateNeigbour(
     const T &start) {
-  return std::move(mutator_->Mutate(start));
+  return mutator_->Mutate(start);
 }
 
 };  // namespace Solutions

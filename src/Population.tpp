@@ -32,14 +32,5 @@ void Population<T>::ShowStat(std::ostream &stream) {
   stream << best_val << " " << mean << " " << specimen(worst_idx)->Fitness();
 }
 
-template <class T>
-Population<T>::Population(std::vector<std::unique_ptr<T>>* spec) {
-  specimen_.reserve(spec->size());
-  std::transform(std::make_move_iterator(spec->begin()),
-                 std::make_move_iterator(spec->end()),
-                 std::back_inserter(specimen_),
-                 [](std::unique_ptr<T> p){ return std::move(p); });
-}
-
 };  // namespace EvolutionaryAlgorithm
 };  // namespace Solutions

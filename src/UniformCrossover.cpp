@@ -25,7 +25,7 @@ std::unique_ptr<PrioSchedule> UniformCrossover<PrioSchedule>::Cross(
     }
   }
 
-  return std::move(s);
+  return s;
 }
 
 using SchedulingProblem::SimpleSchedule;
@@ -42,7 +42,7 @@ std::unique_ptr<SimpleSchedule> UniformCrossover<SimpleSchedule>::Cross(
     }
   }
 
-  return std::move(s);
+  return s;
 }
 
 };  // namespace EvolutionaryAlgorithm

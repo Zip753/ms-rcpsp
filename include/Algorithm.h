@@ -18,7 +18,7 @@ class Algorithm {
 
   std::unique_ptr<T> Optimize() {
     std::ostream vain(0);
-    return std::move(Optimize(vain));
+    return Optimize(vain);
   }
 };
 

@@ -52,9 +52,9 @@ std::unique_ptr<Population<T>> BuildPopulation(size_t pop_size,
   std::vector<std::unique_ptr<T>> specimen;
   specimen.reserve(pop_size);
   for (size_t i = 0; i < pop_size; ++i) {
-    specimen.push_back(std::move(std::make_unique<T>(project)));
+    specimen.push_back(std::make_unique<T>(project));
   }
-  return std::move(std::make_unique<Population<T>>(&specimen));
+  return std::make_unique<Population<T>>(std::move(specimen));
 }
 
 template <class T>

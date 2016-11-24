@@ -39,7 +39,7 @@ std::unique_ptr<PrioSchedule> LAXCrossover<PrioSchedule>::Cross(
     }
   }
 
-  return std::move(s);
+  return s;
 }
 
 using SchedulingProblem::SimpleSchedule;
@@ -65,7 +65,7 @@ std::unique_ptr<SimpleSchedule> LAXCrossover<SimpleSchedule>::Cross(
         s->set_capable_resource_idx(i, b.capable_resource_idx(i));
     }
   }
-  return std::move(s);
+  return s;
 }
 
 };  // namespace EvolutionaryAlgorithm

@@ -66,7 +66,7 @@ std::unique_ptr<T> TabuSearch<T>::Optimize(std::ostream &stream) {
 
 template <class T>
 std::unique_ptr<T> TabuSearch<T>::GenerateNeigbour(const T &start) {
-  return std::move(mutator_->Mutate(start));
+  return mutator_->Mutate(start);
 }
 
 };  // namespace Solutions

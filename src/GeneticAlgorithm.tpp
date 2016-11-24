@@ -39,7 +39,7 @@ std::unique_ptr<T> GeneticAlgorithm<T>::Optimize(std::ostream &stat) {
         MutateAndAddToPopulation(&next_pop, &iter, *b);
       }
     }
-    population_ = std::make_unique<Population<T>>(&next_pop);
+    population_ = std::make_unique<Population<T>>(std::move(next_pop));
   }
   UpdateBest();
 

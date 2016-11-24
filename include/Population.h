@@ -18,7 +18,8 @@ class Population {
    * all specimen to the new population.
    * @param spec List of specimen.
    */
-  Population(std::vector<std::unique_ptr<T>>* spec);
+  Population(std::vector<std::unique_ptr<T>> spec)
+      : specimen_(std::move(spec)) {}
 
   /** @return size of the population. */
   size_t size() const { return specimen_.size(); }

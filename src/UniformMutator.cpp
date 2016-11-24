@@ -82,7 +82,7 @@ std::unique_ptr<SimpleSchedule> UniformMutator<SimpleSchedule>::Mutate(
       MutateGene(s.get(), i);
     }
   }
-  return std::move(s);
+  return s;
 }
 
 template class UniformMutator<SimpleSchedule>;
