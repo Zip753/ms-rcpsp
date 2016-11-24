@@ -28,18 +28,19 @@
 #include "include/UniformMutator.h"
 #include "include/Validator.h"
 
-const int FLAGS_pop_size = 100;
+const int FLAGS_pop_size = 200;
 const int FLAGS_iters = 1000;
 const double FLAGS_temp = 1000;
 const double FLAGS_eps = 1e-3;
 const int FLAGS_list_size = 100;
-const double FLAGS_crossover = 0.3;
+const double FLAGS_crossover = 0.5;
 const double FLAGS_mutation = 0.01;
 int FLAGS_tournament_size = -1;
 std::string FLAGS_suffix = "";
 const bool FLAGS_lax = false;
 const bool FLAGS_output_stat = true;
 bool FLAGS_simple = false;
+const bool FLAGS_remove_clones = true;
 
 using namespace SchedulingProblem;
 using namespace Solutions;
@@ -67,8 +68,12 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
   } else {
     cross = std::make_unique<UniformCrossover<T>>(FLAGS_crossover);
   }
+  double mut_prob = 1.0 / project->size();
+  if (mut_prob < FLAGS_mutation) {
+    mut_prob = FLAGS_mutation;
+  }
   std::unique_ptr<Mutator<T>> mut =
-      std::make_unique<UniformMutator<T>>(FLAGS_mutation);
+      std::make_unique<UniformMutator<T>>(mut_prob);
   std::unique_ptr<Population<T>> pop =
       std::move(BuildPopulation<T>(FLAGS_pop_size, project));
   std::unique_ptr<Algorithm<T>> algo =
@@ -77,17 +82,17 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
                                             std::move(cross),
                                             std::move(mut),
                                             FLAGS_iters,
-                                            false);
+                                            FLAGS_remove_clones);
 //      std::make_unique<SimulatedAnnealing<T>>(T(project),
 //                                                       FLAGS_iters,
 //                                                       FLAGS_temp,
-//                                                       FLAGS_mutation,
+//                                                       mut_prob,
 //                                                       FLAGS_eps);
 //      std::make_unique<TabuSearch<T>>(T(project),
 //                                               FLAGS_iters,
 //                                               FLAGS_pop_size,
 //                                               FLAGS_list_size,
-//                                               FLAGS_mutation);
+//                                               mut_prob);
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     std::ofstream stat_file(stat_file_name);
