@@ -12,26 +12,9 @@ bool SimpleSchedule::operator==(const SimpleSchedule &other) const {
   return Schedule::operator==(other);
 }
 
-void SimpleSchedule::Init(bool create_ires) {
-  if (create_ires) {
-    capable_resource_idx_ = std::vector<size_t>(size_, 0);
-    Reset();
-  }
-
-  size_t rcount = project_->num_resources();
-  business_ = std::vector<int>(rcount);
-}
-
-SimpleSchedule::SimpleSchedule(Project* project_) : Schedule(project_) {
-  Init(true);
-}
-
-SimpleSchedule::SimpleSchedule(const SimpleSchedule& s) : Schedule(s.project_) {
-  Init(false);
-  capable_resource_idx_ = std::vector<size_t>(size_, 0);
-  for (size_t i = 0; i < size_; i++) {
-    capable_resource_idx_[i] = s.capable_resource_idx_[i];
-  }
+SimpleSchedule::SimpleSchedule(Project* project_)
+    : Schedule(project_), Businessable(project_->size()) {
+  Reset();
 }
 
 void SimpleSchedule::FixAll() {

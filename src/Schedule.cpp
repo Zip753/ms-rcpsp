@@ -14,7 +14,7 @@
 namespace SchedulingProblem {
 
 int Schedule::Fitness() {
-  if (fitness_ == -1) {
+  if (fitness_ == kInvalidFitness) {
     fitness_ = ComputeDuration();
   }
   return fitness_;

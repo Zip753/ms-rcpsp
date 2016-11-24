@@ -16,6 +16,9 @@ namespace SchedulingProblem {
  */
 class Businessable {
  public:
+  Businessable(size_t size) : business_(std::vector<int>(size, 0)) {}
+  Businessable(const Businessable &other) : business_(other.business_) {}
+
   inline int business(size_t i) const { return business_[i]; }
 
   inline void set_business(size_t i, int new_business) {

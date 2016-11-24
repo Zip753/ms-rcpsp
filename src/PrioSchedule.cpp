@@ -18,28 +18,10 @@ bool PrioSchedule::operator==(const PrioSchedule &other) const {
   return true;
 }
 
-void PrioSchedule::Init(bool initialize) {
-  if (initialize) {
-    capable_resource_idx_ = std::vector<size_t>(size_, 0);
-    priority_ = std::vector<int>(size_, 0);
-    Reset();
-  }
-
-  business_ = std::vector<int>(project_->num_resources());
-}
-
-PrioSchedule::PrioSchedule(Project* project_) : Schedule(project_) {
-  Init(true);
-}
-
-PrioSchedule::PrioSchedule(const PrioSchedule& s) : Schedule(s.project_) {
-  Init(false);
-  capable_resource_idx_ = std::vector<size_t>(size_, 0);
-  priority_ = std::vector<int>(size_, 0);
-  for (size_t i = 0; i < size_; i++) {
-    capable_resource_idx_[i] = s.capable_resource_idx_[i];
-    priority_[i] = s.priority_[i];
-  }
+PrioSchedule::PrioSchedule(Project* project_)
+    : Schedule(project_), Businessable(project_->size()),
+      priority_(std::vector<int>(size_, 0)) {
+  Reset();
 }
 
 void PrioSchedule::FixAll() {

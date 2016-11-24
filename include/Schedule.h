@@ -46,11 +46,15 @@ class Schedule {
 
   inline void set_capable_resource_idx(size_t i, size_t new_idx) {
     capable_resource_idx_.at(i) = new_idx;
+    ResetFitness();
   }
 
   inline int start(size_t i) const { return start_[i]; }
 
-  inline void set_start(size_t i, int new_start) { start_[i] = new_start; }
+  inline void set_start(size_t i, int new_start) {
+    start_[i] = new_start;
+    ResetFitness();
+  }
 
   /**
    * Returns index of resource assigned to i-th task.
@@ -85,10 +89,15 @@ class Schedule {
 
  protected:
   Schedule(Project* project_)
-      : project_(project_), start_(std::vector<int>(project_->size(), 0)),
+      : project_(project_),
+        capable_resource_idx_(std::vector<size_t>(project_->size(), 0)),
+        start_(std::vector<int>(project_->size(), 0)),
         size_(project_->size()) {}
-  Schedule(Project* project_, std::vector<size_t> _ires)
-      : Schedule(project_) { capable_resource_idx_ = _ires; }
+  Schedule(const Schedule &s) : project_(s.project_),
+                                capable_resource_idx_(s.capable_resource_idx_),
+                                start_(s.start_),
+                                size_(s.size_),
+                                fitness_(s.fitness_) {}
 
   /** Pointer to project for which the schedule is designated. */
   Project* project_;
@@ -114,7 +123,11 @@ class Schedule {
    * Cached fitness value for this specimen.
    * @see Schedule#fitness
    */
-  int fitness_ = -1;
+  int fitness_ = kInvalidFitness;
+
+  inline void ResetFitness() { fitness_ = kInvalidFitness; }
+
+  constexpr static int kInvalidFitness = -1;
 };
 
 };  // namespace SchedulingProblem

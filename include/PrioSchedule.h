@@ -22,7 +22,8 @@ namespace SchedulingProblem {
 class PrioSchedule : public Schedule, public Businessable {
  public:
   PrioSchedule(Project* project_);
-  PrioSchedule(const PrioSchedule& s);
+  PrioSchedule(const PrioSchedule& s) : Schedule(s), Businessable(s),
+                                        priority_(s.priority_) {}
   ~PrioSchedule() override {}
 
   void Reset() override;
@@ -39,13 +40,6 @@ class PrioSchedule : public Schedule, public Businessable {
  private:
   /** Task priorities. */
   std::vector<int> priority_;
-
-  /**
-   * Contructor helper.
-   * @param initialize If true, allocate and initialize resources and
-   * priorities.
-   */
-  void Init(bool initialize);
 
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();

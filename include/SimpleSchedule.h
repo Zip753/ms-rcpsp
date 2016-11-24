@@ -16,19 +16,13 @@ namespace SchedulingProblem {
 class SimpleSchedule : public Schedule, public Businessable {
  public:
   SimpleSchedule(Project* project_);
-  SimpleSchedule(const SimpleSchedule& s);
+  SimpleSchedule(const SimpleSchedule& s) : Schedule(s), Businessable(s) {}
   ~SimpleSchedule() override {}
 
   /** Checks schedule equality in terms of representation. */
   bool operator==(const SimpleSchedule &other) const;
 
  private:
-  /**
-   * Contructor helper.
-   * @param initialize If true, allocate and initialize resources.
-   */
-  void Init(bool create_ires);
-
   /** Schedule builder. Builds feasible schedule with no conflicts. */
   void FixAll();
 
