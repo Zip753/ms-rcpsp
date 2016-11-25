@@ -10,7 +10,7 @@ namespace Solutions {
 template <class T>
 bool TabuEquals(const T &a, const T &b) {
   for (size_t i = 0; i < a.size(); ++i) {
-    if (a.ires[i] != b.ires[i]) return false;
+    if (a.capable_resource_idx(i) != b.capable_resource_idx(i)) return false;
   }
   return true;
 }
@@ -51,14 +51,15 @@ std::unique_ptr<T> TabuSearch<T>::Optimize(std::ostream &stream) {
         first = false;
       }
     }
-    assert(iter_best != nullptr);
+    if (iter_best != nullptr) {
+      start = *iter_best;
+    }
     mean /= neighbours_;
-    stream << iter_best->Fitness() << " " << mean << " " << worst_val << " "
+    stream << start.Fitness() << " " << mean << " " << worst_val << " "
            << static_cast<double>(hits) / neighbours_ << "\n";
-    start = *iter_best;
     std::cout << "iter: " << iter << ", fitness: " << start.Fitness() << "\n";
-    if (global_best.Fitness() > iter_best->Fitness()) {
-      global_best = *iter_best;
+    if (global_best.Fitness() > start.Fitness()) {
+      global_best = start;
     }
   }
   return std::make_unique<T>(global_best);
