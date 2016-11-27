@@ -113,7 +113,7 @@ int PrioSchedule::ComputeDuration() {
 void PrioSchedule::Reset() {
   Schedule::Reset();
   for (size_t i = 0; i < size_; i++) {
-    priority_[i] = Util::Random::randint() % static_cast<int>(size_);
+    priority_[i] = Util::Random::randint() % 5;
   }
 }
 
