@@ -14,6 +14,8 @@ namespace Solutions {
 template <class T>
 class Algorithm {
  public:
+  virtual ~Algorithm() = 0;
+  
   virtual std::unique_ptr<T> Optimize(std::ostream &stream) = 0;
 
   std::unique_ptr<T> Optimize() {
@@ -21,6 +23,9 @@ class Algorithm {
     return Optimize(vain);
   }
 };
+
+template <class T>
+Algorithm<T>::~Algorithm() {}
 
 };  // namespace Solutions
 

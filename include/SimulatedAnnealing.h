@@ -19,6 +19,7 @@ class SimulatedAnnealing : public Algorithm<T> {
                               double eps_ = 1e-7) :
       start_(start_), iters_(iters_), start_temp_(start_temp_),
       mutator_(std::make_unique<UniformMutator<T>>(p_mut)), eps_(eps_) {}
+  ~SimulatedAnnealing() {}
 
  private:
   T start_;

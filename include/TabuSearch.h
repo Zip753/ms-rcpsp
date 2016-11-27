@@ -18,6 +18,7 @@ class TabuSearch : public Algorithm<T> {
       start_(start_), iters_(iters_), neighbours_(neighbours_),
       list_size_(list_size_),
       mutator_(std::make_unique<UniformMutator<T>>(p_mut)) {}
+  ~TabuSearch() {}
 
  private:
   T start_;
