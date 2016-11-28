@@ -14,7 +14,7 @@ class ProjectReader {
   /** Reads project from source file. Initializes Project singleton.
    * @return If false, input file has wrong format.
    */
-  static std::unique_ptr<Project> Read(const std::string &filename);
+  static std::unique_ptr<Project> Read(std::istream &infile);
 };
 
 };  // namespace SchedulingProblem

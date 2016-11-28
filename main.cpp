@@ -164,8 +164,9 @@ int main(int argc, char* argv[]) {
       input_base_name.substr(0, input_base_name.find_last_of('.'));
 
   /* Read project data from file. */
+  std::ifstream project_stream(input_full_name);
   std::unique_ptr<Project> project =
-      std::move(ProjectReader::Read(input_full_name));
+      std::move(ProjectReader::Read(project_stream));
   if (project == nullptr) {
     std::cerr << "Invalid input file format.\n";
     return 1;
