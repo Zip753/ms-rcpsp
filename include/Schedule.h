@@ -102,6 +102,9 @@ class Schedule {
   /** Pointer to project for which the schedule is designated. */
   Project* project_;
 
+  bool operator==(const Schedule& other) const;
+
+ private:
   /** List of resources assigned to corresponding tasks. */
   std::vector<size_t> capable_resource_idx_;
 
@@ -111,9 +114,6 @@ class Schedule {
   /** Number of tasks. */
   size_t size_;
 
-  bool operator==(const Schedule& other) const;
-
- private:
   /**
    * Computes fitness and writes it to Schedule#_fitness cache variable.
    */

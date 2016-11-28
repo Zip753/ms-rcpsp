@@ -19,10 +19,10 @@ SimpleSchedule::SimpleSchedule(Project* project_)
 
 void SimpleSchedule::FixAll() {
   /* Create list of inverse dependencies. */
-  std::vector<std::vector<size_t>> next(size_);
+  std::vector<std::vector<size_t>> next(size());
   for (auto& el : next) { el = std::vector<size_t>(); }
 
-  for (size_t i = 0; i < size_; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     for (size_t j = 0; j < project_->task(i).num_dependencies(); ++j) {
       size_t idep = task(i).dependency(j);
       next[idep].push_back(i);
@@ -31,7 +31,7 @@ void SimpleSchedule::FixAll() {
 
   // heap of pairs (task_id, priority)
   std::queue<size_t> queue;
-  for (size_t i = 0; i < size_; ++i) {
+  for (size_t i = 0; i < size(); ++i) {
     if (task(i).num_dependencies() == 0) {
       queue.push(i);
     }
@@ -42,7 +42,7 @@ void SimpleSchedule::FixAll() {
   std::vector<int> time(res_count);
 
   // number of complete dependency_ for tasks
-  std::vector<size_t> dep_count(size_);
+  std::vector<size_t> dep_count(size());
 
   while (!queue.empty()) {
     // take next task
@@ -60,7 +60,7 @@ void SimpleSchedule::FixAll() {
     }
 
     // update start time for the task
-    start_[itask] = std::max(min_start, time[res_idx]);
+    set_start(itask, std::max(min_start, time[res_idx]));
     // update availability time for resource
     time[res_idx] = finish_time(itask) + 1;
 
@@ -79,14 +79,14 @@ int SimpleSchedule::ComputeDuration() {
   FixAll();
 
   int duration = -1;
-  for (size_t i = 0; i < size_; i++) {
+  for (size_t i = 0; i < size(); i++) {
     int finish = finish_time(i);
     if (duration < finish)
       duration = finish;
   }
 
   std::fill(business_.begin(), business_.end(), 0);
-  for (size_t i = 0; i < size_; i++) {
+  for (size_t i = 0; i < size(); i++) {
     size_t res_idx = resource_idx(i);
     business_[res_idx] += task(i).duration();
   }
