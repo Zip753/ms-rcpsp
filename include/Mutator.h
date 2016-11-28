@@ -20,7 +20,7 @@ template <class T>
 class Mutator {
  public:
   /** @param _p_mut Mutation probability. */
-  Mutator(double _p_mut) : p_mut(_p_mut) {};
+  Mutator(double p_mut_) : p_mut_(p_mut_) {};
 
   /** Performs mutation on the given sample. Returns new sample instance. */
   virtual std::unique_ptr<T> Mutate(const T &sample) const = 0;
@@ -37,10 +37,12 @@ class Mutator {
   virtual ~Mutator() = 0;
 
  protected:
-  /** Mutation probability. */
-  double p_mut;
+  bool should_mutate() const { return Random::rand(p_mut_); }
 
  private:
+  /** Mutation probability. */
+  double p_mut_;
+
   /**
    * Mutates single gene in the specimen.
    * @param sample Specimen to operate on.

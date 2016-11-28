@@ -35,11 +35,11 @@ std::unique_ptr<PrioSchedule> UniformMutator<PrioSchedule>::Mutate(
 
   for (size_t i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
-    if (Random::rand(p_mut)) {
+    if (should_mutate()) {
       MutateGene(s.get(), i);
     }
 
-    if (Random::rand(p_mut)) {
+    if (should_mutate()) {
       if (Random::rand(0.5)) {
         s->set_priority(i, s->priority(i) + 1);
       } else {
@@ -78,7 +78,7 @@ std::unique_ptr<SimpleSchedule> UniformMutator<SimpleSchedule>::Mutate(
 
   for (size_t i = 0; i < s->size(); i++) {
     // don't forget to check whether we can mutate it at all
-    if (Random::rand(p_mut)) {
+    if (should_mutate()) {
       MutateGene(s.get(), i);
     }
   }
