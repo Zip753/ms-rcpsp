@@ -1,4 +1,5 @@
-file(GLOB srcs *.cc)
-file(GLOB hdrs *.h)
+file(GLOB visualization_srcs *.cc)
+file(GLOB visualization_hdrs *.h)
 
-add_executable(visualize ${srcs} ${hdrs})
+add_executable(visualize ${visualization_srcs} ${visualization_hdrs})
+target_link_libraries(visualize ga_lib_shared)

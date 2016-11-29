@@ -22,8 +22,10 @@ std::string TimeslotTable::GetHTML(
   for (auto& res : assignments) {
     int resource_id = res.first;
     for (auto& a : res.second) {
-      styles << ".color" << a.task_id
-             << " { background-color: #" << GetColor() << "; }\n";
+      if (!a.critical) {
+        styles << ".color" << a.task_id
+               << " { background-color: #" << GetColor() << "; }\n";
+      }
     }
     std::vector<Visualizer::assignment> tasks(res.second);
     std::sort(tasks.begin(), tasks.end(), [=](auto &a, auto &b) {
@@ -36,9 +38,14 @@ std::string TimeslotTable::GetHTML(
       if (!tasks.empty() && tasks.back().start_time == i) {
         auto task = tasks.back();
         tasks.pop_back();
-        table << " text color" << task.task_id << "\""
-              << " colspan=\"" << task.finish_time - task.start_time;
-        i = task.finish_time - 1;
+        table << " text ";
+        if (task.critical) {
+          table << "critical";
+        } else {
+          table << "color" << task.task_id;
+        }
+        table << "\" colspan=\"" << task.finish_time - task.start_time + 1;
+        i = task.finish_time;
         table << "\">Task " << task.task_id
               << " [" << task.finish_time - task.start_time << "]</td>";
       } else {
@@ -64,6 +71,9 @@ std::string TimeslotTable::GetHTML(
       .text {
         text-align: center;
         font-size: 16px;
+      }
+      .critical {
+        background-color: #999;
       }
       table, th, td {
         border: 1px solid black;

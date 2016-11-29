@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include "../include/Project.h"
 
 class Renderer;
 
@@ -19,7 +20,6 @@ class Visualizer {
   };
 
   typedef std::map<int, std::vector<assignment>> assignments_map;
-  typedef std::multimap<int, assignment*> schedule_map;
 
   std::pair<bool, std::string> Visualize(std::istream& def,
                                          std::istream& sol,
@@ -28,9 +28,14 @@ class Visualizer {
  private:
   Renderer* renderer_;
 
-  void BuildCriticalPaths(assignments_map* assignments);
+  std::map<int, bool> BuildCriticalPaths(SchedulingProblem::Project* project);
 
-  bool CheckCriticalPath(assignment *assignment, schedule_map* schedule);
+  int ComputeFinishTime(size_t task_idx, SchedulingProblem::Project* project,
+                        std::vector<int>* min_finish_time);
+
+  bool CheckCriticalPath(size_t task_idx, SchedulingProblem::Project* project,
+                         std::map<int, bool>* is_critical,
+                         const std::vector<int> &min_finish_time);
 };
 
 #endif  // MS_RCPSP_VISUALIZATION_VISUALIZER_H_

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(ms-rcpsp)
 
+add_definitions(-std=c++14)
+
 file(GLOB_RECURSE srcs "src/*.cpp")
 file(GLOB_RECURSE hdrs "include/*.h")
 
@@ -17,8 +19,6 @@ set_target_properties(ga_lib_static ga_lib_shared ga_bin
         "LIBRARY_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/lib"
         "RUNTIME_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/bin"
 )
-
-add_definitions(-std=c++14)
 
 add_subdirectory(tests)
 add_subdirectory(visualization)

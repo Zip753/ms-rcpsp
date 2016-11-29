@@ -2,31 +2,32 @@
 
 #include <regex>
 
+#include "../include/ProjectReader.h"
 #include "renderer.h"
 
 std::pair<bool, std::string> Visualizer::Visualize(std::istream& def,
                                                    std::istream& sol,
                                                    std::ostream& vis) {
-  std::string line;
-  do {
-    if (!std::getline(def, line)) return {false, "Wrong .def format"};
-  } while (line != "TaskID \t Duration \t Skill \t Predecessor IDs ");
+  std::unique_ptr<SchedulingProblem::Project> project =
+      SchedulingProblem::ProjectReader::Read(def);
 
-  // Read task IDs and durations
-  std::smatch match;
-  std::regex pattern("^(\\d+)\\s+(\\d+)");
+  if (project == nullptr) { return {false, "Wrong .def format"}; }
+
+  std::map<int, bool> is_critical = BuildCriticalPaths(project.get());
+
+  // Map task ID to duration
   std::map<int, int> duration;
-  while (std::getline(def, line)) {
-    if (!std::regex_search(line, match, pattern)) break;
-    int task_id = std::stoi(match[1]);
-    int task_duration = std::stoi(match[2]);
-    duration[task_id] = task_duration;
+  for (size_t i = 0; i < project->size(); ++i) {
+    duration[project->task(i).id()] = project->task(i).duration();
   }
 
   // Read first line with headers
+  std::string line;
   if (!std::getline(sol, line)) return {false, "Missing .sol header"};
   // Read task assignments
   std::map<int, std::vector<assignment>> assignments;
+  std::smatch match;
+  std::regex pattern;
   while (std::getline(sol, line)) {
     // Read start time
     pattern = "(\\d+)";
@@ -42,49 +43,82 @@ std::pair<bool, std::string> Visualizer::Visualize(std::istream& def,
       int task_id = stoi(match[2]);
       int finish_time = start_time + duration[task_id];
       assignments[resource_id].push_back({task_id, start_time, finish_time,
-                                          false});
+                                          is_critical[task_id]});
       line = match.suffix();
     }
   }
-
-  BuildCriticalPaths(&assignments);
 
   vis << renderer_->GetHTML(assignments);
 
   return {true, "OK"};
 }
 
-void Visualizer::BuildCriticalPaths(assignments_map* assignments) {
-  // Map finish time to references to assignments
-  std::multimap<int, assignment*> schedule;
+std::map<int, bool> Visualizer::BuildCriticalPaths(
+    SchedulingProblem::Project* project) {
 
-  int max_finish = 0;
-  for (auto& res : *assignments) {
-    for (auto& a : res.second) {
-      schedule.insert({a.finish_time, &a});
-      if (max_finish < a.finish_time)
-        max_finish = a.finish_time;
+  std::vector<int> min_finish_time(project->size(), -1);
+  int max_min_finish_time = -1;
+  for (size_t i = 0; i < project->size(); ++i) {
+    int finish = ComputeFinishTime(i, project, &min_finish_time);
+    if (max_min_finish_time < finish) {
+      max_min_finish_time = finish;
     }
   }
 
-  auto range = schedule.equal_range(max_finish);
-  for (auto& a = range.first; a != range.second; ++a) {
-    CheckCriticalPath(a->second, &schedule);
+  std::map<int, bool> is_critical;
+  for (size_t i = 0; i < project->size(); ++i) {
+    if (min_finish_time[i] == max_min_finish_time) {
+      CheckCriticalPath(i, project, &is_critical, min_finish_time);
+    }
   }
+
+  return is_critical;
 }
 
-bool Visualizer::CheckCriticalPath(assignment *assignment,
-                                   schedule_map *schedule) {
-  if (assignment->critical || assignment->start_time == 1) {
-    assignment->critical = true;
+bool Visualizer::CheckCriticalPath(size_t task_idx,
+                                   SchedulingProblem::Project* project,
+                                   std::map<int, bool>* is_critical,
+                                   const std::vector<int> &min_finish_time) {
+  const SchedulingProblem::Task &task = project->task(task_idx);
+  
+  if (is_critical->count(task.id()) > 0) {
+    return is_critical->at(task.id());
+  }
+  
+  if (task.num_dependencies() == 0) {
+    is_critical->insert({task.id(), true});
     return true;
   }
-  auto range = schedule->equal_range(assignment->start_time - 1);
-  for (auto& a = range.first; a != range.second; ++a) {
-    if (CheckCriticalPath(a->second, schedule)) {
-      assignment->critical = true;
+  is_critical->insert({task.id(), false});
+
+  int task_finish_time = min_finish_time.at(task_idx);
+  for (size_t i = 0; i < task.num_dependencies(); ++i) {
+    size_t dep_idx = task.dependency(i);
+    if (min_finish_time.at(dep_idx) == task_finish_time - task.duration() - 1 &&
+        CheckCriticalPath(dep_idx, project, is_critical, min_finish_time)) {
+      is_critical->at(task.id()) = true;
     }
   }
-  schedule->erase(range.first, range.second);
-  return assignment->critical;
+
+  return is_critical->at(task.id());
+}
+
+int Visualizer::ComputeFinishTime(size_t task_idx,
+                                  SchedulingProblem::Project* project,
+                                  std::vector<int>* min_finish_time) {
+  const SchedulingProblem::Task &task = project->task(task_idx);
+  int &task_finish_time = min_finish_time->at(task_idx);
+
+  if (task_finish_time != -1) { return task_finish_time; }
+  
+  task_finish_time = task.duration();
+  for (size_t i = 0; i < task.num_dependencies(); ++i) {
+    size_t dep_idx = task.dependency(i);
+    ComputeFinishTime(dep_idx, project, min_finish_time);
+    if (task_finish_time <= min_finish_time->at(dep_idx) + task.duration()) {
+      task_finish_time = min_finish_time->at(dep_idx) + task.duration() + 1;
+    }
+  }
+
+  return task_finish_time;
 }
