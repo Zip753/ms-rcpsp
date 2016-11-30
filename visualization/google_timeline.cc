@@ -8,18 +8,17 @@ std::string GoogleTimeline::GetHTML(
   std::ostringstream data;
   std::ostringstream colors;
   for (auto& res : assignments) {
-    std::string res_color = "'#" + GetColor() + "'";
     for (auto& a : res.second) {
       data << "[ 'Resource " << res.first << "', '" << a.task_id
            << "', '[Task " << a.task_id << "] " << a.start_time << " - "
            << a.finish_time << "', new Date(2010, 0, " << a.start_time
            << "), new Date(2010, 0, " << (a.finish_time + 1) << ") ],\n";
 
-//      if (a.critical) {
-//        colors << "'#000000'";
-//      } else {
-        colors << res_color;
-//      }
+      if (a.critical) {
+        colors << "'#999'";
+      } else {
+        colors << "'#" + GetColor() + "'";
+      }
       colors << ",";
     }
   }
