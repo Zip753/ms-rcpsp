@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(ms-rcpsp)
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif(NOT CMAKE_BUILD_TYPE)
+
 add_definitions(-std=c++14)
 
 file(GLOB_RECURSE srcs "src/*.cpp")
