@@ -48,7 +48,7 @@ std::unique_ptr<Project> ProjectReader::Read(std::istream &infile) {
     if (!std::getline(infile, line) ||
         !std::regex_search(line, match, pattern)) return nullptr;
     int res_id = stoi(match[1]);
-    double res_sal = stof(match[2]);
+    double res_sal = stod(match[2]);
     res.emplace_back(res_id, res_sal);
     line = match.suffix();
     while (std::regex_search(line, match, skill_pattern)) {
