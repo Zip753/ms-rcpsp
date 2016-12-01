@@ -1,6 +1,8 @@
 # MS-RCPSP
 This repository contains a suboptimal solution (and its visualizations) of MS-RCPSP problem using simple genetic algorithm as a part of bachelor thesis.
 
+_to be updated..._
+
 ## About MS-RCPSP problem
 MS-RCPSP stands for Multi-Skill Resource Constrained Project Scheduling Problem, it is and NP-complete scheduling problem. Given a set of workers (a.k.a. *resources*), each possessing certain skills at certain levels, and a set of tasks, each with its own duration, (one) skill requirement and possible dependencies on other tasks, one has to find the sequence of tasks along with workers assignments that minimizes the total time of execution of all tasks. The conditions are as follows:
  * every task can only be completed by one person and cannot be pre-empted
