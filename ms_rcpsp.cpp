@@ -31,20 +31,26 @@
 #include "include/UniformMutator.h"
 #include "include/Validator.h"
 
+// Common flags
 DEFINE_string(algorithm, "ea", "Search method (ea, ts or sa)");
-DEFINE_uint64(pop_size, 200, "Size of the population in EA");
 DEFINE_uint32(iters, 500, "Number of iterations");
-DEFINE_double(temp, 1000, "Initial temperature in SA");
-DEFINE_double(eps, 1e-5, "Lowest temperature in SA");
-DEFINE_uint32(list_size, 100, "Tabu list size in TS");
+// EA flags
+DEFINE_uint64(pop_size, 200, "Size of the population in EA");
 DEFINE_double(crossover, 0.5, "Crossover probability");
+DEFINE_bool(lax, false, "Use LAX crossover");
 DEFINE_double(mutation, 0.01, "Mutation probability");
 DEFINE_uint64(tournament_size, 0, "Tournament size");
+DEFINE_bool(remove_clones, true, "Remove clones from population in EA");
+// TS flags
+DEFINE_uint32(list_size, 100, "Tabu list size in TS");
+DEFINE_uint32(neighbours, 100, "Number of neighbours in TS");
+// SA flags
+DEFINE_double(temp, 1000, "Initial temperature in SA");
+DEFINE_double(eps, 1e-5, "Lowest temperature in SA");
+// Misc flags
 DEFINE_string(suffix, "", "Suffix for output filename");
-DEFINE_bool(lax, false, "Use LAX crossover");
 DEFINE_bool(output_stat, true, "Output iteration stats to .stat file");
 DEFINE_bool(simple, false, "Use SimpleSchedule representation");
-DEFINE_bool(remove_clones, true, "Remove clones from population in EA");
 
 using namespace SchedulingProblem;
 using namespace Solutions;
@@ -97,7 +103,7 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
   } else if (FLAGS_algorithm == "ts") {
     algo = std::make_unique<TabuSearch<T>>(T(project),
                                            FLAGS_iters,
-                                           FLAGS_pop_size,
+                                           FLAGS_neighbours,
                                            FLAGS_list_size,
                                            mut_prob);
   }

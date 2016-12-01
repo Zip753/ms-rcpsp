@@ -9,16 +9,16 @@ add_definitions(-std=c++14)
 
 file(GLOB_RECURSE srcs "src/*.cpp")
 
-add_library(ga_objects OBJECT ${srcs})
-add_library(ga_static STATIC $<TARGET_OBJECTS:ga_objects>)
-add_library(ga_shared SHARED ${srcs})
+add_library(ms_rcpsp_objects OBJECT ${srcs})
+add_library(ms_rcpsp_static STATIC $<TARGET_OBJECTS:ms_rcpsp_objects>)
+add_library(ms_rcpsp_shared SHARED ${srcs})
 
 add_subdirectory(lib)
 
-add_executable(ga_bin $<TARGET_OBJECTS:ga_objects> ms_rcpsp.cpp)
-target_link_libraries(ga_bin gflags)
+add_executable(ms_rcpsp $<TARGET_OBJECTS:ms_rcpsp_objects> ms_rcpsp.cpp)
+target_link_libraries(ms_rcpsp gflags)
 
-set_target_properties(ga_static ga_shared ga_bin
+set_target_properties(ms_rcpsp_static ms_rcpsp_shared ms_rcpsp
         PROPERTIES
         "ARCHIVE_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/lib"
         "LIBRARY_OUTPUT_DIRECTORY" "${CMAKE_BINARY_DIR}/lib"

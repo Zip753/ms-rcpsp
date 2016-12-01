@@ -5,4 +5,4 @@ file(GLOB srcs "*.cpp")
 add_executable(scheduling_tests ${srcs})
 
 target_link_libraries(scheduling_tests gtest gtest_main)
-target_link_libraries(scheduling_tests ga_static)
+target_link_libraries(scheduling_tests ms_rcpsp_static)
