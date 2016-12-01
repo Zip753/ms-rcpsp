@@ -12,7 +12,7 @@ filegroup(
 )
 
 cc_library(
-    name = "ga_lib",
+    name = "ms_rcpsp_lib",
     srcs = [":sources"],
     hdrs = [":headers"],
     copts = ["-std=c++14"],
@@ -20,10 +20,11 @@ cc_library(
 )
 
 cc_binary(
-    name = "ga_bin",
-    srcs = ["main.cpp"],
+    name = "ms_rcpsp",
+    srcs = ["ms_rcpsp.cpp"],
     copts = ["-std=c++14"],
     deps = [
-        ":ga_lib",
+        ":ms_rcpsp_lib",
+        "//external:gflags_nothreads",
     ],
 )

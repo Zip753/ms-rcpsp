@@ -3,6 +3,7 @@
  * feasible schedule.
  */
 
+#include <algorithm>
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -11,6 +12,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "gflags/gflags.h"
 
 #include "include/GeneticAlgorithm.h"
 #include "include/LAXCrossover.h"
@@ -28,19 +31,20 @@
 #include "include/UniformMutator.h"
 #include "include/Validator.h"
 
-const int FLAGS_pop_size = 200;
-const int FLAGS_iters = 1000;
-const double FLAGS_temp = 1000;
-const double FLAGS_eps = 1e-3;
-const int FLAGS_list_size = 100;
-const double FLAGS_crossover = 0.5;
-const double FLAGS_mutation = 0.01;
-int FLAGS_tournament_size = -1;
-std::string FLAGS_suffix = "";
-const bool FLAGS_lax = false;
-const bool FLAGS_output_stat = true;
-bool FLAGS_simple = false;
-const bool FLAGS_remove_clones = true;
+DEFINE_string(algorithm, "ea", "Search method (ea, ts or sa)");
+DEFINE_uint64(pop_size, 200, "Size of the population in EA");
+DEFINE_uint32(iters, 500, "Number of iterations");
+DEFINE_double(temp, 1000, "Initial temperature in SA");
+DEFINE_double(eps, 1e-5, "Lowest temperature in SA");
+DEFINE_uint32(list_size, 100, "Tabu list size in TS");
+DEFINE_double(crossover, 0.5, "Crossover probability");
+DEFINE_double(mutation, 0.01, "Mutation probability");
+DEFINE_uint64(tournament_size, 0, "Tournament size");
+DEFINE_string(suffix, "", "Suffix for output filename");
+DEFINE_bool(lax, false, "Use LAX crossover");
+DEFINE_bool(output_stat, true, "Output iteration stats to .stat file");
+DEFINE_bool(simple, false, "Use SimpleSchedule representation");
+DEFINE_bool(remove_clones, true, "Remove clones from population in EA");
 
 using namespace SchedulingProblem;
 using namespace Solutions;
@@ -76,23 +80,27 @@ std::unique_ptr<T> InitAndSolve(const std::string& stat_file_name,
       std::make_unique<UniformMutator<T>>(mut_prob);
   std::unique_ptr<Population<T>> pop =
       std::move(BuildPopulation<T>(FLAGS_pop_size, project));
-  std::unique_ptr<Algorithm<T>> algo =
-      std::make_unique<GeneticAlgorithm<T>>(std::move(pop),
-                                            std::move(sel),
-                                            std::move(cross),
-                                            std::move(mut),
-                                            FLAGS_iters,
-                                            FLAGS_remove_clones);
-//      std::make_unique<SimulatedAnnealing<T>>(T(project),
-//                                                       FLAGS_iters,
-//                                                       FLAGS_temp,
-//                                                       mut_prob,
-//                                                       FLAGS_eps);
-//      std::make_unique<TabuSearch<T>>(T(project),
-//                                               FLAGS_iters,
-//                                               FLAGS_pop_size,
-//                                               FLAGS_list_size,
-//                                               mut_prob);
+  std::unique_ptr<Algorithm<T>> algo = nullptr;
+  if (FLAGS_algorithm == "ea") {
+    algo = std::make_unique<GeneticAlgorithm<T>>(std::move(pop),
+                                                 std::move(sel),
+                                                 std::move(cross),
+                                                 std::move(mut),
+                                                 FLAGS_iters,
+                                                 FLAGS_remove_clones);
+  } else if (FLAGS_algorithm == "sa") {
+    algo = std::make_unique<SimulatedAnnealing<T>>(T(project),
+                                                   FLAGS_iters,
+                                                   FLAGS_temp,
+                                                   mut_prob,
+                                                   FLAGS_eps);
+  } else if (FLAGS_algorithm == "ts") {
+    algo = std::make_unique<TabuSearch<T>>(T(project),
+                                           FLAGS_iters,
+                                           FLAGS_pop_size,
+                                           FLAGS_list_size,
+                                           mut_prob);
+  }
   std::unique_ptr<T> sch = nullptr;
   if (FLAGS_output_stat) {
     std::ofstream stat_file(stat_file_name);
@@ -130,29 +138,37 @@ void SolveAndOutput(const std::string& stat_file_name,
   best_file << sch->Fitness();
 }
 
+const char *kFilename = "main.cpp";
+
 int main(int argc, char* argv[]) {
-  if (argc < 4 || argc > 5) {
-    std::cerr << "Invalid number of arguments.\nUsage: " << argv[0]
-              << "%s input_file output_dir suffix [--simple]\n";
+  std::ostringstream usage;
+  usage << "Run chosen metaheuristic for scheduling problem:\n\n"
+        << argv[0] << " def_file output_folder [FLAGS]\n"
+        << "def_file       Schedule definition file\n"
+        << "output_folder  Folder where output files are to be stored\n"
+        << "               (MUST end with folder separator)";
+  gflags::SetUsageMessage(usage.str());
+
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+
+  if (argc != 3) {
+    gflags::ShowUsageWithFlags(__FILE__);
+    return 1;
+  }
+
+  std::transform(FLAGS_algorithm.begin(), FLAGS_algorithm.end(),
+                 FLAGS_algorithm.begin(), ::tolower);
+  if (FLAGS_algorithm != "ea" && FLAGS_algorithm != "ts" &&
+      FLAGS_algorithm != "sa") {
+    gflags::ShowUsageWithFlags(__FILE__);
     return 1;
   }
 
   std::string input_full_name = std::string(argv[1]);
   std::string output_folder_name = std::string(argv[2]);
-  FLAGS_suffix = std::string(argv[3]);
-
-  if (argc == 5) {
-    if (strcmp(argv[4], "--simple") == 0) {
-      FLAGS_simple = true;
-    } else {
-      std::cerr << "Invalid flags.\nUsage: " << argv[0]
-                << " input_file output_dir suffix [--simple]\n";
-      return 1;
-    }
-  }
 
   /* Set tournament size dynamically, if none provided. */
-  if (FLAGS_tournament_size == -1) {
+  if (FLAGS_tournament_size == 0) {
     FLAGS_tournament_size = FLAGS_pop_size / 20;
   }
   std::cout << "Tournament size: " << FLAGS_tournament_size << "\n";

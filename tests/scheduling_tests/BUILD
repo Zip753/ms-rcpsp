@@ -3,7 +3,7 @@ cc_test(
     size = "small",
     srcs = ["ResourceTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -13,7 +13,7 @@ cc_test(
     size = "small",
     srcs = ["TaskTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -23,7 +23,7 @@ cc_test(
     size = "small",
     srcs = ["ProjectTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -33,7 +33,7 @@ cc_test(
     size = "small",
     srcs = ["SimpleScheduleTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -43,7 +43,7 @@ cc_test(
     size = "small",
     srcs = ["PrioScheduleTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -53,7 +53,7 @@ cc_test(
     size = "small",
     srcs = ["ProjectReaderTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -63,7 +63,7 @@ cc_test(
     size = "small",
     srcs = ["ScheduleWriterTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )
@@ -73,7 +73,7 @@ cc_test(
     size = "small",
     srcs = ["ValidatorTest.cpp"],
     deps = [
-        "//:ga_lib",
+        "//:ms_rcpsp_lib",
         "@googletest//:gtest_main",
     ],
 )

@@ -13,7 +13,10 @@ add_library(ga_objects OBJECT ${srcs})
 add_library(ga_static STATIC $<TARGET_OBJECTS:ga_objects>)
 add_library(ga_shared SHARED ${srcs})
 
-add_executable(ga_bin $<TARGET_OBJECTS:ga_objects> main.cpp)
+add_subdirectory(lib)
+
+add_executable(ga_bin $<TARGET_OBJECTS:ga_objects> ms_rcpsp.cpp)
+target_link_libraries(ga_bin gflags)
 
 set_target_properties(ga_static ga_shared ga_bin
         PROPERTIES
