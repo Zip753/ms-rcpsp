@@ -31,6 +31,14 @@
 #include "include/UniformMutator.h"
 #include "include/Validator.h"
 
+#ifndef PATH_SEPARATOR
+#  ifdef OS_WINDOWS
+#    define PATH_SEPARATOR  '\\'
+#  else
+#    define PATH_SEPARATOR  '/'
+#  endif
+#endif  // PATH_SEPARATOR
+
 // Common flags
 DEFINE_string(algorithm, "ea", "Search method (ea, ts or sa)");
 DEFINE_uint32(iters, 500, "Number of iterations");
@@ -148,11 +156,10 @@ const char *kFilename = "main.cpp";
 
 int main(int argc, char* argv[]) {
   std::ostringstream usage;
-  usage << "Run chosen metaheuristic for scheduling problem:\n\n"
-        << argv[0] << " def_file output_folder [FLAGS]\n"
+  usage << "Run chosen metaheuristic for scheduling problem:\n"
+        << argv[0] << " def_file output_folder [FLAGS]\n\n"
         << "def_file       Project definition file\n"
-        << "output_folder  Folder where output files are to be stored\n"
-        << "               (MUST end with folder separator)";
+        << "output_folder  Folder where output files are to be stored";
   gflags::SetUsageMessage(usage.str());
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -172,6 +179,11 @@ int main(int argc, char* argv[]) {
 
   std::string input_full_name = std::string(argv[1]);
   std::string output_folder_name = std::string(argv[2]);
+
+  if (output_folder_name.length() == 0 ||
+      output_folder_name[output_folder_name.length() - 1] != PATH_SEPARATOR) {
+    output_folder_name.append(1, PATH_SEPARATOR);
+  }
 
   /* Set tournament size dynamically, if none provided. */
   if (FLAGS_tournament_size == 0) {
