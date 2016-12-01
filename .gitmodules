@@ -2,3 +2,7 @@
 	path = lib/gflags
 	url = https://github.com/gflags/gflags.git
   branch = v2.2.0
+[submodule "tests/lib/googletest"]
+	path = tests/lib/googletest
+	url = https://github.com/google/googletest.git
+  branch = release-1.8.0
