@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
   std::ostringstream usage;
   usage << "Run chosen metaheuristic for scheduling problem:\n\n"
         << argv[0] << " def_file output_folder [FLAGS]\n"
-        << "def_file       Schedule definition file\n"
+        << "def_file       Project definition file\n"
         << "output_folder  Folder where output files are to be stored\n"
         << "               (MUST end with folder separator)";
   gflags::SetUsageMessage(usage.str());

@@ -22,7 +22,7 @@ std::string TimeslotTable::GetHTML(
   for (auto& res : assignments) {
     int resource_id = res.first;
     for (auto& a : res.second) {
-      if (!a.critical) {
+      if (!critical() || !a.critical) {
         styles << ".color" << a.task_id
                << " { background-color: #" << GetColor() << "; }\n";
       }
@@ -39,7 +39,7 @@ std::string TimeslotTable::GetHTML(
         auto task = tasks.back();
         tasks.pop_back();
         table << " text ";
-        if (task.critical) {
+        if (critical() && task.critical) {
           table << "critical";
         } else {
           table << "color" << task.task_id;

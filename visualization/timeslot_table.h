@@ -7,7 +7,8 @@
 
 class TimeslotTable final : public Renderer {
  public:
-  TimeslotTable(Palletizer* palletizer_) : Renderer(palletizer_) {}
+  TimeslotTable(Palletizer* palletizer_, bool critical_ = false)
+      : Renderer(palletizer_, critical_) {}
 
   std::string GetHTML(const Visualizer::assignments_map &assignments) override;
 

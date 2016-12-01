@@ -7,7 +7,8 @@
 
 class GoogleTimeline final : public Renderer {
  public:
-  GoogleTimeline(Palletizer* palletizer_) : Renderer(palletizer_) {}
+  GoogleTimeline(Palletizer* palletizer_, bool critical_)
+      : Renderer(palletizer_, critical_) {}
 
   std::string GetHTML(const Visualizer::assignments_map &assignments) override;
 };

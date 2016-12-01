@@ -14,7 +14,7 @@ std::string GoogleTimeline::GetHTML(
            << a.finish_time << "', new Date(2010, 0, " << a.start_time
            << "), new Date(2010, 0, " << (a.finish_time + 1) << ") ],\n";
 
-      if (a.critical) {
+      if (critical() && a.critical) {
         colors << "'#999'";
       } else {
         colors << "'#" + GetColor() + "'";
