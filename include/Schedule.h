@@ -84,7 +84,7 @@ class Schedule {
    * @param i Index of the task.
    */
   inline int finish_time(size_t i) const {
-    return start_[i] + task(i).duration();
+    return start_[i] + task(i).duration() - 1;
   }
 
  protected:

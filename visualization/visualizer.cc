@@ -41,7 +41,7 @@ std::pair<bool, std::string> Visualizer::Visualize(std::istream& def,
     while (std::regex_search(line, match, pattern)) {
       int resource_id = stoi(match[1]);
       int task_id = stoi(match[2]);
-      int finish_time = start_time + duration[task_id];
+      int finish_time = start_time + duration[task_id] - 1;
       assignments[resource_id].push_back({task_id, start_time, finish_time,
                                           is_critical[task_id]});
       line = match.suffix();

@@ -16,8 +16,8 @@ std::pair<bool, std::string> Validator::Validate(const Schedule &s) {
   std::ostringstream stream;
   for (size_t i = 0; i < s.size(); ++i) {
     // Check start time
-    if (s.start(i) < 0) {
-      stream << "Negative start time (task ID: " << s.task(i).id()
+    if (s.start(i) <= 0) {
+      stream << "Non-positive start time (task ID: " << s.task(i).id()
              << ", start time: " << s.start(i) << ").";
       return {false, stream.str()};
     }

@@ -10,7 +10,7 @@ std::string TimeslotTable::GetHTML(
 
   table << "<tr><td class=\"first text\"></td>";
   int max_fin = GetMaxFinishTime(assignments);
-  for (int i = 0; i <= max_fin; ++i) {
+  for (int i = 1; i <= max_fin; ++i) {
     table << "<td class=\"cell\">" << i << "</td>";
   }
   table << "</tr>\n";
@@ -33,7 +33,7 @@ std::string TimeslotTable::GetHTML(
     });
     table << "<tr><td class=\"first text\">Resource " << resource_id
           << "</td>\n";
-    for (int i = 0; i <= max_fin; ++i) {
+    for (int i = 1; i <= max_fin; ++i) {
       table << "<td class=\"cell";
       if (!tasks.empty() && tasks.back().start_time == i) {
         auto task = tasks.back();
@@ -47,7 +47,7 @@ std::string TimeslotTable::GetHTML(
         table << "\" colspan=\"" << task.finish_time - task.start_time + 1;
         i = task.finish_time;
         table << "\">Task " << task.task_id
-              << " [" << task.finish_time - task.start_time << "]</td>";
+              << " [" << task.finish_time - task.start_time + 1 << "]</td>";
       } else {
         table << "\"></td>";
       }

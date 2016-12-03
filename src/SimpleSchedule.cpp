@@ -39,9 +39,9 @@ void SimpleSchedule::FixAll() {
   size_t res_count = project_->num_resources();
 
   // availability time for resource_
-  std::vector<int> time(res_count);
+  std::vector<int> time(res_count, 1);
 
-  // number of complete dependency_ for tasks
+  // number of complete dependencies for tasks
   std::vector<size_t> dep_count(size());
 
   while (!queue.empty()) {
@@ -49,9 +49,9 @@ void SimpleSchedule::FixAll() {
     size_t itask = queue.front();
     queue.pop();
 
-    // find max finish time of all dependency_
+    // find max finish time of all dependencies
     size_t res_idx = resource_idx(itask);
-    int min_start = 0;
+    int min_start = 1;
     for (size_t i = 0; i < task(itask).num_dependencies(); ++i) {
       size_t idep = task(itask).dependency(i);
       int fin = finish_time(idep) + 1;

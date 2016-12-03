@@ -21,7 +21,7 @@ class ValidatorTest : public ::testing::Test {
 };
 
 TEST_F(ValidatorTest, DependencyConflict) {
-  schedule.set_start(0, 0);
+  schedule.set_start(0, 1);
   schedule.set_start(1, 2);
   schedule.set_start(2, 10);
   schedule.set_capable_resource_idx(0, 0);
@@ -35,7 +35,7 @@ TEST_F(ValidatorTest, DependencyConflict) {
                 "(task #2 start time: 2, task #1 finish time: 3).");
 }
 
-TEST_F(ValidatorTest, NegativeStartTime) {
+TEST_F(ValidatorTest, NonPositiveStartTime) {
   schedule.set_start(0, -1);
   schedule.set_start(1, 4);
   schedule.set_start(2, 3);
@@ -46,13 +46,13 @@ TEST_F(ValidatorTest, NegativeStartTime) {
   std::pair<bool, std::string> result = validator.Validate(schedule);
   EXPECT_FALSE(result.first);
   EXPECT_EQ(result.second,
-            "Negative start time (task ID: 1, start time: -1).");
+            "Non-positive start time (task ID: 1, start time: -1).");
 }
 
 TEST_F(ValidatorTest, ResourceConflict) {
-  schedule.set_start(0, 0);
+  schedule.set_start(0, 1);
   schedule.set_start(1, 4);
-  schedule.set_start(2, 0);
+  schedule.set_start(2, 1);
   schedule.set_capable_resource_idx(0, 0);
   schedule.set_capable_resource_idx(1, 1);
   schedule.set_capable_resource_idx(2, 0);
@@ -65,9 +65,9 @@ TEST_F(ValidatorTest, ResourceConflict) {
 }
 
 TEST_F(ValidatorTest, IncapableResource) {
-  schedule.set_start(0, 0);
+  schedule.set_start(0, 1);
   schedule.set_start(1, 4);
-  schedule.set_start(2, 0);
+  schedule.set_start(2, 1);
   schedule.set_capable_resource_idx(0, 0);
   schedule.set_capable_resource_idx(1, 1);
   schedule.set_capable_resource_idx(2, 1);
@@ -80,9 +80,9 @@ TEST_F(ValidatorTest, IncapableResource) {
 }
 
 TEST_F(ValidatorTest, ValidSchedule) {
-  schedule.set_start(0, 0);
+  schedule.set_start(0, 1);
   schedule.set_start(1, 4);
-  schedule.set_start(2, 0);
+  schedule.set_start(2, 1);
   schedule.set_capable_resource_idx(0, 0);
   schedule.set_capable_resource_idx(1, 0);
   schedule.set_capable_resource_idx(2, 0);
