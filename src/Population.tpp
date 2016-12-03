@@ -29,7 +29,8 @@ void Population<T>::ShowStat(std::ostream &stream) {
   }
   mean /= size();
 
-  stream << best_val << " " << mean << " " << specimen(worst_idx)->Fitness();
+  stream << best_val << " " << mean << " " << specimen(worst_idx)->Fitness()
+      << "\n";
 }
 
 };  // namespace EvolutionaryAlgorithm
