@@ -17,8 +17,12 @@ std::string TimeslotTable::GetHTML(
   table << "</tr>\n";
 
   int cell_width = max_fin >= 100 ? 17 : 12;
+  int table_width = 93 + (cell_width + 3) * (max_fin + 1);
+  int box_margin = 10;
 
-  styles << "table { width: " << 90 + cell_width * (max_fin + 1) << "px; }\n";
+  styles << "table { width: " << table_width << "px; }\n";
+  styles << "#box { width: " << table_width + 2 * box_margin << "px; "
+         << "margin: " << box_margin << "; }\n";
 
   std::vector<Visualizer::assignment> critical_tasks;
 
@@ -92,6 +96,9 @@ std::string TimeslotTable::GetHTML(
         text-align: center;
         font-size: 11px;
       }
+      #box {
+        margin: 10px;
+      }
       .first {
         width: 90px;
       }
@@ -120,9 +127,11 @@ std::string TimeslotTable::GetHTML(
     </style>
   </head>
   <body>
-    <table>
-      )HTML" << table.str() << R"HTML(
-    </table>
+    <div id="box">
+      <table>
+        )HTML" << table.str() << R"HTML(
+      </table>
+    </div>
   </body>
   </html>
   )HTML";
