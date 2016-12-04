@@ -4,7 +4,11 @@
 
 std::string GoogleTimeline::GetHTML(
     const Visualizer::assignments_map &assignments) {
+
+  const std::string critical_color("'#000'");
+
   // Convert to Google Timeline definition
+  std::vector<Visualizer::assignment> critical_tasks;
   std::ostringstream data;
   std::ostringstream colors;
   for (auto& res : assignments) {
@@ -15,11 +19,22 @@ std::string GoogleTimeline::GetHTML(
            << "), new Date(2010, 0, " << (a.finish_time + 1) << ") ],\n";
 
       if (critical() && a.critical) {
-        colors << "'#999'";
+        critical_tasks.push_back(a);
+        colors << critical_color;
       } else {
         colors << "'#" + GetColor() + "'";
       }
       colors << ",";
+    }
+  }
+
+  if (!critical_tasks.empty()) {
+    for (auto& a : critical_tasks) {
+      data << "[ 'Critical path', '" << a.task_id
+           << "', '[Task " << a.task_id << "] " << a.start_time << " - "
+           << a.finish_time << "', new Date(2010, 0, " << a.start_time
+           << "), new Date(2010, 0, " << (a.finish_time + 1) << ") ],\n";
+      colors << critical_color << ",";
     }
   }
 
@@ -28,9 +43,6 @@ std::string GoogleTimeline::GetHTML(
   <html>
     <head>
       <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    </head>
-    <body>
-      <div id="timeline"></div>
       <script type="text/javascript">
         google.charts.load('current', {'packages':['timeline']});
         google.charts.setOnLoadCallback(drawChart);
@@ -48,7 +60,14 @@ std::string GoogleTimeline::GetHTML(
 
           chart.draw(dataTable);
 
-          var height = document.querySelector("#timeline div:first-child div:first-child div:first-child svg").height.baseVal.value + 70;
+          var el = document.querySelector("#timeline div:first-child " +
+"div:first-child div:first-child div:last-child svg");
+          if (el === null) {
+            el = document.querySelector("#timeline div:first-child " +
+"div:first-child div:first-child svg");
+          }
+          var height = el.height.baseVal.value + 70;
+          console.log(height);
 
           var options = {
             height: height
@@ -63,10 +82,13 @@ std::string GoogleTimeline::GetHTML(
 
           var parent = document.querySelector('svg');
           var child = parent.children[2];
-          // console.log(child);
+          console.log(child);
           parent.removeChild(child);
         }
       </script>
+    </head>
+    <body>
+      <div id="timeline"></div>
     </body>
   </html>
   )HTML";

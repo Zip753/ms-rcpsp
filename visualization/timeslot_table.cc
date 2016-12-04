@@ -8,6 +8,7 @@ std::string TimeslotTable::GetHTML(
   std::ostringstream styles;
   std::ostringstream table;
 
+  table << "<tbody>";
   table << "<tr><td class=\"first text\"></td>";
   int max_fin = GetMaxFinishTime(assignments);
   for (int i = 1; i <= max_fin; ++i) {
@@ -19,10 +20,14 @@ std::string TimeslotTable::GetHTML(
 
   styles << "table { width: " << 90 + cell_width * (max_fin + 1) << "px; }\n";
 
+  std::vector<Visualizer::assignment> critical_tasks;
+
   for (auto& res : assignments) {
     int resource_id = res.first;
     for (auto& a : res.second) {
-      if (!critical() || !a.critical) {
+      if (critical() && a.critical) {
+        critical_tasks.push_back(a);
+      } else if (!critical() || !a.critical) {
         styles << ".color" << a.task_id
                << " { background-color: #" << GetColor() << "; }\n";
       }
@@ -54,6 +59,28 @@ std::string TimeslotTable::GetHTML(
     }
     table << "</tr>\n";
   }
+  table << "</tbody>";
+
+  if (!critical_tasks.empty()) {
+    table << "<tbody><tr><td class=\"first text\">Critical path</td>";
+    std::sort(critical_tasks.begin(), critical_tasks.end(),
+              [&](auto& a, auto& b) { return a.start_time > b.start_time; });
+    for (int i = 1; i <= max_fin; ++i) {
+      table << "<td class=\"cell";
+      if (!critical_tasks.empty() && critical_tasks.back().start_time == i) {
+        auto task = critical_tasks.back();
+        critical_tasks.pop_back();
+        table << " text critical\" colspan=\""
+              << task.finish_time - task.start_time + 1;
+        i = task.finish_time;
+        table << "\">Task " << task.task_id
+              << " [" << task.finish_time - task.start_time + 1 << "]</td>";
+      } else {
+        table << "\"></td>";
+      }
+    }
+    table << "</tr></tbody>";
+  }
 
   std::ostringstream html;
   html << R"HTML(
@@ -73,14 +100,21 @@ std::string TimeslotTable::GetHTML(
         font-size: 16px;
       }
       .critical {
-        background-color: #999;
+        background-color: #000;
+        color: #fff;
+        border-color: #000 #fff;
       }
-      table, th, td {
+      th, td {
         border: 1px solid black;
-        border-collapse: collapse;
       }
       table {
+        border-collapse: collapse;
         table-layout: fixed;
+      }
+      tbody:not(:first-child):before {
+        content: '';
+        display: table-row;
+        height: 15px;
       }
       )HTML" << styles.str() << R"HTML(
     </style>
