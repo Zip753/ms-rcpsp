@@ -68,7 +68,9 @@ std::map<int, bool> Visualizer::BuildCriticalPaths(
   std::map<int, bool> is_critical;
   for (size_t i = 0; i < project->size(); ++i) {
     if (min_finish_time[i] == max_min_finish_time) {
-      CheckCriticalPath(i, project, &is_critical, min_finish_time);
+      if (CheckCriticalPath(i, project, &is_critical, min_finish_time)) {
+        break;
+      }
     }
   }
 
@@ -97,10 +99,11 @@ bool Visualizer::CheckCriticalPath(size_t task_idx,
     if (min_finish_time.at(dep_idx) == task_finish_time - task.duration() - 1 &&
         CheckCriticalPath(dep_idx, project, is_critical, min_finish_time)) {
       is_critical->at(task.id()) = true;
+      return true;
     }
   }
 
-  return is_critical->at(task.id());
+  return false;
 }
 
 int Visualizer::ComputeFinishTime(size_t task_idx,
